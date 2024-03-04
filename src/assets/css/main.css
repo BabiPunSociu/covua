@@ -1,0 +1,14 @@
+@import url(./base.scss);
+@import url(./chess-main.scss);
+
+* {
+    /* font-family: MISA Fonts; */
+    font-size: var(--font-size-default);
+    color: #212121;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    outline: none;
+    text-transform: none;
+  }
