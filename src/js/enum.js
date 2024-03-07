@@ -67,4 +67,4 @@ const NVDEnum = {
   },
 };
 
-export default { NVDEnum };
+export default NVDEnum;

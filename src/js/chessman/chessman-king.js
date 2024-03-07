@@ -62,4 +62,4 @@ class chessManKing extends chessMan {
   }
 }
 
-export { chessManKing };
+export default chessManKing;

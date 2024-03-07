@@ -118,7 +118,7 @@ class chessMan {
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
    * @author: NVDung (19-02-2024)
    */
-  iCanCapture(toChessManValue, toRow, toColumn) {
+  isCanCapture(toChessManValue, toRow, toColumn) {
     throw new Error("Not implement!");
   }
 
@@ -150,4 +150,4 @@ class chessMan {
   }
 }
 
-export { chessMan };
+export default chessMan;

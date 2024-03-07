@@ -37,6 +37,11 @@ export default {
       ],
     };
   },
+
+  mounted() {
+    // console.log(this.$resource);
+    // console.log(typeof this.$resource.NVDResource.classChessMan);
+  },
 };
 </script>
 
@@ -47,6 +52,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #525151de;
 
   table {
     width: 100vh;
@@ -68,7 +74,7 @@ export default {
         }
 
         &.cell-color-caro {
-          background-color: rgb(114, 251, 162);
+          background-color: #01ef9282; // rgb(114, 251, 162);
         }
       }
     }

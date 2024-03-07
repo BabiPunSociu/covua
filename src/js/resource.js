@@ -18,4 +18,4 @@ const NVDResource = {
   ],
 };
 
-export default { NVDResource };
+export default NVDResource;
