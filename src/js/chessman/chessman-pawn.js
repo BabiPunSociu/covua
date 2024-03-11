@@ -3,11 +3,11 @@ import NVDEnum from "../enum.js";
 import chessMan from "./chessman";
 
 /**
- * Khai báo lớp quân vua
+ * Khai báo lớp quân TỐT
  *
- * @author: NVDung (19-02-2024)
+ * @author: NVDung (11-03-2024)
  */
-class chessManKing extends chessMan {
+class chessManPawn extends chessMan {
   // ===================================== Constructor ===================================== //
   /**
    * Contructor
@@ -16,7 +16,7 @@ class chessManKing extends chessMan {
    * @param {Number} rowCurrent Vị trí hàng hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
    * @param {Number} colCurent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
    *
-   * @author: NVDung (19-02-2024)
+   * @author: NVDung (11-03-2024)
    */
   constructor(chessManValue, rowCurrent, colCurent) {
     super(chessManValue, rowCurrent, colCurent);
@@ -30,7 +30,7 @@ class chessManKing extends chessMan {
    * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
-   * @author: NVDung (19-02-2024)
+   * @author: NVDung (11-03-2024)
    */
   isCanMove(toRow, toColumn) {
     // Đảm bảo di chuyển khỏi vị trí hiện tại
@@ -38,10 +38,17 @@ class chessManKing extends chessMan {
       return false;
     }
 
-    // Kiểm tra di chuyển 1 ô theo mọi hướng
+    // TỐT ĐEN Ở Trên -> Xuống
     if (
-      Math.abs(toRow - this.rowCurrent) <= 1 &&
-      Math.abs(toColumn - this.colCurent) <= 1
+      this.id === NVDEnum.chessMan.blackPawn &&
+      this.rowCurrent + 1 === toRow
+    ) {
+      return true;
+    }
+    // TỐT TRẮNG Ở Dưới -> Lên
+    if (
+      this.id === NVDEnum.chessMan.whitePawn &&
+      this.rowCurrent - 1 === toRow
     ) {
       return true;
     }
@@ -55,21 +62,28 @@ class chessManKing extends chessMan {
    * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
-   * @author: NVDung (19-02-2024)
+   * @author: NVDung (11-03-2024)
    */
   isCanCapture(toChessManValue, toRow, toColumn) {
+    // TỐT trắng ăn quân đen
     if (
-      // Vua trắng ăn quân đen
-      (this.id === NVDEnum.chessMan.whiteKing &&
-        toChessManValue >= NVDEnum.chessMan.blackKing) ||
-      // Vua đen ăn quân trắng
-      (this.id === NVDEnum.chessMan.blackKing &&
-        0 < toChessManValue <= NVDEnum.chessMan.whitePawn)
+      this.id === NVDEnum.chessMan.whitePawn &&
+      toChessManValue >= NVDEnum.chessMan.blackKing &&
+      this.rowCurrent - 1 === toRow &&
+      Math.abs(this.colCurent - toColumn) === 1
     ) {
-      // Kiểm tra Capture hợp lệ của quân VUA -> Tương tự với Move
-      return this.isCanMove(toRow, toColumn);
+      return true;
     }
 
+    // TỐT đen ăn quân trắng
+    if (
+      this.id === NVDEnum.chessMan.blackPawn &&
+      0 < toChessManValue <= NVDEnum.chessMan.whitePawn &&
+      this.rowCurrent + 1 === toRow &&
+      Math.abs(this.colCurent - toColumn) === 1
+    ) {
+      return true;
+    }
     return false;
   }
 
@@ -80,7 +94,7 @@ class chessManKing extends chessMan {
    * @param {Number} toRow Vị trí HÀNG quân cờ sẽ Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number} toCol Vị trí CỘT quân cờ sẽ Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
-   * @author: NVDung (19-02-2024)
+   * @author: NVDung (11-03-2024)
    */
   moveTo(toChessManValue = 0, toRow, toColumn, boardStateMatrix) {
     // Gọi đến Class cha để thực hiện di chuyển
@@ -90,4 +104,4 @@ class chessManKing extends chessMan {
   }
 }
 
-export default chessManKing;
+export default chessManPawn;

@@ -106,7 +106,12 @@ class chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanMove(toRow, toColumn) {
-    throw new Error("Not implement!");
+    // Đảm bảo di chuyển khỏi vị trí hiện tại
+    if (
+      !(Math.abs(toRow - this.rowCurrent) + Math.abs(toColumn - this.colCurent))
+    ) {
+      return false;
+    }
   }
 
   /**
@@ -125,15 +130,15 @@ class chessMan {
   /**
    * Phương thức di chuyển quân cờ (Move + Capture)
    *
-   * @param {Number} toChessMan Giá trị số quân cờ sẽ Capture, từ 1 đến 12.
+   * @param {Number} toChessManValue Giá trị số quân cờ sẽ Capture, từ 1 đến 12.
    * @param {Number} toRow Vị trí HÀNG quân cờ sẽ Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number} toCol Vị trí CỘT quân cờ sẽ Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
-   * @authorization: NVDung (19-02-2024)
+   * @author: NVDung (19-02-2024)
    */
   moveTo(toChessManValue = 0, toRow, toColumn, boardStateMatrix) {
     // Kiểm tra ăn quân cờ hợp lệ
-    if (toChessMan && this.iCanCapture(toChessManValue, toRow, toColumn)) {
+    if (toChessManValue && this.iCanCapture(toChessManValue, toRow, toColumn)) {
       // Cập nhật vị trí quân cờ trên bàn cờ
       this.updateMatrix(boardStateMatrix, toRow, toColumn);
       // Phát âm thanh ăn quân cờ
