@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <button @click="soundEffect">Sound Effect</button>
     <table>
       <tr v-for="(row, indexRow) in theStartMatrix" :key="row">
         <td v-for="(cell, indexCol) in row" :key="cell">
@@ -12,7 +11,10 @@
             "
           >
             <!-- Hiển thị ảnh quân cờ -->
-            <div :class="this.$resource.classChessMan[cell]"></div>
+            <div
+              class="chess-image"
+              :class="this.$resource.classChessMan[cell]"
+            ></div>
           </div>
         </td>
       </tr>

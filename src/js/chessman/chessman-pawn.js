@@ -43,14 +43,16 @@ class chessManPawn extends chessMan {
     // TỐT ĐEN Ở Trên -> Xuống
     if (
       this.id === NVDEnum.chessMan.blackPawn &&
-      this.rowCurrent + 1 === toRow
+      (this.rowCurrent + 1 === toRow ||
+        (this.rowCurrent === 1 && this.rowCurrent + 2 === toRow))
     ) {
       return true;
     }
     // TỐT TRẮNG Ở Dưới -> Lên
     if (
       this.id === NVDEnum.chessMan.whitePawn &&
-      this.rowCurrent - 1 === toRow
+      (this.rowCurrent - 1 === toRow ||
+        (this.rowCurrent === 6 && this.rowCurrent - 2 === toRow))
     ) {
       return true;
     }
