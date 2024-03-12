@@ -4,6 +4,8 @@ import chessManKing from "./chessman-king.js";
 import chessManQueen from "./chessman-queen.js";
 import chessManBishop from "./chessman-bishop.js";
 import chessManKnight from "./chessman-knight.js";
+import chessManRook from "./chessman-rook.js";
+import chessManPawn from "./chessman-pawn.js";
 
 /**
  * Hàm thực hiện tạo đối tượng quân cờ - Factory Pattern

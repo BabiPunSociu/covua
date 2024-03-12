@@ -29,10 +29,12 @@ class chessManRook extends chessMan {
    *
    * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
+   * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
    * @author: NVDung (11-03-2024)
+   * @Modified: NVDung (12-03-2024)
    */
-  isCanMove(toRow, toColumn) {
+  isCanMove(toRow, toColumn, boardStateMatrix) {
     // Đảm bảo di chuyển khỏi vị trí hiện tại
     if (!super.isCanMove(toRow, toColumn)) {
       return false;
@@ -45,7 +47,9 @@ class chessManRook extends chessMan {
       // Di chuyển dọc
       toColumn === this.colCurent
     ) {
-      return true;
+      // Kiểm tra quân cờ cản đường
+      let isBlockedPath = this.isBlockedPath(toRow, toColumn, boardStateMatrix);
+      return !isBlockedPath;
     }
     return false;
   }
@@ -56,10 +60,12 @@ class chessManRook extends chessMan {
    * @param {Number} toChessManValue Giá trị số quân cờ sẽ Capture, từ 1 đến 12.
    * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
+   * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
    * @author: NVDung (11-03-2024)
+   * @modified: NVDung (12-03-2024)
    */
-  isCanCapture(toChessManValue, toRow, toColumn) {
+  isCanCapture(toChessManValue, toRow, toColumn, boardStateMatrix) {
     if (
       // XE trắng ăn quân đen
       (this.id === NVDEnum.chessMan.whiteRook &&
@@ -69,7 +75,7 @@ class chessManRook extends chessMan {
         0 < toChessManValue <= NVDEnum.chessMan.whitePawn)
     ) {
       // Kiểm tra Capture hợp lệ của quân XE -> Tương tự với Move
-      return this.isCanMove(toRow, toColumn);
+      return this.isCanMove(toRow, toColumn, boardStateMatrix);
     }
     return false;
   }

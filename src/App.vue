@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <button @click="soundEffect">Sound Effect</button>
     <table>
       <tr v-for="(row, indexRow) in theStartMatrix" :key="row">
         <td v-for="(cell, indexCol) in row" :key="cell">
@@ -35,13 +36,15 @@ export default {
         [6, 6, 6, 6, 6, 6, 6, 6],
         [5, 4, 3, 2, 1, 3, 4, 5],
       ],
+
+      // Dữ liệu
+      droppedData: null,
     };
   },
 
-  mounted() {
-    // console.log(this.$resource);
-    // console.log(typeof this.$resource.NVDResource.classChessMan);
-  },
+  mounted() {},
+
+  methods: {},
 };
 </script>
 
@@ -55,8 +58,8 @@ export default {
   background: #525151de;
 
   table {
-    width: 100vh;
-    height: 100vh;
+    width: 80vh;
+    height: 80vh;
     border-collapse: collapse;
 
     td {

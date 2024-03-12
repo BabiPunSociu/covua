@@ -29,12 +29,14 @@ class chessManPawn extends chessMan {
    *
    * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
+   * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
    * @author: NVDung (11-03-2024)
+   * @modified: NVDung (12-03-2024)
    */
-  isCanMove(toRow, toColumn) {
+  isCanMove(toRow, toColumn, boardStateMatrix) {
     // Đảm bảo di chuyển khỏi vị trí hiện tại
-    if (!super.isCanMove(toRow, toColumn)) {
+    if (!super.isCanMove(toRow, toColumn, boardStateMatrix)) {
       return false;
     }
 
@@ -61,10 +63,12 @@ class chessManPawn extends chessMan {
    * @param {Number} toChessManValue Giá trị số quân cờ sẽ Capture, từ 1 đến 12.
    * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
+   * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
    * @author: NVDung (11-03-2024)
+   * @modified: NVDung (12-03-2024)
    */
-  isCanCapture(toChessManValue, toRow, toColumn) {
+  isCanCapture(toChessManValue, toRow, toColumn, boardStateMatrix) {
     // TỐT trắng ăn quân đen
     if (
       this.id === NVDEnum.chessMan.whitePawn &&
