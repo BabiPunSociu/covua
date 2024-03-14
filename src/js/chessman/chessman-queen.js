@@ -14,12 +14,12 @@ class chessManQueen extends chessMan {
    *
    * @param {Number} chessManValue Giá trị số của quân cờ theo quy ước, từ 1 đến 12. Ví dụ: 1, 2, ..., 12
    * @param {Number} rowCurrent Vị trí hàng hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} colCurent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
+   * @param {Number} colCurrent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
    *
    * @author: NVDung (11-03-2024)
    */
-  constructor(chessManValue, rowCurrent, colCurent) {
-    super(chessManValue, rowCurrent, colCurent);
+  constructor(chessManValue, rowCurrent, colCurrent) {
+    super(chessManValue, rowCurrent, colCurrent);
   }
 
   // ===================================== Phương thức ===================================== //
@@ -45,7 +45,7 @@ class chessManQueen extends chessMan {
       // Di chuyển ngang
       toRow === this.rowCurrent ||
       // Di chuyển dọc
-      toColumn === this.colCurent
+      toColumn === this.colCurrent
     ) {
       // Kiểm tra quân cờ chặn đường
       let isBlockedPath = this.isBlockedPath(toRow, toColumn, boardStateMatrix);
@@ -54,7 +54,7 @@ class chessManQueen extends chessMan {
 
     // Di chuyển chéo, nghĩa là khoảng cách ngang & dọc bằng nhau
     if (
-      Math.abs(toColumn - this.colCurent) === Math.abs(toRow - this.rowCurrent)
+      Math.abs(toColumn - this.colCurrent) === Math.abs(toRow - this.rowCurrent)
     ) {
       // Kiểm tra quân cờ chặn đường
       let isBlockedPathDiagonal = this.isBlockedPathDiagonal(

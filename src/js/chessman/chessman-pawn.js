@@ -14,12 +14,12 @@ class chessManPawn extends chessMan {
    *
    * @param {Number} chessManValue Giá trị số của quân cờ theo quy ước, từ 1 đến 12. Ví dụ: 1, 2, ..., 12
    * @param {Number} rowCurrent Vị trí hàng hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} colCurent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
+   * @param {Number} colCurrent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
    *
    * @author: NVDung (11-03-2024)
    */
-  constructor(chessManValue, rowCurrent, colCurent) {
-    super(chessManValue, rowCurrent, colCurent);
+  constructor(chessManValue, rowCurrent, colCurrent) {
+    super(chessManValue, rowCurrent, colCurrent);
   }
 
   // ===================================== Phương thức ===================================== //
@@ -76,7 +76,7 @@ class chessManPawn extends chessMan {
       this.id === NVDEnum.chessMan.whitePawn &&
       toChessManValue >= NVDEnum.chessMan.blackKing &&
       this.rowCurrent - 1 === toRow &&
-      Math.abs(this.colCurent - toColumn) === 1
+      Math.abs(this.colCurrent - toColumn) === 1
     ) {
       return true;
     }
@@ -86,7 +86,7 @@ class chessManPawn extends chessMan {
       this.id === NVDEnum.chessMan.blackPawn &&
       0 < toChessManValue <= NVDEnum.chessMan.whitePawn &&
       this.rowCurrent + 1 === toRow &&
-      Math.abs(this.colCurent - toColumn) === 1
+      Math.abs(this.colCurrent - toColumn) === 1
     ) {
       return true;
     }

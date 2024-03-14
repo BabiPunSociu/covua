@@ -14,12 +14,12 @@ class chessManRook extends chessMan {
    *
    * @param {Number} chessManValue Giá trị số của quân cờ theo quy ước, từ 1 đến 12. Ví dụ: 1, 2, ..., 12
    * @param {Number} rowCurrent Vị trí hàng hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} colCurent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
+   * @param {Number} colCurrent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
    *
    * @author: NVDung (11-03-2024)
    */
-  constructor(chessManValue, rowCurrent, colCurent) {
-    super(chessManValue, rowCurrent, colCurent);
+  constructor(chessManValue, rowCurrent, colCurrent) {
+    super(chessManValue, rowCurrent, colCurrent);
   }
 
   // ===================================== Phương thức ===================================== //
@@ -45,7 +45,7 @@ class chessManRook extends chessMan {
       // Di chuyển ngang
       toRow === this.rowCurrent ||
       // Di chuyển dọc
-      toColumn === this.colCurent
+      toColumn === this.colCurrent
     ) {
       // Kiểm tra quân cờ cản đường
       let isBlockedPath = this.isBlockedPath(toRow, toColumn, boardStateMatrix);

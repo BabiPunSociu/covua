@@ -14,12 +14,12 @@ class chessManKing extends chessMan {
    *
    * @param {Number} chessManValue Giá trị số của quân cờ theo quy ước, từ 1 đến 12. Ví dụ: 1, 2, ..., 12
    * @param {Number} rowCurrent Vị trí hàng hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} colCurent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
+   * @param {Number} colCurrent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
    *
    * @author: NVDung (19-02-2024)
    */
-  constructor(chessManValue, rowCurrent, colCurent) {
-    super(chessManValue, rowCurrent, colCurent);
+  constructor(chessManValue, rowCurrent, colCurrent) {
+    super(chessManValue, rowCurrent, colCurrent);
   }
 
   // ===================================== Phương thức ===================================== //
@@ -43,7 +43,7 @@ class chessManKing extends chessMan {
     // Kiểm tra di chuyển 1 ô theo mọi hướng
     if (
       Math.abs(toRow - this.rowCurrent) <= 1 &&
-      Math.abs(toColumn - this.colCurent) <= 1
+      Math.abs(toColumn - this.colCurrent) <= 1
     ) {
       return true;
     }

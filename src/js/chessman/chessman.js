@@ -15,10 +15,10 @@ class chessMan {
    *
    * @param {Number} chessManValue Giá trị số của quân cờ theo quy ước, từ 1 đến 12. Ví dụ: 1, 2, ..., 12
    * @param {Number} rowCurrent Vị trí hàng hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} colCurent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
+   * @param {Number} colCurrent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
    * @author: NVDung (19-02-2024)
    */
-  constructor(chessManValue, rowCurrent, colCurent) {
+  constructor(chessManValue, rowCurrent, colCurrent) {
     /**
      * Giá trị số của quân cờ theo quy ước, từ 1 đến 12.
      */
@@ -37,7 +37,7 @@ class chessMan {
     /**
      * Vị trí cột hiện tại của quân cờ theo ma trận.
      */
-    this.colCurent = colCurent;
+    this.colCurrent = colCurrent;
   }
 
   // ===================================== Phương thức ===================================== //
@@ -93,7 +93,7 @@ class chessMan {
    */
   updateMatrix(boardStateMatrix, toRow, toColumn) {
     // Vị trí cũ => trống
-    boardStateMatrix[this.rowCurrent][this.colCurent] = NVDEnum.chessMan.empty;
+    boardStateMatrix[this.rowCurrent][this.colCurrent] = NVDEnum.chessMan.empty;
     // vị trí mới => quân cờ
     boardStateMatrix[toRow][toColumn] = this.id;
   }
@@ -109,24 +109,24 @@ class chessMan {
    */
   isBlockedPath(toRow, toColumn, boardStateMatrix) {
     // Di chuyển NGANG
-    if (toRow === this.colCurent) {
-      let col = this.colCurent;
+    if (toRow === this.colCurrent) {
+      let col = this.colCurrent;
       while (col !== toColumn) {
         // Kiểm tra có quân cờ khác cản đường ?
         if (boardStateMatrix[this.rowCurrent][col] !== NVDEnum.chessMan.empty) {
           return true;
         }
         // Cập nhật vị trí col
-        col += this.colCurent < toColumn ? 1 : -1;
+        col += this.colCurrent < toColumn ? 1 : -1;
       }
     }
 
     // Di chuyển DỌC
-    else if (toColumn === this.colCurent) {
+    else if (toColumn === this.colCurrent) {
       let row = this.rowCurrent;
       while (row !== toRow) {
         // Kiểm tra có quân cờ khác cần đường ?
-        if (boardStateMatrix[row][this.colCurent] !== NVDEnum.chessMan.empty) {
+        if (boardStateMatrix[row][this.colCurrent] !== NVDEnum.chessMan.empty) {
           return true;
         }
         // Cập nhật vị trí row
@@ -148,7 +148,7 @@ class chessMan {
    */
   isBlockedPathDiagonal(toRow, toColumn, boardStateMatrix) {
     let row = this.rowCurrent;
-    let col = this.colCurent;
+    let col = this.colCurrent;
     while (row !== toRow && col !== toColumn) {
       // Kiểm tra có quân cờ khác cần đường ?
       if (boardStateMatrix[row][col] !== NVDEnum.chessMan.empty) {
@@ -156,7 +156,7 @@ class chessMan {
       }
       // Cập nhật vị trí row
       row += this.rowCurrent < toRow ? 1 : -1;
-      col += this.colCurent < toColumn ? 1 : -1;
+      col += this.colCurrent < toColumn ? 1 : -1;
     }
     return false;
   }
@@ -286,10 +286,11 @@ class chessMan {
   isCanMove(toRow, toColumn, boardStateMatrix) {
     // Đảm bảo di chuyển khỏi vị trí hiện tại
     if (
-      !(Math.abs(toRow - this.rowCurrent) + Math.abs(toColumn - this.colCurent))
+      Math.abs(toRow - this.rowCurrent) + Math.abs(toColumn - this.colCurrent)
     ) {
-      return false;
+      return true; // Đã di chuyển khỏi vị trí ban đầu.
     }
+    return false; // Không di chuyển khỏi vị trí ban đầu.
   }
 
   /**

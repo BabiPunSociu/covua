@@ -32,14 +32,14 @@ $chessman-name: ("king", "queen", "bishop", "rook", "knight", "pawn");
 .chess-man-neo {
   /* ======================== Quân trắng ======================== */
   @each $name in $chessman-name {
-    .white-#{$name} {
+    &.white-#{$name} {
       @include chessman("neo", "w", $name);
     }
   }
 
   /* ======================== Quân đen ======================== */
   @each $name in $chessman-name {
-    .black-#{$name} {
+    &.black-#{$name} {
       @include chessman("neo", "b", $name);
     }
   }
@@ -49,14 +49,14 @@ $chessman-name: ("king", "queen", "bishop", "rook", "knight", "pawn");
 .chess-man-club {
   /* ======================== Quân trắng ======================== */
   @each $name in $chessman-name {
-    .white-#{$name} {
+    &.white-#{$name} {
       @include chessman("club", "w", $name);
     }
   }
 
   /* ======================== Quân đen ======================== */
   @each $name in $chessman-name {
-    .black-#{$name} {
+    &.black-#{$name} {
       @include chessman("club", "b", $name);
     }
   }
