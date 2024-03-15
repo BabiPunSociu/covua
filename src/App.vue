@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <table>
+    <table :key="reRender">
       <tr
         v-for="(row, indexRow) in theStartMatrix"
         :key="row"
@@ -13,10 +13,13 @@
           :ref="'td' + indexRow.toString() + indexCol"
           :key="cell"
           :data-col="indexCol"
-          :class="{ 'cell-color-caro': (indexRow + indexCol) % 2 !== 0 }"
+          :class="{
+            'cell-color': true,
+            'cell-color-caro': (indexRow + indexCol) % 2 !== 0,
+          }"
           @dragenter="handleDragEnter($event, cell, indexRow, indexCol)"
           @dragover.prevent="handleDragOver($event)"
-          @dragleave="handleDragLeave(indexRow, indexCol)"
+          @dragleave="handleDragLeave"
           @drop="handleDrop"
         >
           <!-- Thuộc tính draggable="true" để cho phép Drag -->
@@ -31,6 +34,21 @@
             @dragstart="handleDragStart"
             @dragend="handleDragEnd"
           ></div>
+          <!-- Đánh dấu hàng ở cột 0 -->
+          <span
+            class="maker-row"
+            :class="{ 'maker-text-white': (indexRow + indexCol) % 2 !== 0 }"
+            v-if="indexCol === 0"
+            >{{ indexRow }}</span
+          >
+          <span
+            class="maker-col"
+            :class="{ 'maker-text-white': (indexRow + indexCol) % 2 !== 0 }"
+            v-if="indexRow === 7"
+            >{{ indexCol }}</span
+          >
+
+          <span class="maker-cell">{{ indexRow + " " + indexCol }}</span>
         </td>
       </tr>
     </table>
@@ -43,6 +61,11 @@ export default {
 
   data() {
     return {
+      /**
+       * Đánh dấu re-render table.
+       */
+      reRender: false,
+
       theStartMatrix: [
         [11, 10, 9, 8, 7, 9, 10, 11],
         [12, 12, 12, 12, 12, 12, 12, 12],
@@ -60,10 +83,11 @@ export default {
       sourceChessMan: null,
 
       /**
-       * Đối tượng chessMan Target - đây KHÔNG phải đối tượng chessman:
-       * { chessValue: Number, row: Number, col: Number, }
+       * Hàng đợi chứa các đối tượng chessMan Target.
+       * Đối tượng chessManTarget - đây KHÔNG phải đối tượng chessman:
+       * chessManTarget { chessValue: Number, row: Number, col: Number, }
        */
-      targetChessMan: null,
+      targetChessManQueue: [],
     };
   },
 
@@ -79,9 +103,12 @@ export default {
      * @author: NVDung (13-03-2024)
      */
     handleDragStart(event) {
-      console.log("======================================");
+      console.log(
+        `============================================================================
+        ============================================================================`
+      );
       console.log("handleDragStart");
-      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.effectAllowed = "copyMove";
 
       // Lấy thông tin ChessMan Source
       let dragData = {
@@ -101,14 +128,15 @@ export default {
         dragData.indexRow,
         dragData.indexCol
       );
-      console.log("Chess Man Source: ");
-      console.table(this.sourceChessMan);
-
-      console.log("======================================");
+      // console.table(this.sourceChessMan);
+      console.log(
+        `Chess Man Source: (${this.sourceChessMan.id},${this.sourceChessMan.name}, ${this.sourceChessMan.rowCurrent},${this.sourceChessMan.colCurrent})`
+      );
     },
 
     /**
      * Xử lý sự kiện khi con trỏ chuỗi di chuyển VÀO VÙNG THẢ.
+     * - Tạo hình ảnh khi kéo.
      * - Tô sáng VÙNG THẢ.
      * - Nhận dữ liệu VÙNG THẢ -> Tạo đối tượng targetChessMan.
      *
@@ -122,8 +150,9 @@ export default {
       console.log("======================================");
       console.log("handleDragEnter");
 
-      event.dataTransfer.dropEffect = "move";
+      event.preventDefault();
 
+      /* ========== Tạo hình ảnh khi kéo ========== */
       try {
         // Lấy ref thẻ td nguồn
         let divRef =
@@ -140,24 +169,36 @@ export default {
         console.error(error);
       }
 
-      console.log("======================================");
+      /* ========== Tô sáng VÙNG THẢ ========== */
+      try {
+        // Xác định thẻ HTML VÙNG THẢ
+        let el = this.$refs["td" + row.toString() + col][0];
 
-      // Xác định thẻ HTML VÙNG THẢ
-      let el = this.$refs["td" + row.toString() + col][0];
+        // Tô sáng
+        el.style.outline = "100px auto white";
 
-      // Tô sáng
-      el.style.outline = "3px auto white";
-      // console.log(el);
+        // console.log(el);
+      } catch (error) {
+        console.error("Lỗi khi xác định thẻ HTML VÙNG THẢ để Tô sáng");
+        console.error(error);
+      }
 
+      /* ========== Lưu trữ dữ liệu cùng thả ========== */
       // Tạo đối tượng targetChessMan
-      this.targetChessMan = {
+      let targetChessMan = {
         chessValue: chessValue,
         row: row,
         col: col,
       };
 
-      console.log("Target chess man: ");
-      console.table(this.targetChessMan);
+      // console.log("Target chess man: ");
+      // console.table(targetChessMan);
+      console.log(
+        `Chess Man Destination: (${targetChessMan.chessValue}, ${targetChessMan.row},${targetChessMan.col})`
+      );
+
+      // Thêm đối tượng targetChessMan vào cuối Hàng đợi targetChessManQueue
+      this.targetChessManQueue.push(targetChessMan);
     },
 
     /**
@@ -170,28 +211,40 @@ export default {
       event.preventDefault();
       // console.log("======================================");
       // console.log("handleDragOver");
-      event.preventDefault();
+
+      event.dataTransfer.dropEffect = "move";
     },
 
     /**
      * Xử lý sự kiện khi con trỏ chuỗi di chuyển RA khỏi VÙNG THẢ.
-     * - Tắt Tô sáng VÙNG THẢ.
-     *
+     * - Tắt Tô sáng VÙNG THẢ - Đối tượng targetChessMan đầu tiên trong Queue.
+     * - Xóa đối tượng targetChessMan đã tắt Tô sáng khỏi Queue.
      * @param {Event} event Đối tượng Event
      * @param {Number} row Giá trị HÀNG trong ma trận.
      * @param {Number} col Giá trị CỘT trong ma trận.
      * @author: NVDung (13-03-2024)
      */
-    handleDragLeave(row, col) {
-      // console.log("======================================");
-      // console.log("handleDragLeave");
+    handleDragLeave() {
+      console.log("======================================");
+      console.log("handleDragLeave");
+      try {
+        // Lấy hàng & cột của đối tượng targetChessMan đầu tiên trong hàng đợi
+        let row = this.targetChessManQueue[0].row;
+        let col = this.targetChessManQueue[0].col;
+        // Xác định thẻ HTML VÙNG THẢ
+        let el = this.$refs["td" + row + col][0];
 
-      // Xác định thẻ HTML VÙNG THẢ
-      let el = this.$refs["td" + row.toString() + col][0];
+        // Tắt tô sáng
+        el.style.outline = "none";
+        console.log(`Row: ${row}, Col: ${col}`);
+        console.log(el);
 
-      // Tắt tô sáng
-      el.style.outline = "none";
-      // console.log(el);
+        // Xóa đối tượng targetChessMan đã tắt Tô sáng khỏi Queue.
+        this.targetChessManQueue.shift();
+      } catch (e) {
+        console.error("handleDragLeave...");
+        console.error(e);
+      }
     },
 
     /**
@@ -201,15 +254,23 @@ export default {
      * @param {Event} event Event sự kiện
      * @author: NVDung (13-03-2024)
      */
-    handleDrop() {
+    handleDrop(event) {
       console.log("======================================");
       console.log("handleDrop");
-      this.sourceChessMan.moveTo(
-        this.targetChessMan.chessValue,
-        this.targetChessMan.row,
-        this.targetChessMan.col,
-        this.theStartMatrix
-      );
+
+      event.preventDefault();
+      try {
+        console.log();
+        this.sourceChessMan.moveTo(
+          this.targetChessManQueue[0].chessValue,
+          this.targetChessManQueue[0].row,
+          this.targetChessManQueue[0].col,
+          this.theStartMatrix
+        );
+      } catch (e) {
+        console.error("handleDrop...");
+        console.error(e);
+      }
     },
 
     /**
@@ -223,19 +284,28 @@ export default {
       console.log("======================================");
       console.log("handleDragEnd: Xóa tô sáng ô đích.");
 
-      // Xác định thẻ HTML đích từ đối tượng targetChessMan.
-      let el =
-        this.$refs[
-          "td" + this.targetChessMan.row.toString() + this.targetChessMan.col
-        ][0];
+      try {
+        // Lấy hàng & cột của đối tượng targetChessMan đầu tiên trong hàng đợi
+        let row = this.targetChessManQueue[0].row;
+        let col = this.targetChessManQueue[0].col;
 
-      // console.log(el);
-      // Xóa tô sáng
-      el.style.outline = "none";
+        // Xác định thẻ HTML đích từ đối tượng targetChessMan.
+        let el = this.$refs["td" + row + col][0];
+
+        console.log(`Row: ${row}, Col: ${col}`);
+        // Xóa tô sáng
+        el.style.outline = "none";
+      } catch (e) {
+        console.error("handleDragEnd...");
+        console.error(e);
+      }
 
       // Clear dữ liệu
       this.sourceChessMan = null;
-      this.targetChessMan = null;
+      this.targetChessManQueue = [];
+
+      // Re-render
+      this.reRender = !this.reRender;
     },
     /* ================== End DRAG - DROP ================== */
   },
@@ -257,10 +327,12 @@ export default {
     border-collapse: collapse;
 
     td {
-      background-color: rgb(115, 90, 58);
-
+      position: relative;
+      &.cell-color {
+        background: rgb(235, 236, 208);
+      }
       &.cell-color-caro {
-        background-color: #01ef9282; // rgb(114, 251, 162);
+        background-color: rgb(115, 149, 82);
       }
 
       .chess-man {
@@ -273,6 +345,32 @@ export default {
         &.chess-man-neo {
           height: 100%;
         }
+      }
+
+      .maker-row,
+      .maker-col {
+        position: absolute;
+        color: rgb(115, 149, 82);
+
+        &.maker-text-white {
+          color: rgb(235, 236, 208);
+        }
+      }
+
+      .maker-row {
+        top: 0;
+        left: 0;
+      }
+
+      .maker-col {
+        bottom: 0;
+        right: 0;
+      }
+
+      .maker-cell {
+        position: absolute;
+        top: 0;
+        right: 0;
       }
     }
   }

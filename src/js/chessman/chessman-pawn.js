@@ -40,6 +40,12 @@ class chessManPawn extends chessMan {
       return false;
     }
 
+    // Đảm bảo quân tốt di chuyển thẳng
+    if (this.colCurrent !== toColumn) {
+      console.log("Lỗi quân tốt PHẢI di chuyển thẳng.");
+      return false;
+    }
+
     // TỐT ĐEN Ở Trên -> Xuống
     if (
       this.id === NVDEnum.chessMan.blackPawn &&
@@ -56,6 +62,7 @@ class chessManPawn extends chessMan {
     ) {
       return true;
     }
+
     return false;
   }
 
@@ -71,12 +78,16 @@ class chessManPawn extends chessMan {
    * @modified: NVDung (12-03-2024)
    */
   isCanCapture(toChessManValue, toRow, toColumn, boardStateMatrix) {
+    // Đảm bảo di chuyển chéo 1 ô
+    if (Math.abs(this.colCurrent - toColumn) !== 1) {
+      return false;
+    }
+
     // TỐT trắng ăn quân đen
     if (
       this.id === NVDEnum.chessMan.whitePawn &&
       toChessManValue >= NVDEnum.chessMan.blackKing &&
-      this.rowCurrent - 1 === toRow &&
-      Math.abs(this.colCurrent - toColumn) === 1
+      this.rowCurrent - 1 === toRow
     ) {
       return true;
     }
@@ -85,8 +96,7 @@ class chessManPawn extends chessMan {
     if (
       this.id === NVDEnum.chessMan.blackPawn &&
       0 < toChessManValue <= NVDEnum.chessMan.whitePawn &&
-      this.rowCurrent + 1 === toRow &&
-      Math.abs(this.colCurrent - toColumn) === 1
+      this.rowCurrent + 1 === toRow
     ) {
       return true;
     }
