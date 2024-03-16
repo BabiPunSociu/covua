@@ -33,23 +33,30 @@ class chessManRook extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanMove(boardStateMatrix, targetChessMan) {
-    // Đảm bảo di chuyển khỏi vị trí hiện tại
-    if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
-      return false;
-    }
+    try {
+      // Đảm bảo di chuyển khỏi vị trí hiện tại
+      if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
+        return false;
+      }
 
-    // Kiểm tra di chuyển ngang / dọc
-    if (
-      // Di chuyển ngang
-      targetChessMan.row === this.rowCurrent ||
-      // Di chuyển dọc
-      targetChessMan.col === this.colCurrent
-    ) {
-      // Kiểm tra quân cờ cản đường
-      let isBlockedPath = this.isBlockedPath(boardStateMatrix, targetChessMan);
-      return !isBlockedPath;
+      // Kiểm tra di chuyển ngang / dọc
+      if (
+        // Di chuyển ngang
+        targetChessMan.row === this.rowCurrent ||
+        // Di chuyển dọc
+        targetChessMan.col === this.colCurrent
+      ) {
+        // Kiểm tra quân cờ cản đường
+        let isBlockedPath = this.isBlockedPath(
+          boardStateMatrix,
+          targetChessMan
+        );
+        return !isBlockedPath;
+      }
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra CanMove quân Rook", e);
     }
-    return false;
   }
 
   /**
@@ -61,18 +68,22 @@ class chessManRook extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanCapture(boardStateMatrix, targetChessMan) {
-    if (
-      // XE trắng ăn quân đen
-      (this.id === NVDEnum.chessMan.whiteRook &&
-        targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
-      // XE đen ăn quân trắng
-      (this.id === NVDEnum.chessMan.blackRook &&
-        0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
-    ) {
-      // Kiểm tra Capture hợp lệ của quân XE -> Tương tự với Move
-      return this.isCanMove(boardStateMatrix, targetChessMan);
+    try {
+      if (
+        // XE trắng ăn quân đen
+        (this.id === NVDEnum.chessMan.whiteRook &&
+          targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
+        // XE đen ăn quân trắng
+        (this.id === NVDEnum.chessMan.blackRook &&
+          0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
+      ) {
+        // Kiểm tra Capture hợp lệ của quân XE -> Tương tự với Move
+        return this.isCanMove(boardStateMatrix, targetChessMan);
+      }
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra Capture quân Rook", e);
     }
-    return false;
   }
 
   /**
@@ -83,10 +94,14 @@ class chessManRook extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   moveTo(boardStateMatrix, targetChessMan) {
-    // Gọi đến Class cha để thực hiện di chuyển
-    super.moveTo(boardStateMatrix, targetChessMan);
+    try {
+      // Gọi đến Class cha để thực hiện di chuyển
+      super.moveTo(boardStateMatrix, targetChessMan);
 
-    // Các xử lý mở rộng viết ở đây
+      // Các xử lý mở rộng viết ở đây
+    } catch (e) {
+      console.error("Lỗi khi di chuyển quân Rook", e);
+    }
   }
 }
 

@@ -33,35 +33,39 @@ class chessManPawn extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanMove(boardStateMatrix, targetChessMan) {
-    // Đảm bảo di chuyển khỏi vị trí hiện tại
-    if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
+    try {
+      // Đảm bảo di chuyển khỏi vị trí hiện tại
+      if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
+        return false;
+      }
+
+      // Đảm bảo quân tốt di chuyển thẳng
+      if (this.colCurrent !== targetChessMan.col) {
+        console.log("Lỗi quân tốt PHẢI di chuyển thẳng.");
+        return false;
+      }
+
+      // TỐT ĐEN Ở Trên -> Xuống
+      if (
+        this.id === NVDEnum.chessMan.blackPawn &&
+        (this.rowCurrent + 1 === targetChessMan.row ||
+          (this.rowCurrent === 1 && this.rowCurrent + 2 === targetChessMan.row))
+      ) {
+        return true;
+      }
+      // TỐT TRẮNG Ở Dưới -> Lên
+      if (
+        this.id === NVDEnum.chessMan.whitePawn &&
+        (this.rowCurrent - 1 === targetChessMan.row ||
+          (this.rowCurrent === 6 && this.rowCurrent - 2 === targetChessMan.row))
+      ) {
+        return true;
+      }
+
       return false;
+    } catch (error) {
+      console.error("Lỗi khi kiểm tra di chuyển Pawn", error);
     }
-
-    // Đảm bảo quân tốt di chuyển thẳng
-    if (this.colCurrent !== targetChessMan.col) {
-      console.log("Lỗi quân tốt PHẢI di chuyển thẳng.");
-      return false;
-    }
-
-    // TỐT ĐEN Ở Trên -> Xuống
-    if (
-      this.id === NVDEnum.chessMan.blackPawn &&
-      (this.rowCurrent + 1 === targetChessMan.row ||
-        (this.rowCurrent === 1 && this.rowCurrent + 2 === targetChessMan.row))
-    ) {
-      return true;
-    }
-    // TỐT TRẮNG Ở Dưới -> Lên
-    if (
-      this.id === NVDEnum.chessMan.whitePawn &&
-      (this.rowCurrent - 1 === targetChessMan.row ||
-        (this.rowCurrent === 6 && this.rowCurrent - 2 === targetChessMan.row))
-    ) {
-      return true;
-    }
-
-    return false;
   }
 
   /**
@@ -73,29 +77,33 @@ class chessManPawn extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanCapture(boardStateMatrix, targetChessMan) {
-    // Đảm bảo di chuyển chéo 1 ô
-    if (Math.abs(this.colCurrent - targetChessMan.col) !== 1) {
+    try {
+      // Đảm bảo di chuyển chéo 1 ô
+      if (Math.abs(this.colCurrent - targetChessMan.col) !== 1) {
+        return false;
+      }
+
+      // TỐT trắng ăn quân đen
+      if (
+        this.id === NVDEnum.chessMan.whitePawn &&
+        targetChessMan.id >= NVDEnum.chessMan.blackKing &&
+        this.rowCurrent - 1 === targetChessMan.row
+      ) {
+        return true;
+      }
+
+      // TỐT đen ăn quân trắng
+      if (
+        this.id === NVDEnum.chessMan.blackPawn &&
+        0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn &&
+        this.rowCurrent + 1 === targetChessMan.row
+      ) {
+        return true;
+      }
       return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra di chuyên Pawn", e);
     }
-
-    // TỐT trắng ăn quân đen
-    if (
-      this.id === NVDEnum.chessMan.whitePawn &&
-      targetChessMan.id >= NVDEnum.chessMan.blackKing &&
-      this.rowCurrent - 1 === targetChessMan.row
-    ) {
-      return true;
-    }
-
-    // TỐT đen ăn quân trắng
-    if (
-      this.id === NVDEnum.chessMan.blackPawn &&
-      0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn &&
-      this.rowCurrent + 1 === targetChessMan.row
-    ) {
-      return true;
-    }
-    return false;
   }
 
   /**
@@ -106,10 +114,14 @@ class chessManPawn extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   moveTo(boardStateMatrix, targetChessMan) {
-    // Gọi đến Class cha để thực hiện di chuyển
-    super.moveTo(boardStateMatrix, targetChessMan);
+    try {
+      // Gọi đến Class cha để thực hiện di chuyển
+      super.moveTo(boardStateMatrix, targetChessMan);
 
-    // Các xử lý mở rộng viết ở đây
+      // Các xử lý mở rộng viết ở đây
+    } catch (e) {
+      console.error("Lỗi khi di chuyên Pawn", e);
+    }
   }
 }
 

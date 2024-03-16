@@ -33,36 +33,43 @@ class chessManQueen extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanMove(boardStateMatrix, targetChessMan) {
-    // Đảm bảo di chuyển khỏi vị trí hiện tại
-    if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
+    try {
+      // Đảm bảo di chuyển khỏi vị trí hiện tại
+      if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
+        return false;
+      }
+
+      // Kiểm tra di chuyển ngang / dọc
+      if (
+        // Di chuyển ngang
+        targetChessMan.row === this.rowCurrent ||
+        // Di chuyển dọc
+        targetChessMan.col === this.colCurrent
+      ) {
+        // Kiểm tra quân cờ chặn đường
+        let isBlockedPath = this.isBlockedPath(
+          boardStateMatrix,
+          targetChessMan
+        );
+        return !isBlockedPath;
+      }
+
+      // Di chuyển chéo, nghĩa là khoảng cách ngang & dọc bằng nhau
+      if (
+        Math.abs(targetChessMan.col - this.colCurrent) ===
+        Math.abs(targetChessMan.row - this.rowCurrent)
+      ) {
+        // Kiểm tra quân cờ chặn đường
+        let isBlockedPathDiagonal = this.isBlockedPathDiagonal(
+          boardStateMatrix,
+          targetChessMan
+        );
+        return !isBlockedPathDiagonal;
+      }
       return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra di chuyển queen", e);
     }
-
-    // Kiểm tra di chuyển ngang / dọc
-    if (
-      // Di chuyển ngang
-      targetChessMan.row === this.rowCurrent ||
-      // Di chuyển dọc
-      targetChessMan.col === this.colCurrent
-    ) {
-      // Kiểm tra quân cờ chặn đường
-      let isBlockedPath = this.isBlockedPath(boardStateMatrix, targetChessMan);
-      return !isBlockedPath;
-    }
-
-    // Di chuyển chéo, nghĩa là khoảng cách ngang & dọc bằng nhau
-    if (
-      Math.abs(targetChessMan.col - this.colCurrent) ===
-      Math.abs(targetChessMan.row - this.rowCurrent)
-    ) {
-      // Kiểm tra quân cờ chặn đường
-      let isBlockedPathDiagonal = this.isBlockedPathDiagonal(
-        boardStateMatrix,
-        targetChessMan
-      );
-      return !isBlockedPathDiagonal;
-    }
-    return false;
   }
 
   /**
@@ -74,18 +81,22 @@ class chessManQueen extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanCapture(boardStateMatrix, targetChessMan) {
-    if (
-      // HẬU trắng ăn quân đen
-      (this.id === NVDEnum.chessMan.whiteQueen &&
-        targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
-      // HẬU đen ăn quân trắng
-      (this.id === NVDEnum.chessMan.blackQueen &&
-        0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
-    ) {
-      // Kiểm tra Capture hợp lệ của quân HẬU -> Tương tự với Move
-      return this.isCanMove(boardStateMatrix, targetChessMan);
+    try {
+      if (
+        // HẬU trắng ăn quân đen
+        (this.id === NVDEnum.chessMan.whiteQueen &&
+          targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
+        // HẬU đen ăn quân trắng
+        (this.id === NVDEnum.chessMan.blackQueen &&
+          0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
+      ) {
+        // Kiểm tra Capture hợp lệ của quân HẬU -> Tương tự với Move
+        return this.isCanMove(boardStateMatrix, targetChessMan);
+      }
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra capture queen", e);
     }
-    return false;
   }
 
   /**
@@ -96,10 +107,14 @@ class chessManQueen extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   moveTo(boardStateMatrix, targetChessMan) {
-    // Gọi đến Class cha để thực hiện di chuyển
-    super.moveTo(boardStateMatrix, targetChessMan);
+    try {
+      // Gọi đến Class cha để thực hiện di chuyển
+      super.moveTo(boardStateMatrix, targetChessMan);
 
-    // Các xử lý mở rộng viết ở đây
+      // Các xử lý mở rộng viết ở đây
+    } catch (e) {
+      console.error("Lỗi khi di chuyên Queen", e);
+    }
   }
 }
 

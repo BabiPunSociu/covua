@@ -1,4 +1,7 @@
 const NVDEnum = {
+  /**
+   * Quân cờ
+   */
   chessMan: {
     /**
      * Ô trống
@@ -64,6 +67,21 @@ const NVDEnum = {
      * Quân tốt đen
      */
     blackPawn: 12,
+  },
+
+  /**
+   * Màu quân cờ mà người chơi cầm.
+   */
+  colorPlayer: {
+    /**
+     * Người chơi cầm quân TRẮNG.
+     */
+    white: 0,
+
+    /**
+     * Người chơi cẩm quân ĐEN.
+     */
+    black: 1,
   },
 };
 

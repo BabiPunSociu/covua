@@ -1,6 +1,6 @@
 import NVDResource from "../resource.js";
 import NVDEnum from "../enum.js";
-import createChessMan from "./createChessMan.js";
+import createChessMan from "./create-chessman.js";
 import playSoundEffect from "../cloudinary/soundEffect.js";
 import targetChessMan from "../targetchessman/target-chessman.js";
 
@@ -70,10 +70,15 @@ class chessMan {
    * @author: NVDung (19-02-2024)
    */
   updateMatrix(boardStateMatrix, targetChessMan) {
-    // Vị trí cũ => trống
-    boardStateMatrix[this.rowCurrent][this.colCurrent] = NVDEnum.chessMan.empty;
-    // vị trí mới => quân cờ
-    boardStateMatrix[targetChessMan.row][targetChessMan.col] = this.id;
+    try {
+      // Vị trí cũ => trống
+      boardStateMatrix[this.rowCurrent][this.colCurrent] =
+        NVDEnum.chessMan.empty;
+      // vị trí mới => quân cờ
+      boardStateMatrix[targetChessMan.row][targetChessMan.col] = this.id;
+    } catch (error) {
+      console.error("Lỗi khi cập nhật ma trả bàn cờ", error);
+    }
   }
 
   /**
@@ -85,39 +90,47 @@ class chessMan {
    * @author: NVDung (12-03-2024)
    */
   isBlockedPath(boardStateMatrix, targetChessMan) {
-    // Di chuyển NGANG
-    if (targetChessMan.row === this.rowCurrent) {
-      let col =
-        this.colCurrent < targetChessMan.col
-          ? this.colCurrent + 1
-          : this.colCurrent - 1;
-      while (col !== targetChessMan.col) {
-        // Kiểm tra có quân cờ khác cản đường ?
-        if (boardStateMatrix[this.rowCurrent][col] !== NVDEnum.chessMan.empty) {
-          return true;
+    try {
+      // Di chuyển NGANG
+      if (targetChessMan.row === this.rowCurrent) {
+        let col =
+          this.colCurrent < targetChessMan.col
+            ? this.colCurrent + 1
+            : this.colCurrent - 1;
+        while (col !== targetChessMan.col) {
+          // Kiểm tra có quân cờ khác cản đường ?
+          if (
+            boardStateMatrix[this.rowCurrent][col] !== NVDEnum.chessMan.empty
+          ) {
+            return true;
+          }
+          // Cập nhật vị trí col
+          col += this.colCurrent < targetChessMan.col ? 1 : -1;
         }
-        // Cập nhật vị trí col
-        col += this.colCurrent < targetChessMan.col ? 1 : -1;
       }
-    }
 
-    // Di chuyển DỌC
-    else if (targetChessMan.col === this.colCurrent) {
-      let row =
-        this.rowCurrent < targetChessMan.row
-          ? this.rowCurrent + 1
-          : this.rowCurrent - 1;
-      while (row !== targetChessMan.row) {
-        // Kiểm tra có quân cờ khác cần đường ?
-        if (boardStateMatrix[row][this.colCurrent] !== NVDEnum.chessMan.empty) {
-          return true;
+      // Di chuyển DỌC
+      else if (targetChessMan.col === this.colCurrent) {
+        let row =
+          this.rowCurrent < targetChessMan.row
+            ? this.rowCurrent + 1
+            : this.rowCurrent - 1;
+        while (row !== targetChessMan.row) {
+          // Kiểm tra có quân cờ khác cần đường ?
+          if (
+            boardStateMatrix[row][this.colCurrent] !== NVDEnum.chessMan.empty
+          ) {
+            return true;
+          }
+          // Cập nhật vị trí row
+          row += this.rowCurrent < targetChessMan.row ? 1 : -1;
         }
-        // Cập nhật vị trí row
-        row += this.rowCurrent < targetChessMan.row ? 1 : -1;
       }
-    }
 
-    return false;
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra chặn đường theo đường ngang & dọc", e);
+    }
   }
 
   /**
@@ -129,24 +142,28 @@ class chessMan {
    * @author: NVDung (12-03-2024)
    */
   isBlockedPathDiagonal(boardStateMatrix, targetChessMan) {
-    let row =
-      this.rowCurrent < targetChessMan.row
-        ? this.rowCurrent + 1
-        : this.rowCurrent - 1;
-    let col =
-      this.colCurrent < targetChessMan.col
-        ? this.colCurrent + 1
-        : this.colCurrent - 1;
-    while (row !== targetChessMan.row && col !== targetChessMan.col) {
-      // Kiểm tra có quân cờ khác cần đường ?
-      if (boardStateMatrix[row][col] !== NVDEnum.chessMan.empty) {
-        return true;
+    try {
+      let row =
+        this.rowCurrent < targetChessMan.row
+          ? this.rowCurrent + 1
+          : this.rowCurrent - 1;
+      let col =
+        this.colCurrent < targetChessMan.col
+          ? this.colCurrent + 1
+          : this.colCurrent - 1;
+      while (row !== targetChessMan.row && col !== targetChessMan.col) {
+        // Kiểm tra có quân cờ khác cần đường ?
+        if (boardStateMatrix[row][col] !== NVDEnum.chessMan.empty) {
+          return true;
+        }
+        // Cập nhật vị trí row
+        row += this.rowCurrent < targetChessMan.row ? 1 : -1;
+        col += this.colCurrent < targetChessMan.col ? 1 : -1;
       }
-      // Cập nhật vị trí row
-      row += this.rowCurrent < targetChessMan.row ? 1 : -1;
-      col += this.colCurrent < targetChessMan.col ? 1 : -1;
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra chặn đường theo đường chéo", e);
     }
-    return false;
   }
 
   /**
@@ -158,12 +175,16 @@ class chessMan {
    * @author: NVDung (12-03-2024)
    */
   getPositionByChessManValue(boardStateMatrix, chessManValue) {
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        if (boardStateMatrix[row][col] === chessManValue) {
-          return [row, col];
+    try {
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+          if (boardStateMatrix[row][col] === chessManValue) {
+            return [row, col];
+          }
         }
       }
+    } catch (e) {
+      console.error("Lỗi khi lọc vị trí quân cờ", e);
     }
   }
 
@@ -175,40 +196,44 @@ class chessMan {
    * @author: NVDung (12-03-2024)
    */
   isWhiteKingCheck(boardStateMatrix) {
-    // Xác định vị trí VUA TRẮNG
-    let [rowKing, colKing] = this.getPositionByChessManValue(
-      boardStateMatrix,
-      NVDEnum.chessMan.whiteKing
-    );
+    try {
+      // Xác định vị trí VUA TRẮNG
+      let [rowKing, colKing] = this.getPositionByChessManValue(
+        boardStateMatrix,
+        NVDEnum.chessMan.whiteKing
+      );
 
-    // Tạo đối tượng targetChessMan quân vua trắng.
-    const whiteKing = new targetChessMan(
-      NVDEnum.chessMan.whiteKing,
-      rowKing,
-      colKing
-    );
+      // Tạo đối tượng targetChessMan quân vua trắng.
+      const whiteKing = new targetChessMan(
+        NVDEnum.chessMan.whiteKing,
+        rowKing,
+        colKing
+      );
 
-    // Duyệt qua các vị trí trên bàn cờ
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        // Xác định là quân cờ đen [7, ..., 12]
-        if (boardStateMatrix[row][col] >= NVDEnum.chessMan.blackKing) {
-          // Tạo đối tượng quân cờ phù hợp
-          let blackChessPiece = createChessMan(
-            boardStateMatrix[row][col],
-            row,
-            col
-          );
+      // Duyệt qua các vị trí trên bàn cờ
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+          // Xác định là quân cờ đen [7, ..., 12]
+          if (boardStateMatrix[row][col] >= NVDEnum.chessMan.blackKing) {
+            // Tạo đối tượng quân cờ phù hợp
+            let blackChessPiece = createChessMan(
+              boardStateMatrix[row][col],
+              row,
+              col
+            );
 
-          // Kiểm tra quân ĐEN này có Capture quân vua TRẮNG không?
-          if (blackChessPiece.isCanCapture(boardStateMatrix, whiteKing)) {
-            console.log("Vua trắng bị chiếu tướng");
-            return true;
+            // Kiểm tra quân ĐEN này có Capture quân vua TRẮNG không?
+            if (blackChessPiece.isCanCapture(boardStateMatrix, whiteKing)) {
+              console.log("Vua trắng bị chiếu tướng");
+              return true;
+            }
           }
         }
       }
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra chiếu tướng vua trắng", e);
     }
-    return false;
   }
 
   /**
@@ -219,42 +244,46 @@ class chessMan {
    * @author: NVDung (12-03-2024)
    */
   isBlackKingCheck(boardStateMatrix) {
-    // Xác định vị trí VUA ĐEN
-    let [rowKing, colKing] = this.getPositionByChessManValue(
-      boardStateMatrix,
-      NVDEnum.chessMan.blackKing
-    );
+    try {
+      // Xác định vị trí VUA ĐEN
+      let [rowKing, colKing] = this.getPositionByChessManValue(
+        boardStateMatrix,
+        NVDEnum.chessMan.blackKing
+      );
 
-    // Tạo đối tượng targetChessMan quân vua ĐEN.
-    const blackKing = new targetChessMan(
-      NVDEnum.chessMan.blackKing,
-      rowKing,
-      colKing
-    );
+      // Tạo đối tượng targetChessMan quân vua ĐEN.
+      const blackKing = new targetChessMan(
+        NVDEnum.chessMan.blackKing,
+        rowKing,
+        colKing
+      );
 
-    // Duyệt qua các vị trí trên bàn cờ
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
-        // Giá trị ô cờ
-        let cellValue = boardStateMatrix[row][col];
+      // Duyệt qua các vị trí trên bàn cờ
+      for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+          // Giá trị ô cờ
+          let cellValue = boardStateMatrix[row][col];
 
-        // Xác định là quân cờ TRẮNG [1, ..., 6]
-        if (
-          NVDEnum.chessMan.empty < cellValue &&
-          cellValue <= NVDEnum.chessMan.whitePawn
-        ) {
-          // Tạo đối tượng quân cờ phù hợp
-          let blackChessPiece = createChessMan(cellValue, row, col);
+          // Xác định là quân cờ TRẮNG [1, ..., 6]
+          if (
+            NVDEnum.chessMan.empty < cellValue &&
+            cellValue <= NVDEnum.chessMan.whitePawn
+          ) {
+            // Tạo đối tượng quân cờ phù hợp
+            let blackChessPiece = createChessMan(cellValue, row, col);
 
-          // Kiểm tra quân TRẮNG này có Capture quân vua ĐEN không?
-          if (blackChessPiece.isCanCapture(boardStateMatrix, blackKing)) {
-            console.log("Vua đen bị chiếu tướng");
-            return true;
+            // Kiểm tra quân TRẮNG này có Capture quân vua ĐEN không?
+            if (blackChessPiece.isCanCapture(boardStateMatrix, blackKing)) {
+              console.log("Vua đen bị chiếu tướng");
+              return true;
+            }
           }
         }
       }
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra chiếu tướng vua đen", e);
     }
-    return false;
   }
   // ==================== Phương thức cần override ==================== //
 
@@ -267,14 +296,18 @@ class chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanMove(boardStateMatrix, targetChessMan) {
-    // Đảm bảo di chuyển khỏi vị trí hiện tại
-    if (
-      Math.abs(targetChessMan.row - this.rowCurrent) +
-      Math.abs(targetChessMan.col - this.colCurrent)
-    ) {
-      return true; // Đã di chuyển khỏi vị trí ban đầu.
+    try {
+      // Đảm bảo di chuyển khỏi vị trí hiện tại
+      if (
+        Math.abs(targetChessMan.row - this.rowCurrent) +
+        Math.abs(targetChessMan.col - this.colCurrent)
+      ) {
+        return true; // Đã di chuyển khỏi vị trí ban đầu.
+      }
+      return false; // Không di chuyển khỏi vị trí ban đầu.
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra di chuyển hợp lệ", e);
     }
-    return false; // Không di chuyển khỏi vị trí ban đầu.
   }
 
   /**
@@ -297,78 +330,88 @@ class chessMan {
    * @author: NVDung (19-02-2024)
    */
   moveTo(boardStateMatrix, targetChessMan) {
-    // Kiểm tra ăn quân cờ hợp lệ
-    if (
-      targetChessMan.id &&
-      this.isCanCapture(boardStateMatrix, targetChessMan)
-    ) {
-      // Tạo ma trận bàn cờ sao chép
-      let boardStateMatrixClone = JSON.parse(JSON.stringify(boardStateMatrix));
-
-      // Cập nhật vị trí quân cờ trên bàn cờ sao chép
-      this.updateMatrix(boardStateMatrixClone, targetChessMan);
-
+    try {
+      // Kiểm tra ăn quân cờ hợp lệ
       if (
-        // Nếu đang di chuyển quân TRẮNG -> Kiểm tra chiếu tướng Vua TRẮNG
-        (NVDEnum.chessMan.whiteKing <= this.id <= NVDEnum.chessMan.whitePawn &&
-          !this.isWhiteKingCheck(boardStateMatrixClone)) ||
-        // Nếu di chuyển quân ĐEN -> Kiểm tra chiếu tướng Vua ĐEN
-        (NVDEnum.chessMan.blackKing <= this.id &&
-          !this.isBlackKingCheck(boardStateMatrixClone))
+        targetChessMan.id &&
+        this.isCanCapture(boardStateMatrix, targetChessMan)
       ) {
-        // Hợp lệ
-        // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-        this.updateMatrix(boardStateMatrix, targetChessMan);
-        // Phát âm thanh ăn quân cờ
-        playSoundEffect(
-          "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438790/sound/capture.mp3"
+        // Tạo ma trận bàn cờ sao chép
+        let boardStateMatrixClone = JSON.parse(
+          JSON.stringify(boardStateMatrix)
         );
+
+        // Cập nhật vị trí quân cờ trên bàn cờ sao chép
+        this.updateMatrix(boardStateMatrixClone, targetChessMan);
+
+        if (
+          // Nếu đang di chuyển quân TRẮNG -> Kiểm tra chiếu tướng Vua TRẮNG
+          (NVDEnum.chessMan.whiteKing <=
+            this.id <=
+            NVDEnum.chessMan.whitePawn &&
+            !this.isWhiteKingCheck(boardStateMatrixClone)) ||
+          // Nếu di chuyển quân ĐEN -> Kiểm tra chiếu tướng Vua ĐEN
+          (NVDEnum.chessMan.blackKing <= this.id &&
+            !this.isBlackKingCheck(boardStateMatrixClone))
+        ) {
+          // Hợp lệ
+          // Cập nhật vị trí quân cờ trên bàn cờ THẬT
+          this.updateMatrix(boardStateMatrix, targetChessMan);
+          // Phát âm thanh ăn quân cờ
+          playSoundEffect(
+            "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438790/sound/capture.mp3"
+          );
+        }
       }
-    }
-    // Kiểm tra di chuyển quân cờ hợp lệ
-    else if (
-      !targetChessMan.id &&
-      this.isCanMove(boardStateMatrix, targetChessMan)
-    ) {
-      // Tạo ma trận sao chép
-      let boardStateMatrixClone = JSON.parse(JSON.stringify(boardStateMatrix));
-
-      // Cập nhật vị trí quân cờ trên bàn cờ sao chép
-      this.updateMatrix(boardStateMatrixClone, targetChessMan);
-
-      // Nếu đang di chuyển quân TRẮNG
-      if (
-        NVDEnum.chessMan.whiteKing <= this.id &&
-        this.id <= NVDEnum.chessMan.whitePawn
+      // Kiểm tra di chuyển quân cờ hợp lệ
+      else if (
+        !targetChessMan.id &&
+        this.isCanMove(boardStateMatrix, targetChessMan)
       ) {
-        // Kiểm tra chiếu tướng Vua TRẮNG
-        if (!this.isWhiteKingCheck(boardStateMatrixClone)) {
-          // Không chiếu tướng Vua Trắng -> Hợp lệ.
-          // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-          this.updateMatrix(boardStateMatrix, targetChessMan);
-          // Phát âm thanh di chuyển quân cờ
-          playSoundEffect(
-            "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
-          );
-        }
-      }
+        // Tạo ma trận sao chép
+        let boardStateMatrixClone = JSON.parse(
+          JSON.stringify(boardStateMatrix)
+        );
 
-      // Nếu di chuyển quân ĐEN
-      else if (NVDEnum.chessMan.blackKing <= this.id) {
-        // Kiểm tra chiếu tướng Vua ĐEN
-        if (!this.isBlackKingCheck(boardStateMatrixClone)) {
-          // Không chiếu tướng Vua ĐEN -> Hợp lệ.
-          // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-          this.updateMatrix(boardStateMatrix, targetChessMan);
-          // Phát âm thanh di chuyển quân cờ
-          playSoundEffect(
-            "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
-          );
+        // Cập nhật vị trí quân cờ trên bàn cờ sao chép
+        this.updateMatrix(boardStateMatrixClone, targetChessMan);
+
+        // Nếu đang di chuyển quân TRẮNG
+        if (
+          NVDEnum.chessMan.whiteKing <= this.id &&
+          this.id <= NVDEnum.chessMan.whitePawn
+        ) {
+          // Kiểm tra chiếu tướng Vua TRẮNG
+          if (!this.isWhiteKingCheck(boardStateMatrixClone)) {
+            // Không chiếu tướng Vua Trắng -> Hợp lệ.
+            // Cập nhật vị trí quân cờ trên bàn cờ THẬT
+            this.updateMatrix(boardStateMatrix, targetChessMan);
+            // Phát âm thanh di chuyển quân cờ
+            playSoundEffect(
+              "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
+            );
+          }
         }
+
+        // Nếu di chuyển quân ĐEN
+        else if (NVDEnum.chessMan.blackKing <= this.id) {
+          // Kiểm tra chiếu tướng Vua ĐEN
+          if (!this.isBlackKingCheck(boardStateMatrixClone)) {
+            // Không chiếu tướng Vua ĐEN -> Hợp lệ.
+            // Cập nhật vị trí quân cờ trên bàn cờ THẬT
+            this.updateMatrix(boardStateMatrix, targetChessMan);
+            // Phát âm thanh di chuyển quân cờ
+            playSoundEffect(
+              "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
+            );
+          }
+        }
+      } else {
+        // Move không hợp lệ
+        // Phát âm thanh di chuyển không hợp lệ.
       }
-    } else {
-      // Move không hợp lệ
-      // Phát âm thanh di chuyển không hợp lệ.
+    } catch (e) {
+      console.error("Lỗi khi di chuyển quân cờ", e);
     }
   }
 }

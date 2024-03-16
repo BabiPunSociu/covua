@@ -86,6 +86,11 @@ export default {
        * Hàng đợi chứa các đối tượng targetChessMan.
        */
       targetChessManQueue: [],
+
+      /**
+       * Chơi quân cờ màu ?
+       */
+      colorPlayer: null,
     };
   },
 

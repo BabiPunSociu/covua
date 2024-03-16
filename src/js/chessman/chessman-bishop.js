@@ -33,25 +33,29 @@ class chessManBishop extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanMove(boardStateMatrix, targetChessMan) {
-    // Đảm bảo di chuyển khỏi vị trí hiện tại
-    if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
+    try {
+      // Đảm bảo di chuyển khỏi vị trí hiện tại
+      if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
+        return false;
+      }
+
+      // Di chuyển chéo, nghĩa là khoảng cách ngang & dọc bằng nhau
+      if (
+        Math.abs(targetChessMan.col - this.colCurrent) ===
+        Math.abs(targetChessMan.row - this.rowCurrent)
+      ) {
+        let isBlockedPath = this.isBlockedPathDiagonal(
+          boardStateMatrix,
+          targetChessMan
+        );
+
+        return !isBlockedPath;
+      }
+
       return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra di chuyển bishop", e);
     }
-
-    // Di chuyển chéo, nghĩa là khoảng cách ngang & dọc bằng nhau
-    if (
-      Math.abs(targetChessMan.col - this.colCurrent) ===
-      Math.abs(targetChessMan.row - this.rowCurrent)
-    ) {
-      let isBlockedPath = this.isBlockedPathDiagonal(
-        boardStateMatrix,
-        targetChessMan
-      );
-
-      return !isBlockedPath;
-    }
-
-    return false;
   }
 
   /**
@@ -63,19 +67,23 @@ class chessManBishop extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanCapture(boardStateMatrix, targetChessMan) {
-    if (
-      // TƯỢNG trắng ăn quân đen
-      (this.id === NVDEnum.chessMan.whiteBishop &&
-        targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
-      // TƯỢNG đen ăn quân trắng
-      (this.id === NVDEnum.chessMan.blackBishop &&
-        0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
-    ) {
-      // Kiểm tra Capture hợp lệ của quân TƯỢNG -> Tương tự với Move
-      return this.isCanMove(boardStateMatrix, targetChessMan);
-    }
+    try {
+      if (
+        // TƯỢNG trắng ăn quân đen
+        (this.id === NVDEnum.chessMan.whiteBishop &&
+          targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
+        // TƯỢNG đen ăn quân trắng
+        (this.id === NVDEnum.chessMan.blackBishop &&
+          0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
+      ) {
+        // Kiểm tra Capture hợp lệ của quân TƯỢNG -> Tương tự với Move
+        return this.isCanMove(boardStateMatrix, targetChessMan);
+      }
 
-    return false;
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra capture bishop", e);
+    }
   }
 
   /**
@@ -86,10 +94,14 @@ class chessManBishop extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   moveTo(boardStateMatrix, targetChessMan) {
-    // Gọi đến Class cha để thực hiện di chuyển
-    super.moveTo(boardStateMatrix, targetChessMan);
+    try {
+      // Gọi đến Class cha để thực hiện di chuyển
+      super.moveTo(boardStateMatrix, targetChessMan);
 
-    // Các xử lý mở rộng viết ở đây
+      // Các xử lý mở rộng viết ở đây
+    } catch (e) {
+      console.error("Lỗi khi di chuyên quân cờ bishop", e);
+    }
   }
 }
 

@@ -15,7 +15,7 @@ import NVDResource from "./js/resource.js";
 // function playSoundEffect()
 import playSoundEffect from "./js/cloudinary/soundEffect.js";
 // function createChessMan()
-import createChessMan from "./js/chessman/createChessMan.js";
+import createChessMan from "./js/chessman/create-chessman.js";
 // class targetChessMan
 import targetChessMan from "./js/targetchessman/target-chessman.js";
 

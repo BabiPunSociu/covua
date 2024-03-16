@@ -33,19 +33,23 @@ class chessManKing extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanMove(boardStateMatrix, targetChessMan) {
-    // Đảm bảo di chuyển khỏi vị trí hiện tại
-    if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
-      return false;
-    }
+    try {
+      // Đảm bảo di chuyển khỏi vị trí hiện tại
+      if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
+        return false;
+      }
 
-    // Kiểm tra di chuyển 1 ô theo mọi hướng
-    if (
-      Math.abs(targetChessMan.row - this.rowCurrent) <= 1 &&
-      Math.abs(targetChessMan.col - this.colCurrent) <= 1
-    ) {
-      return true;
+      // Kiểm tra di chuyển 1 ô theo mọi hướng
+      if (
+        Math.abs(targetChessMan.row - this.rowCurrent) <= 1 &&
+        Math.abs(targetChessMan.col - this.colCurrent) <= 1
+      ) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra di chuyển King", e);
     }
-    return false;
   }
 
   /**
@@ -57,19 +61,23 @@ class chessManKing extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   isCanCapture(boardStateMatrix, targetChessMan) {
-    if (
-      // Vua trắng ăn quân đen
-      (this.id === NVDEnum.chessMan.whiteKing &&
-        targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
-      // Vua đen ăn quân trắng
-      (this.id === NVDEnum.chessMan.blackKing &&
-        0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
-    ) {
-      // Kiểm tra Capture hợp lệ của quân VUA -> Tương tự với Move
-      return this.isCanMove(boardStateMatrix, targetChessMan);
-    }
+    try {
+      if (
+        // Vua trắng ăn quân đen
+        (this.id === NVDEnum.chessMan.whiteKing &&
+          targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
+        // Vua đen ăn quân trắng
+        (this.id === NVDEnum.chessMan.blackKing &&
+          0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
+      ) {
+        // Kiểm tra Capture hợp lệ của quân VUA -> Tương tự với Move
+        return this.isCanMove(boardStateMatrix, targetChessMan);
+      }
 
-    return false;
+      return false;
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra Capture King", e);
+    }
   }
 
   /**
@@ -80,10 +88,14 @@ class chessManKing extends chessMan {
    * @author: NVDung (19-02-2024)
    */
   moveTo(boardStateMatrix, targetChessMan) {
-    // Gọi đến Class cha để thực hiện di chuyển
-    super.moveTo(boardStateMatrix, targetChessMan);
+    try {
+      // Gọi đến Class cha để thực hiện di chuyển
+      super.moveTo(boardStateMatrix, targetChessMan);
 
-    // Các xử lý mở rộng viết ở đây
+      // Các xử lý mở rộng viết ở đây
+    } catch (e) {
+      console.error("Lỗi khi di chuyển King", e);
+    }
   }
 }
 
