@@ -2,11 +2,12 @@ import NVDResource from "../resource.js";
 import NVDEnum from "../enum.js";
 import createChessMan from "./createChessMan.js";
 import playSoundEffect from "../cloudinary/soundEffect.js";
+import targetChessMan from "../targetchessman/target-chessman.js";
 
 /**
  * Khai báo lớp quân cờ
  *
- * @author: NVDung (19-02-2024)
+ * @author NVDung (19-02-2024)
  */
 class chessMan {
   // ===================================== Constructor ===================================== //
@@ -16,7 +17,7 @@ class chessMan {
    * @param {Number} chessManValue Giá trị số của quân cờ theo quy ước, từ 1 đến 12. Ví dụ: 1, 2, ..., 12
    * @param {Number} rowCurrent Vị trí hàng hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
    * @param {Number} colCurrent Vị trí cột hiện tại của quân cờ theo ma trận. Ví dụ: 0, 1, ..., 7.
-   * @author: NVDung (19-02-2024)
+   * @author NVDung (19-02-2024)
    */
   constructor(chessManValue, rowCurrent, colCurrent) {
     /**
@@ -60,79 +61,59 @@ class chessMan {
     }
   }
 
-  // /**
-  //  * Lấy vị trí "HÀNG" của quân cờ với stringPosition
-  //  *
-  //  * @param {String} stringPosition
-  //  * @returns {Number} Vị trí Row.
-  //  * @author: NVDung (19-02-2024)
-  //  */
-  // getRowPosition(stringPosition) {
-  //   return parseInt(stringPosition.slice(0, 1));
-  // }
-
-  //   /**
-  //  * Lấy vị trí "CỘT" của quân cờ với stringPosition
-  //  *
-  //  * @param {String} stringPosition
-  //  * @returns {Number} Vị trí Column.
-  //  * @author: NVDung (19-02-2024)
-  //  */
-  // getColPosition(stringPosition) {
-  //   return parseInt(stringPosition.slice(1, 2));
-  // }
-
   /**
    * Hàm cập nhật ma trận bàn cờ.
    *
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại
-   * @param {Number} toRow Vị trí hàng mới
-   * @param {Number} toColumn Vị trí cột mới
+   * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
    *
    * @author: NVDung (19-02-2024)
    */
-  updateMatrix(boardStateMatrix, toRow, toColumn) {
+  updateMatrix(boardStateMatrix, targetChessMan) {
     // Vị trí cũ => trống
     boardStateMatrix[this.rowCurrent][this.colCurrent] = NVDEnum.chessMan.empty;
     // vị trí mới => quân cờ
-    boardStateMatrix[toRow][toColumn] = this.id;
+    boardStateMatrix[targetChessMan.row][targetChessMan.col] = this.id;
   }
 
   /**
    * Kiểm tra chặn đường theo đường ngang & dọc ?
    *
-   * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
+   * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
    * @returns {Boolean} True - Có quân cờ chặn đường, False - Không bị chặn đường.
    * @author: NVDung (12-03-2024)
    */
-  isBlockedPath(toRow, toColumn, boardStateMatrix) {
+  isBlockedPath(boardStateMatrix, targetChessMan) {
     // Di chuyển NGANG
-    if (toRow === this.rowCurrent) {
+    if (targetChessMan.row === this.rowCurrent) {
       let col =
-        this.colCurrent < toColumn ? this.colCurrent + 1 : this.colCurrent - 1;
-      while (col !== toColumn) {
+        this.colCurrent < targetChessMan.col
+          ? this.colCurrent + 1
+          : this.colCurrent - 1;
+      while (col !== targetChessMan.col) {
         // Kiểm tra có quân cờ khác cản đường ?
         if (boardStateMatrix[this.rowCurrent][col] !== NVDEnum.chessMan.empty) {
           return true;
         }
         // Cập nhật vị trí col
-        col += this.colCurrent < toColumn ? 1 : -1;
+        col += this.colCurrent < targetChessMan.col ? 1 : -1;
       }
     }
 
     // Di chuyển DỌC
-    else if (toColumn === this.colCurrent) {
+    else if (targetChessMan.col === this.colCurrent) {
       let row =
-        this.rowCurrent < toRow ? this.rowCurrent + 1 : this.rowCurrent - 1;
-      while (row !== toRow) {
+        this.rowCurrent < targetChessMan.row
+          ? this.rowCurrent + 1
+          : this.rowCurrent - 1;
+      while (row !== targetChessMan.row) {
         // Kiểm tra có quân cờ khác cần đường ?
         if (boardStateMatrix[row][this.colCurrent] !== NVDEnum.chessMan.empty) {
           return true;
         }
         // Cập nhật vị trí row
-        row += this.rowCurrent < toRow ? 1 : -1;
+        row += this.rowCurrent < targetChessMan.row ? 1 : -1;
       }
     }
 
@@ -142,25 +123,28 @@ class chessMan {
   /**
    * Kiểm tra chặn đường theo đường chéo ?
    *
-   * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
+   * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
    * @returns {Boolean} True - Có quân cờ chặn đường, False - Không bị chặn đường.
    * @author: NVDung (12-03-2024)
    */
-  isBlockedPathDiagonal(toRow, toColumn, boardStateMatrix) {
+  isBlockedPathDiagonal(boardStateMatrix, targetChessMan) {
     let row =
-      this.rowCurrent < toRow ? this.rowCurrent + 1 : this.rowCurrent - 1;
+      this.rowCurrent < targetChessMan.row
+        ? this.rowCurrent + 1
+        : this.rowCurrent - 1;
     let col =
-      this.colCurrent < toColumn ? this.colCurrent + 1 : this.colCurrent - 1;
-    while (row !== toRow && col !== toColumn) {
+      this.colCurrent < targetChessMan.col
+        ? this.colCurrent + 1
+        : this.colCurrent - 1;
+    while (row !== targetChessMan.row && col !== targetChessMan.col) {
       // Kiểm tra có quân cờ khác cần đường ?
       if (boardStateMatrix[row][col] !== NVDEnum.chessMan.empty) {
         return true;
       }
       // Cập nhật vị trí row
-      row += this.rowCurrent < toRow ? 1 : -1;
-      col += this.colCurrent < toColumn ? 1 : -1;
+      row += this.rowCurrent < targetChessMan.row ? 1 : -1;
+      col += this.colCurrent < targetChessMan.col ? 1 : -1;
     }
     return false;
   }
@@ -197,6 +181,13 @@ class chessMan {
       NVDEnum.chessMan.whiteKing
     );
 
+    // Tạo đối tượng targetChessMan quân vua trắng.
+    const whiteKing = new targetChessMan(
+      NVDEnum.chessMan.whiteKing,
+      rowKing,
+      colKing
+    );
+
     // Duyệt qua các vị trí trên bàn cờ
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
@@ -210,14 +201,7 @@ class chessMan {
           );
 
           // Kiểm tra quân ĐEN này có Capture quân vua TRẮNG không?
-          if (
-            blackChessPiece.isCanCapture(
-              NVDEnum.chessMan.whiteKing,
-              rowKing,
-              colKing,
-              boardStateMatrix
-            )
-          ) {
+          if (blackChessPiece.isCanCapture(boardStateMatrix, whiteKing)) {
             console.log("Vua trắng bị chiếu tướng");
             return true;
           }
@@ -241,6 +225,13 @@ class chessMan {
       NVDEnum.chessMan.blackKing
     );
 
+    // Tạo đối tượng targetChessMan quân vua ĐEN.
+    const blackKing = new targetChessMan(
+      NVDEnum.chessMan.blackKing,
+      rowKing,
+      colKing
+    );
+
     // Duyệt qua các vị trí trên bàn cờ
     for (let row = 0; row < 8; row++) {
       for (let col = 0; col < 8; col++) {
@@ -256,14 +247,7 @@ class chessMan {
           let blackChessPiece = createChessMan(cellValue, row, col);
 
           // Kiểm tra quân TRẮNG này có Capture quân vua ĐEN không?
-          if (
-            blackChessPiece.isCanCapture(
-              NVDEnum.chessMan.blackKing,
-              rowKing,
-              colKing,
-              boardStateMatrix
-            )
-          ) {
+          if (blackChessPiece.isCanCapture(boardStateMatrix, blackKing)) {
             console.log("Vua đen bị chiếu tướng");
             return true;
           }
@@ -277,16 +261,16 @@ class chessMan {
   /**
    * Kiểm tra di chuyển hợp lệ ?
    *
-   * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
+   * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
    * @author: NVDung (19-02-2024)
    */
-  isCanMove(toRow, toColumn, boardStateMatrix) {
+  isCanMove(boardStateMatrix, targetChessMan) {
     // Đảm bảo di chuyển khỏi vị trí hiện tại
     if (
-      Math.abs(toRow - this.rowCurrent) + Math.abs(toColumn - this.colCurrent)
+      Math.abs(targetChessMan.row - this.rowCurrent) +
+      Math.abs(targetChessMan.col - this.colCurrent)
     ) {
       return true; // Đã di chuyển khỏi vị trí ban đầu.
     }
@@ -296,37 +280,33 @@ class chessMan {
   /**
    * Kiểm tra ăn quân cờ hợp lệ ?
    *
-   * @param {Number} toChessManValue Giá trị số quân cờ sẽ Capture, từ 1 đến 12.
-   * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
+   * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
    * @author: NVDung (19-02-2024)
    */
-  isCanCapture(toChessManValue, toRow, toColumn, boardStateMatrix) {
+  isCanCapture(boardStateMatrix, targetChessMan) {
     throw new Error("Not implement!");
   }
 
   /**
    * Phương thức di chuyển quân cờ (Move + Capture)
    *
-   * @param {Number} toChessManValue Giá trị số quân cờ sẽ Capture, từ 1 đến 12.
-   * @param {Number} toRow Vị trí HÀNG quân cờ sẽ Capture. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} toCol Vị trí CỘT quân cờ sẽ Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
+   * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
    * @author: NVDung (19-02-2024)
    */
-  moveTo(toChessManValue = 0, toRow, toColumn, boardStateMatrix) {
+  moveTo(boardStateMatrix, targetChessMan) {
     // Kiểm tra ăn quân cờ hợp lệ
     if (
-      toChessManValue &&
-      this.isCanCapture(toChessManValue, toRow, toColumn, boardStateMatrix)
+      targetChessMan.id &&
+      this.isCanCapture(boardStateMatrix, targetChessMan)
     ) {
       // Tạo ma trận bàn cờ sao chép
       let boardStateMatrixClone = JSON.parse(JSON.stringify(boardStateMatrix));
 
       // Cập nhật vị trí quân cờ trên bàn cờ sao chép
-      this.updateMatrix(boardStateMatrixClone, toRow, toColumn);
+      this.updateMatrix(boardStateMatrixClone, targetChessMan);
 
       if (
         // Nếu đang di chuyển quân TRẮNG -> Kiểm tra chiếu tướng Vua TRẮNG
@@ -338,7 +318,7 @@ class chessMan {
       ) {
         // Hợp lệ
         // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-        this.updateMatrix(boardStateMatrix, toRow, toColumn);
+        this.updateMatrix(boardStateMatrix, targetChessMan);
         // Phát âm thanh ăn quân cờ
         playSoundEffect(
           "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438790/sound/capture.mp3"
@@ -347,32 +327,14 @@ class chessMan {
     }
     // Kiểm tra di chuyển quân cờ hợp lệ
     else if (
-      !toChessManValue &&
-      this.isCanMove(toRow, toColumn, boardStateMatrix)
+      !targetChessMan.id &&
+      this.isCanMove(boardStateMatrix, targetChessMan)
     ) {
       // Tạo ma trận sao chép
       let boardStateMatrixClone = JSON.parse(JSON.stringify(boardStateMatrix));
 
       // Cập nhật vị trí quân cờ trên bàn cờ sao chép
-      this.updateMatrix(boardStateMatrixClone, toRow, toColumn);
-      /*
-      if (
-        // Nếu đang di chuyển quân TRẮNG -> Kiểm tra chiếu tướng Vua TRẮNG
-        (NVDEnum.chessMan.whiteKing <= this.id <= NVDEnum.chessMan.whitePawn &&
-          !this.isWhiteKingCheck(boardStateMatrixClone)) ||
-        // Nếu di chuyển quân ĐEN -> Kiểm tra chiếu tướng Vua ĐEN
-        (NVDEnum.chessMan.blackKing <= this.id &&
-          !this.isBlackKingCheck(boardStateMatrixClone))
-      ) {
-        // Hợp lệ
-        // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-        this.updateMatrix(boardStateMatrix, toRow, toColumn);
-        // Phát âm thanh di chuyển quân cờ
-        playSoundEffect(
-          "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
-        );
-      }
-      */
+      this.updateMatrix(boardStateMatrixClone, targetChessMan);
 
       // Nếu đang di chuyển quân TRẮNG
       if (
@@ -383,7 +345,7 @@ class chessMan {
         if (!this.isWhiteKingCheck(boardStateMatrixClone)) {
           // Không chiếu tướng Vua Trắng -> Hợp lệ.
           // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-          this.updateMatrix(boardStateMatrix, toRow, toColumn);
+          this.updateMatrix(boardStateMatrix, targetChessMan);
           // Phát âm thanh di chuyển quân cờ
           playSoundEffect(
             "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
@@ -397,7 +359,7 @@ class chessMan {
         if (!this.isBlackKingCheck(boardStateMatrixClone)) {
           // Không chiếu tướng Vua ĐEN -> Hợp lệ.
           // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-          this.updateMatrix(boardStateMatrix, toRow, toColumn);
+          this.updateMatrix(boardStateMatrix, targetChessMan);
           // Phát âm thanh di chuyển quân cờ
           playSoundEffect(
             "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"

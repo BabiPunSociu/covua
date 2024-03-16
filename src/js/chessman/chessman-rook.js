@@ -27,28 +27,26 @@ class chessManRook extends chessMan {
   /**
    * Kiểm tra di chuyển hợp lệ ?
    *
-   * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
+   * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
-   * @author: NVDung (11-03-2024)
-   * @Modified: NVDung (12-03-2024)
+   * @author: NVDung (19-02-2024)
    */
-  isCanMove(toRow, toColumn, boardStateMatrix) {
+  isCanMove(boardStateMatrix, targetChessMan) {
     // Đảm bảo di chuyển khỏi vị trí hiện tại
-    if (!super.isCanMove(toRow, toColumn)) {
+    if (!super.isCanMove(boardStateMatrix, targetChessMan)) {
       return false;
     }
 
     // Kiểm tra di chuyển ngang / dọc
     if (
       // Di chuyển ngang
-      toRow === this.rowCurrent ||
+      targetChessMan.row === this.rowCurrent ||
       // Di chuyển dọc
-      toColumn === this.colCurrent
+      targetChessMan.col === this.colCurrent
     ) {
       // Kiểm tra quân cờ cản đường
-      let isBlockedPath = this.isBlockedPath(toRow, toColumn, boardStateMatrix);
+      let isBlockedPath = this.isBlockedPath(boardStateMatrix, targetChessMan);
       return !isBlockedPath;
     }
     return false;
@@ -57,25 +55,22 @@ class chessManRook extends chessMan {
   /**
    * Kiểm tra ăn quân cờ hợp lệ ?
    *
-   * @param {Number} toChessManValue Giá trị số quân cờ sẽ Capture, từ 1 đến 12.
-   * @param {Number} toRow Vị trí hàng quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} toColumn Vị trí cột quân cờ bị Capture. Ví dụ: 0, 1, ..., 7.
+   * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
-   * @author: NVDung (11-03-2024)
-   * @modified: NVDung (12-03-2024)
+   * @author: NVDung (19-02-2024)
    */
-  isCanCapture(toChessManValue, toRow, toColumn, boardStateMatrix) {
+  isCanCapture(boardStateMatrix, targetChessMan) {
     if (
       // XE trắng ăn quân đen
       (this.id === NVDEnum.chessMan.whiteRook &&
-        toChessManValue >= NVDEnum.chessMan.blackKing) ||
+        targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
       // XE đen ăn quân trắng
       (this.id === NVDEnum.chessMan.blackRook &&
-        0 < toChessManValue <= NVDEnum.chessMan.whitePawn)
+        0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
     ) {
       // Kiểm tra Capture hợp lệ của quân XE -> Tương tự với Move
-      return this.isCanMove(toRow, toColumn, boardStateMatrix);
+      return this.isCanMove(boardStateMatrix, targetChessMan);
     }
     return false;
   }
@@ -83,15 +78,13 @@ class chessManRook extends chessMan {
   /**
    * Phương thức di chuyển quân cờ (Move + Capture)
    *
-   * @param {Number} toChessMan Giá trị số quân cờ sẽ Capture, từ 1 đến 12.
-   * @param {Number} toRow Vị trí HÀNG quân cờ sẽ Capture. Ví dụ: 0, 1, ..., 7.
-   * @param {Number} toCol Vị trí CỘT quân cờ sẽ Capture. Ví dụ: 0, 1, ..., 7.
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
-   * @author: NVDung (11-03-2024)
+   * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
+   * @author: NVDung (19-02-2024)
    */
-  moveTo(toChessManValue = 0, toRow, toColumn, boardStateMatrix) {
+  moveTo(boardStateMatrix, targetChessMan) {
     // Gọi đến Class cha để thực hiện di chuyển
-    super.moveTo(toChessManValue, toRow, toColumn, boardStateMatrix);
+    super.moveTo(boardStateMatrix, targetChessMan);
 
     // Các xử lý mở rộng viết ở đây
   }

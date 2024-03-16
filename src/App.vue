@@ -83,9 +83,7 @@ export default {
       sourceChessMan: null,
 
       /**
-       * Hàng đợi chứa các đối tượng chessMan Target.
-       * Đối tượng chessManTarget - đây KHÔNG phải đối tượng chessman:
-       * chessManTarget { chessValue: Number, row: Number, col: Number, }
+       * Hàng đợi chứa các đối tượng targetChessMan.
        */
       targetChessManQueue: [],
     };
@@ -185,16 +183,10 @@ export default {
 
       /* ========== Lưu trữ dữ liệu cùng thả ========== */
       // Tạo đối tượng targetChessMan
-      let targetChessMan = {
-        chessValue: chessValue,
-        row: row,
-        col: col,
-      };
+      let targetChessMan = new this.$targetChessMan(chessValue, row, col);
 
-      // console.log("Target chess man: ");
-      // console.table(targetChessMan);
       console.log(
-        `Chess Man Destination: (${targetChessMan.chessValue}, ${targetChessMan.row},${targetChessMan.col})`
+        `Chess Man Destination: (${targetChessMan.id}, ${targetChessMan.row},${targetChessMan.col})`
       );
 
       // Thêm đối tượng targetChessMan vào cuối Hàng đợi targetChessManQueue
@@ -262,10 +254,8 @@ export default {
       try {
         console.log();
         this.sourceChessMan.moveTo(
-          this.targetChessManQueue[0].chessValue,
-          this.targetChessManQueue[0].row,
-          this.targetChessManQueue[0].col,
-          this.theStartMatrix
+          this.theStartMatrix,
+          this.targetChessManQueue[0]
         );
       } catch (e) {
         console.error("handleDrop...");
@@ -308,6 +298,19 @@ export default {
       this.reRender = !this.reRender;
     },
     /* ================== End DRAG - DROP ================== */
+
+    /* ================== GAME ================== */
+    /**
+     * Kiểm tra kết thúc ván cờ?
+     *
+     * @returns {String} result $Người chiến thắng || $Hòa.
+     */
+    gameOver() {
+      const result = "Hòa";
+
+      return result;
+    },
+    /* ================== GAME ================== */
   },
 };
 </script>
