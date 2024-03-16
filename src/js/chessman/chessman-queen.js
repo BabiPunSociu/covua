@@ -104,12 +104,15 @@ class chessManQueen extends chessMan {
    *
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
+   * @returns {Boolean} True - Hợp lệ, False - Không hợp lệ.
    * @author: NVDung (19-02-2024)
    */
   moveTo(boardStateMatrix, targetChessMan) {
     try {
       // Gọi đến Class cha để thực hiện di chuyển
-      super.moveTo(boardStateMatrix, targetChessMan);
+      let isLegalMove = super.moveTo(boardStateMatrix, targetChessMan);
+
+      return isLegalMove;
 
       // Các xử lý mở rộng viết ở đây
     } catch (e) {

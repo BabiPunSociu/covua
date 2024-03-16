@@ -327,6 +327,7 @@ class chessMan {
    *
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
+   * @return {Boolean} True - Di chuyển hợp lệ, False - Không di chuyển hợp lệ.
    * @author: NVDung (19-02-2024)
    */
   moveTo(boardStateMatrix, targetChessMan) {
@@ -361,7 +362,11 @@ class chessMan {
           playSoundEffect(
             "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438790/sound/capture.mp3"
           );
+
+          return true;
         }
+
+        return false;
       }
       // Kiểm tra di chuyển quân cờ hợp lệ
       else if (
@@ -390,6 +395,8 @@ class chessMan {
             playSoundEffect(
               "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
             );
+
+            return true;
           }
         }
 
@@ -404,12 +411,15 @@ class chessMan {
             playSoundEffect(
               "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
             );
+
+            return true;
           }
         }
-      } else {
-        // Move không hợp lệ
-        // Phát âm thanh di chuyển không hợp lệ.
       }
+      // Move không hợp lệ
+      return false;
+
+      // Phát âm thanh di chuyển không hợp lệ.
     } catch (e) {
       console.error("Lỗi khi di chuyển quân cờ", e);
     }

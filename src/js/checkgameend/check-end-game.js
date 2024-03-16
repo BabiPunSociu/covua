@@ -18,22 +18,75 @@ import NVDEnum from "../enum.js";
 function findLegalMoves(boardStateMatrix, colorPlayer) {
   // List chứa các đối tượng nước đi hợp lệ.
   const listResult = [];
+
   try {
-    // Người chơi cầm quân TRẮNG
-    if (colorPlayer === NVDEnum.colorPlayer.white) {
-      // Máy tính hợp lệ
-    } else if (colorPlayer === NVDEnum.colorPlayer.black) {
-      // Máy tính đen
+    // Kiểm tra màu cờ của người chơi đang thực hiện
+    const isWhite = colorPlayer === NVDEnum.colorPlayer.white;
+    const isBlack = colorPlayer === NVDEnum.colorPlayer.black;
+
+    // Kiểm tra màu không hợp lệ.
+    if (!(isWhite || isBlack)) {
+      throw new Error("Invalid color player.");
     }
 
-    // Màu cờ không hợp lệ
-    else {
-      throw new Error("Invalid colorPlayer");
+    // Xác định giá trị min-max của quân cờ theo màu
+    const minChessMan = isWhite
+      ? NVDEnum.chessMan.whiteKing
+      : NVDEnum.chessMan.blackKing;
+    const maxChessMan = isWhite
+      ? NVDEnum.chessMan.whitePawn
+      : NVDEnum.chessMan.blackPawn;
+
+    // Duyệt qua toàn bộ bàn cờ
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        // Giá trị ô cờ
+        const cell = boardStateMatrix[row][col];
+        // Xác định quân cờ theo màu đang thực hiện
+        if (minChessMan <= cell && cell <= maxChessMan) {
+          // Tạo đối tượng sourceChessMan phù hợp
+          const sourceChessMan = createChessMan(cell, row, col);
+
+          // Duyệt lại toàn bộ bàn cờ để xác định các ô đích
+          for (let targetRow = 0; targetRow < 8; targetRow++) {
+            for (let targetCol = 0; targetCol < 8; targetCol++) {
+              // Giá trị ô cờ đích
+              const targetCell = boardStateMatrix[targetRow][targetCol];
+
+              if (
+                // Nếu chơi quân TRẮNG thì cần các ô không có quân TRẮNG
+                (isWhite && (targetCell === 0 || targetCell > maxChessMan)) ||
+                // Nếu chơi quân ĐEN thì cần các ô không có quân ĐEN
+                (isBlack && targetCell < minChessMan)
+              ) {
+                // Tạo đối tượng targetChessMan
+                const targetChessManObject = new targetChessMan(
+                  targetCell,
+                  targetRow,
+                  targetCol
+                );
+                const isLegalMove = sourceChessMan.moveTo(
+                  boardStateMatrix,
+                  targetChessManObject
+                );
+
+                if (isLegalMove) {
+                  listResult.push({
+                    chessMan: sourceChessMan,
+                    targetChessMan: targetChessManObject,
+                  });
+                }
+              }
+            }
+          }
+        }
+      }
     }
+
+    return listResult;
   } catch (e) {
     console.error("Lỗi khi tìm danh sách nước đi hợp lệ", e);
   }
-  return listResult;
 }
 
 /* ============================== CÁC HÀM VỀ CỜ THẮNG - THUA ============================== */

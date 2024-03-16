@@ -257,11 +257,11 @@ export default {
 
       event.preventDefault();
       try {
-        console.log();
-        this.sourceChessMan.moveTo(
+        let isLegalMove = this.sourceChessMan.moveTo(
           this.theStartMatrix,
           this.targetChessManQueue[0]
         );
+        console.log(isLegalMove);
       } catch (e) {
         console.error("handleDrop...");
         console.error(e);
