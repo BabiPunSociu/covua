@@ -1,17 +1,19 @@
 /* ============================== IMPORT CLASSES/ FUNCTIONS ============================== */
 // Function createChessMan
 import createChessMan from "../chessman/create-chessman.js";
+// Class chessMan
+import chessMan from "../chessman/chessman.js";
 // Class targetChessMan
 import targetChessMan from "../targetchessman/target-chessman.js";
 // Đối tượng NVDEnum
 import NVDEnum from "../enum.js";
 
-/* ============================== CÁC HÀM VỀ CỜ HÒA ============================== */
+/* ============================== CÁC HÀM VỀ NƯỚC CỜ HỢP LỆ ============================== */
 /**
  * Tìm danh sách nước đi hợp lệ.
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
- * @param {Number} colorPlayer Máy tính hợp lệ.
+ * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện.
  * @returns {Array[Object]} Array chứa các đối tượng nước đi hợp lệ, dạng {chessMan, targetChessMan}.
  * @author NVDung (16-03-2024)
  */
@@ -96,10 +98,40 @@ function findLegalMoves(boardStateMatrix, colorPlayer) {
  * - Đối thủ không có bất kì nước đi hợp lệ nào để thoát khỏi chiếu.
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
+ * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện.
  * @returns {Boolean} True - Checkmate, False - Không checkmate.
  * @author NVDung (16-03-2024)
  */
-function isCheckmate(boardStateMatrix) {}
+function isCheckmate(boardStateMatrix, colorPlayer) {
+  try {
+    // Kiểm tra màu cờ của người chơi đang thực hiện
+    const isWhite = colorPlayer === NVDEnum.colorPlayer.white;
+    const isBlack = colorPlayer === NVDEnum.colorPlayer.black;
+
+    // Kiểm tra màu không hợp lệ.
+    if (!(isWhite || isBlack)) {
+      throw new Error("Invalid color player.");
+    }
+
+    let listLegalMoves = findLegalMoves(boardStateMatrix, colorPlayer);
+
+    // Kiểm tra chiếu tướng && không có nước đi hợp lệ để thoát khỏi.
+    if (
+      (
+        // Chơi quân TRẮNG + Vua TRẮNG bị chiếu
+        (isWhite && chessMan.isWhiteKingCheck(boardStateMatrix)) ||
+        // Chơi quân ĐEN + Vua ĐEN bị chiếu
+        (isBlack && chessMan.isBlackKingCheck(boardStateMatrix))) &&
+      // Không có nước đi nào hợp lệ để di chuyển.
+      listLegalMoves.length === 0
+    ) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    console.error("Lỗi khi kiểm tra checkmate", e);
+  }
+}
 
 /* ============================== CÁC HÀM VỀ CỜ HÒA ============================== */
 /**
@@ -118,7 +150,7 @@ function isDraw(boardStateMatrix) {
  * Kiểm tra KẾT THÚC ván cờ theo trạng thái bàn cờ.
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
- * @param {} colorPlayer
+ * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện.
  * @returns {boolean} True - Kết thúc, False - Không kết thúc.
  * @author NVDung (16-03-2024)
  */
