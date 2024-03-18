@@ -1,3 +1,6 @@
+/**
+ * Đối tượng NVDEnum
+ */
 const NVDEnum = {
   /**
    * Quân cờ
@@ -71,6 +74,7 @@ const NVDEnum = {
 
   /**
    * Màu quân cờ mà người chơi cầm.
+   * @author NVDung (16-03-2024)
    */
   colorPlayer: {
     /**
@@ -82,6 +86,27 @@ const NVDEnum = {
      * Người chơi cẩm quân ĐEN.
      */
     black: 1,
+  },
+
+  /**
+   * Kết quả trận đấu
+   * @author NVDung (17-03-2024)
+   */
+  resultMatch: {
+    /**
+     * Đang diễn ra
+     */
+    happenning: 0,
+
+    /**
+     * Kết quả THUA
+     */
+    lose: 1,
+
+    /**
+     * Kết quả HÒA
+     */
+    draw: 2,
   },
 };
 

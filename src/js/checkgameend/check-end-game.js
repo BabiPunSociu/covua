@@ -1,8 +1,6 @@
 /* ============================== IMPORT CLASSES/ FUNCTIONS ============================== */
 // Function createChessMan
 import createChessMan from "../chessman/create-chessman.js";
-// Class chessMan
-import chessMan from "../chessman/chessman.js";
 // Class targetChessMan
 import targetChessMan from "../targetchessman/target-chessman.js";
 // Đối tượng NVDEnum
@@ -99,6 +97,7 @@ function findLegalMoves(boardStateMatrix, colorPlayer) {
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
  * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện.
+ *
  * @returns {Boolean} True - Checkmate, False - Không checkmate.
  * @author NVDung (16-03-2024)
  */
@@ -113,13 +112,16 @@ function isCheckmate(boardStateMatrix, colorPlayer) {
       throw new Error("Invalid color player.");
     }
 
+    // Tìm danh sách nước đi hợp lệ
     let listLegalMoves = findLegalMoves(boardStateMatrix, colorPlayer);
+
+    // Tạo đối tượng chessMan bất kì, để dùng phương thức kiểm tra chiếu tướng
+    const chessMan = createChessMan(NVDEnum.chessMan.whiteKing, 0, 0);
 
     // Kiểm tra chiếu tướng && không có nước đi hợp lệ để thoát khỏi.
     if (
-      (
-        // Chơi quân TRẮNG + Vua TRẮNG bị chiếu
-        (isWhite && chessMan.isWhiteKingCheck(boardStateMatrix)) ||
+      // Chơi quân TRẮNG + Vua TRẮNG bị chiếu
+      ((isWhite && chessMan.isWhiteKingCheck(boardStateMatrix)) ||
         // Chơi quân ĐEN + Vua ĐEN bị chiếu
         (isBlack && chessMan.isBlackKingCheck(boardStateMatrix))) &&
       // Không có nước đi nào hợp lệ để di chuyển.
@@ -138,20 +140,140 @@ function isCheckmate(boardStateMatrix, colorPlayer) {
  * Kiểm tra ván cờ HÒA
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
+ * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện: 0 - TRẮNG, 1 - ĐEN.
+ *
  * @returns {Boolean} True - Hòa, False - Không hòa.
  * @author NVDung (16-03-2024)
  */
-function isDraw(boardStateMatrix) {
-  //
+function isDraw(boardStateMatrix, colorPlayer) {
+  try {
+    // Kiểm tra màu cờ của người chơi đang thực hiện
+    const isWhite = colorPlayer === NVDEnum.colorPlayer.white;
+    const isBlack = colorPlayer === NVDEnum.colorPlayer.black;
+
+    // Kiểm tra màu không hợp lệ.
+    if (!(isWhite || isBlack)) {
+      throw new Error("Invalid color player.");
+    }
+
+    // Kiểm tra stalemate
+    if (stalemateCheck(boardStateMatrix, colorPlayer)) {
+      return true;
+    }
+
+    // Kiểm tra threefold repetition
+
+    // Kiểm tra insufficient material
+
+    // Kiểm tra fivefold repetition
+
+    return false;
+  } catch (error) {
+    console.error("Lỗi khi kiểm tra hòa", error);
+  }
 }
+
+/**
+ * Kiểm tra trường hợp hòa phổ biến stalemate.
+ * - Vua không bị chiếu, nhưng không có nước đi nào hợp lệ để di chuyển.
+ *
+ * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
+ * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện: 0 - TRẮNG, 1 - ĐEN.
+ *
+ * @returns {Boolean} True - Hòa, False - Không hòa.
+ * @author NVDung (17-03-2024)
+ */
+function stalemateCheck(boardStateMatrix, colorPlayer) {
+  try {
+    // Kiểm tra màu cờ của người chơi đang thực hiện
+    const isWhite = colorPlayer === NVDEnum.colorPlayer.white;
+    const isBlack = colorPlayer === NVDEnum.colorPlayer.black;
+
+    // Kiểm tra màu không hợp lệ.
+    if (!(isWhite || isBlack)) {
+      throw new Error("Invalid color player.");
+    }
+
+    // Tìm danh sách nước đi hợp lệ
+    let listLegalMoves = findLegalMoves(boardStateMatrix, colorPlayer);
+
+    // Tạo đối tượng chessMan bất kì, để dùng phương thức kiểm tra chiếu tướng
+    const chessMan = createChessMan(NVDEnum.chessMan.whiteKing, 0, 0);
+
+    // Kiểm tra chiếu tướng && không có nước đi hợp lệ để thoát khỏi.
+    if (
+      // Chơi quân TRẮNG + Vua TRẮNG "KHÔNG" bị chiếu
+      ((isWhite && !chessMan.isWhiteKingCheck(boardStateMatrix)) ||
+        // Chơi quân ĐEN + Vua ĐEN "KHÔNG" bị chiếu
+        (isBlack && !chessMan.isBlackKingCheck(boardStateMatrix))) &&
+      // Không có nước đi nào hợp lệ để di chuyển.
+      listLegalMoves.length === 0
+    ) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error("Lỗi khi kiểm tra hòa trong stalemate", error);
+  }
+}
+
+/**
+ * Kiểm tra trường hợp hòa phải biến threefold repetition.
+ * - Nếu bàn cờ xuất hiện ba lần theo 1 tình huống => Tìm bằng CSDL (API)
+ *
+ * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
+ * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện: 0 - TRẮNG, 1 - ĐEN.
+ *
+ * @returns {Boolean} True - Hòa, False - Không hòa.
+ * @author NVDung (17-03-2024)
+ */
+function threefoldRepetitionCheck(boardStateMatrix, colorPlayer) {}
+
+/**
+ * Kiểm tra trường hợp hòa phải biến insufficient material.
+ * - Không đủ quân để có thể thực hiện Checkmate. (Thường là còn mỗi Vua)
+ *
+ * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
+ * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện: 0 - TRẮNG, 1 - ĐEN.
+ *
+ * @returns {Boolean} True - Hòa, False - Không hòa.
+ * @author NVDung (17-03-2024)
+ */
+function insufficientMaterialCheck(boardStateMatrix, colorPlayer) {}
+
+/**
+ * Kiểm tra trường hợp hòa phải biến fifty-move rule.
+ * - Nếu trong 50 nước đi liên tiếp không có việc bắt quân hoặc di chuyển quân tốt -> HÒA.
+ *
+ * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
+ * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện: 0 - TRẮNG, 1 - ĐEN.
+ *
+ * @returns {Boolean} True - Hòa, False - Không hòa.
+ * @author NVDung (17-03-2024)
+ */
+function fiftyMoveRuleCheck(boardStateMatrix, colorPlayer) {}
 
 /* ============================== HÀM KIỂM TRA KẾT THÚC VÁN CỜ ============================== */
 /**
  * Kiểm tra KẾT THÚC ván cờ theo trạng thái bàn cờ.
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
- * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện.
- * @returns {boolean} True - Kết thúc, False - Không kết thúc.
+ * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện: 0 - TRẮNG, 1 - ĐEN.
+ *
+ * @returns {Number} 0 - Đang diễn ra, 1 - THUA, 2 - HÒA.
  * @author NVDung (16-03-2024)
  */
-export function checkEndGame(boardStateMatrix, colorPlayer) {}
+export function checkEndGame(boardStateMatrix, colorPlayer) {
+  // Kiem tra checkmate
+  if (isCheckmate(boardStateMatrix, colorPlayer)) {
+    return NVDEnum.resultMatch.lose;
+  }
+
+  // Kiem tra draw
+  if (isDraw(boardStateMatrix)) {
+    return NVDEnum.resultMatch.draw;
+  }
+
+  // Mặc định trả về trạng thái: Đang diễn ra.
+  return NVDEnum.resultMatch.happenning;
+}

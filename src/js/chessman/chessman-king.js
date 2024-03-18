@@ -68,7 +68,8 @@ class chessManKing extends chessMan {
           targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
         // Vua đen ăn quân trắng
         (this.id === NVDEnum.chessMan.blackKing &&
-          0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn)
+          0 < targetChessMan.id &&
+          targetChessMan.id <= NVDEnum.chessMan.whitePawn)
       ) {
         // Kiểm tra Capture hợp lệ của quân VUA -> Tương tự với Move
         return this.isCanMove(boardStateMatrix, targetChessMan);
