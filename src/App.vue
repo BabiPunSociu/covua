@@ -1,5 +1,19 @@
 <template>
   <div class="container">
+    <video
+      style="display: none"
+      height="90%"
+      controls
+      :autoplay="true"
+      :playsinline="false"
+      loop
+      :muted="false"
+    >
+      <source
+        src="https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1711004482/video/C%E1%BA%A1m_b%E1%BA%ABy_th%C3%AD_h%E1%BA%ADu_trong_c%E1%BB%9D_vua_benrikids_boardgames_chess_1920p_30fps_H264-128kbit_AAC_hsanpr.mp4"
+      />
+    </video>
+
     <table :key="reRender">
       <tr
         v-for="(row, indexRow) in theStartMatrix"
@@ -308,12 +322,37 @@ export default {
     /**
      * Kiểm tra kết thúc ván cờ?
      *
-     * @returns {String} result $Người chiến thắng || $Hòa.
      */
-    gameOver() {
-      const result = "Hòa";
+    gameOverCheck() {
+      try {
+        // Tạo biến lưu giá trị trả về
+        let result = this.$enum.resultMatch.happenning;
 
-      return result;
+        // Kiểm tra kết thúc trên bàn cờ.
+        let checkEndGame = this.$checkEndGame(
+          this.theStartMatrix,
+          this.colorPlayer
+        );
+
+        switch (checkEndGame) {
+          // Thua Checkmate
+          case this.$enum.resultMatch.lose:
+            console.log("Bạn đã thua.");
+            break;
+          // Hòa
+          case this.$enum.resultMatch.draw:
+            console.log("Bạn đã HÒA.");
+            break;
+          // Vẫn đang diễn ra.
+          default:
+            console.log("Vẫn đang diễn ra.");
+            break;
+        }
+
+        return result;
+      } catch (e) {
+        console.error("gameOverCheck...", e);
+      }
     },
     /* ================== GAME ================== */
   },

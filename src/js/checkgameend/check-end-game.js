@@ -263,7 +263,7 @@ function fiftyMoveRuleCheck(boardStateMatrix, colorPlayer) {}
  * @returns {Number} 0 - Đang diễn ra, 1 - THUA, 2 - HÒA.
  * @author NVDung (16-03-2024)
  */
-export function checkEndGame(boardStateMatrix, colorPlayer) {
+function checkEndGame(boardStateMatrix, colorPlayer) {
   // Kiem tra checkmate
   if (isCheckmate(boardStateMatrix, colorPlayer)) {
     return NVDEnum.resultMatch.lose;
@@ -277,3 +277,5 @@ export function checkEndGame(boardStateMatrix, colorPlayer) {
   // Mặc định trả về trạng thái: Đang diễn ra.
   return NVDEnum.resultMatch.happenning;
 }
+
+export default checkEndGame;

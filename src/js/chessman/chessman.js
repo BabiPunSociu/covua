@@ -1,7 +1,7 @@
 import NVDResource from "../resource.js";
 import NVDEnum from "../enum.js";
 import createChessMan from "./create-chessman.js";
-import playSoundEffect from "../cloudinary/soundEffect.js";
+import playSoundEffect from "../cloudinary/sound-effect.js";
 import targetChessMan from "../targetchessman/target-chessman.js";
 
 /**
