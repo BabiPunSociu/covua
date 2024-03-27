@@ -1,0 +1,38 @@
+.m-context-menu {
+  /*
+  position: absolute;
+  top: 36px;
+  right: 0;
+  */
+  z-index: 10;
+
+  display: flex;
+  flex-direction: column;
+
+  max-height: 308px; /* zero */
+  overflow-y: auto;
+  padding: 8px 0; /* zero */
+  background-color: #fff;
+  box-shadow: 0 4px 16px rgba(23, 27, 42, 0.24);
+  border-radius: var(--border-radius-default);
+}
+
+.m-context-menu a {
+  display: flex;
+  align-items: center;
+  height: var(--rounded-button-height); /* zero  36px*/
+  padding: 0 8px;
+  color: #212121;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.m-context-menu a:hover {
+  background-color: rgba(255, 0, 0, 0.05); /* zero */
+  background-color: #f1ffef;
+  cursor: pointer;
+}
+
+.m-context-menu a:active {
+  background-color: var(--primary-btn--active-background-color);
+}
