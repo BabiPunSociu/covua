@@ -6,6 +6,8 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
+import emitter from "tiny-emitter/instance";
+import axios from "axios";
 
 /* ==================== IMPORT JS FILE ==================== */
 // Đối tượng NVDEnum
@@ -31,6 +33,8 @@ app.config.globalProperties.$playSoundEffect = playSoundEffect;
 app.config.globalProperties.$createChessMan = createChessMan;
 app.config.globalProperties.$targetChessMan = targetChessMan;
 app.config.globalProperties.$checkEndGame = checkEndGame;
+app.config.globalProperties.$emitter = emitter;
+app.config.globalProperties.$axios = axios;
 
 app.use(createPinia());
 // app.use(router);
