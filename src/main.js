@@ -1,5 +1,5 @@
-/* ==================== IMPORT CSS ==================== */
-import "./assets/css/main.css";
+/* ==================== IMPORT SCSS ==================== */
+import "./assets/scss/main.scss";
 
 /* ==================== IMPORT LIBRARIES ==================== */
 import { createApp } from "vue";
@@ -23,8 +23,32 @@ import targetChessMan from "./js/targetchessman/target-chessman.js";
 // function checkEndGame()
 import checkEndGame from "./js/checkgameend/check-end-game.js";
 
+/* ==================== IMPORT VUE COMPONENT ==================== */
+import NVDButton from "./components/base/buttons/NVDButton.vue";
+import NVDLabelVue from "./components/base/label/NVDLabel.vue";
+import NVDTextField from "./components/base/textfield/NVDTextField.vue";
+import NVDCombobox from "./components/base/combobox/NVDCombobox.vue";
+import NVDCheckbox from "./components/base/checkbox/NVDCheckbox.vue";
+import NVDRadioButton from "./components/base/radiobutton/NVDRadioButton.vue";
+import NVDDialogVue from "./components/base/dialog/NVDDialog.vue";
+import NVDLoading from "./components/base/loading/NVDLoading.vue";
+import NVDToast from "./components/base/toast/NVDToast.vue";
+import NVDForm from "./components/base/form/NVDForm.vue";
+
 /* ==================== CREATE APP (Instance) ==================== */
 const app = createApp(App);
+
+/* ==================== COMPONENT GLOBAL ==================== */
+app.component("m-button", NVDButton);
+app.component("m-label", NVDLabelVue);
+app.component("m-text-field", NVDTextField);
+app.component("m-combobox", NVDCombobox);
+app.component("m-checkbox", NVDCheckbox);
+app.component("m-radio", NVDRadioButton);
+app.component("m-dialog", NVDDialogVue);
+app.component("m-loading", NVDLoading);
+app.component("m-toast", NVDToast);
+app.component("m-form", NVDForm);
 
 /* ==================== CREATE GLOBAL VARIABLE ==================== */
 app.config.globalProperties.$enum = NVDEnum;
@@ -37,6 +61,6 @@ app.config.globalProperties.$emitter = emitter;
 app.config.globalProperties.$axios = axios;
 
 app.use(createPinia());
-// app.use(router);
+app.use(router);
 
 app.mount("#app");

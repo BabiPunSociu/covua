@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <video
+    <!-- <video
       style="display: none"
       height="90%"
       controls
@@ -12,7 +12,7 @@
       <source
         src="https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1711004482/video/C%E1%BA%A1m_b%E1%BA%ABy_th%C3%AD_h%E1%BA%ADu_trong_c%E1%BB%9D_vua_benrikids_boardgames_chess_1920p_30fps_H264-128kbit_AAC_hsanpr.mp4"
       />
-    </video>
+    </video> -->
 
     <table :key="reRender">
       <tr
