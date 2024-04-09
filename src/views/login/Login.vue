@@ -1,37 +1,48 @@
 <template>
-  <div class="background">
+  <div class="background flex flex-center">
     <div class="login-container">
       <!-- Username -->
-      <m-text-field
-        lblTooltip="Username"
-        :haveLabel="true"
-        inputType="text"
-        :tabIndex="1"
-        :isAutoFocused="true"
-        @inputOnChange="usernameChanged"
-      >
-        <template v-slot:lbl-content>Username</template>
-      </m-text-field>
-      <!-- Password -->
-      <m-text-field
-        lblTooltip="Password"
-        :haveLabel="true"
-        inputType="password"
-        :tabIndex="2"
-        :isAutoFocused="false"
-        @inputOnChange="passwordChanged"
-      >
-        <template v-slot:lbl-content>Password</template>
-      </m-text-field>
-
-      <div class="password-option flex">
-        <m-checkbox @checkboxChangeValue="checkboxChangeValue"
-          >Remember me</m-checkbox
+      <div class="username">
+        <m-text-field
+          lblTooltip="Username"
+          :haveLabel="true"
+          :isTextWhite="true"
+          inputType="text"
+          :tabIndex="1"
+          :isAutoFocused="true"
+          @inputOnChange="usernameChanged"
         >
-        <router-link to="/forgot-password">Forgot Password?</router-link>
+          <template v-slot:lbl-content>Username</template>
+        </m-text-field>
+      </div>
+      <!-- Password -->
+      <div class="password">
+        <m-text-field
+          lblTooltip="Password"
+          :haveLabel="true"
+          :isTextWhite="true"
+          inputType="password"
+          :tabIndex="2"
+          :isAutoFocused="false"
+          @inputOnChange="passwordChanged"
+        >
+          <template v-slot:lbl-content>Password</template>
+        </m-text-field>
       </div>
 
-      <m-button>Log In</m-button>
+      <div class="password-option flex flex-space-between">
+        <m-checkbox
+          :isTextWhite="true"
+          :value="isRememberPassword"
+          @checkboxChangeValue="checkboxChangeValue"
+          >Remember me</m-checkbox
+        >
+        <router-link to="/forgot-password" class="forgot-password"
+          >Forgot Password?</router-link
+        >
+      </div>
+
+      <div class="btn-login flex flex-center"><m-button>Log In</m-button></div>
 
       <div class="seperate-area flex">
         <hr />
@@ -39,7 +50,7 @@
         <hr />
       </div>
 
-      <div class="oauth2">
+      <div class="oauth2 flex">
         <m-button>Log in with Google</m-button>
         <m-button>Log in with Facebook</m-button>
       </div>
@@ -58,6 +69,7 @@ export default {
     return {
       username: "",
       password: "",
+      isRememberPassword: false,
     };
   },
 
@@ -66,7 +78,9 @@ export default {
 
     passwordChanged() {},
 
-    checkboxChangeValue() {},
+    checkboxChangeValue(newVal) {
+      this.isRememberPassword = newVal;
+    },
   },
 };
 </script>

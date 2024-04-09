@@ -4,6 +4,7 @@
     <m-label
       :lblRequired="textFieldRequired"
       :tooltip="lblTooltip"
+      :isTextWhite="isTextWhite"
       v-if="haveLabel"
     >
       <slot name="lbl-content"></slot>
@@ -85,6 +86,16 @@ export default {
       default: false,
       required: false,
     },
+
+    /**
+     * Hiển thị label màu trắng?
+     */
+    isTextWhite: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+
     /**
      * Truyền type của input
      * Author: NVDUNG (20/08/2023)

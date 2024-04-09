@@ -1,0 +1,10 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  gap: 0;
+
+  .main {
+    width: -webkit-fill-available;
+    height: 100vh;
+  }
+}

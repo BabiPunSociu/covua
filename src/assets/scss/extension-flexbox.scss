@@ -1,5 +1,7 @@
 .flex {
   display: flex;
+  gap: var(--gap);
+  align-items: center;
 }
 
 .flex-column {
@@ -15,3 +17,10 @@
   align-items: center;
 }
 
+.flex-space-between {
+  justify-content: space-between;
+}
+
+.flex-space-around {
+  justify-content: space-around;
+}

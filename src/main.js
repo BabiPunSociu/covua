@@ -34,6 +34,7 @@ import NVDDialogVue from "./components/base/dialog/NVDDialog.vue";
 import NVDLoading from "./components/base/loading/NVDLoading.vue";
 import NVDToast from "./components/base/toast/NVDToast.vue";
 import NVDForm from "./components/base/form/NVDForm.vue";
+import NVDChessBoard from "./components/base/chessboard/NVDChessBoard.vue";
 
 /* ==================== CREATE APP (Instance) ==================== */
 const app = createApp(App);
@@ -49,6 +50,7 @@ app.component("m-dialog", NVDDialogVue);
 app.component("m-loading", NVDLoading);
 app.component("m-toast", NVDToast);
 app.component("m-form", NVDForm);
+app.component("m-chess-board", NVDChessBoard);
 
 /* ==================== CREATE GLOBAL VARIABLE ==================== */
 app.config.globalProperties.$enum = NVDEnum;

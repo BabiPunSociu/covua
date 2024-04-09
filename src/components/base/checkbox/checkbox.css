@@ -9,6 +9,10 @@
   margin-left: 8px;
 }
 
+.m-form-checkbox label.text-white {
+  color: var(--color-white);
+}
+
 .checkbox-container {
   display: flex;
   align-items: center;

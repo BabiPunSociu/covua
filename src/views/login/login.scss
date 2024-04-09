@@ -1,0 +1,68 @@
+.background {
+  height: 100vh;
+  background: var(--color-overlay-login)
+    url(../../assets/images/background/chessboard-background.png) no-repeat
+    fixed bottom center;
+  background-size: contain;
+
+  .login-container {
+    background: var(--color-bg-login);
+    border-radius: var(--border-radius-default);
+    padding: 1rem;
+    // Username
+    .username {
+      border: 1px solid #e6e6e6;
+    }
+
+    // Password
+    .password {
+      border: 1px solid #e6e6e6;
+      margin-top: 1rem;
+    }
+
+    .password-option {
+      border: 1px solid #e6e6e6;
+      margin-top: 1rem;
+
+      .forgot-password {
+        color: rgb(255, 255, 255, 0.5);
+        border: 1px solid #e6e6e6;
+
+        &:hover {
+          color: var(--color-white);
+        }
+      }
+    }
+
+    .btn-login {
+      margin: 2rem 0;
+    }
+
+    .seperate-area {
+      hr {
+        height: 1px;
+      }
+      span {
+        color: var(--color-white);
+      }
+    }
+
+    .oauth2 {
+      margin: 2rem 0;
+      border: 1px solid #e6e6e6;
+    }
+
+    // Register link
+    .register {
+      margin-top: 1rem;
+      color: rgb(255, 255, 255, 0.5);
+      border: 1px solid #e6e6e6;
+      display: block;
+      text-align: center;
+
+      &:hover {
+        color: var(--color-white);
+      }
+    }
+  }
+}

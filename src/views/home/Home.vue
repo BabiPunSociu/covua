@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container flex">
     <TheSideBar></TheSideBar>
     <div class="main">
       <TheHeader></TheHeader>

@@ -1,0 +1,62 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #525151de;
+
+  table {
+    width: 80vh;
+    height: 80vh;
+    border-collapse: collapse;
+
+    td {
+      position: relative;
+      &.cell-color {
+        background: rgb(235, 236, 208);
+      }
+      &.cell-color-caro {
+        background-color: rgb(115, 149, 82);
+      }
+
+      .chess-man {
+        user-select: none;
+
+        &:hover {
+          cursor: grab;
+        }
+
+        &.chess-man-neo {
+          height: 100%;
+        }
+      }
+
+      .maker-row,
+      .maker-col {
+        position: absolute;
+        color: rgb(115, 149, 82);
+
+        &.maker-text-white {
+          color: rgb(235, 236, 208);
+        }
+      }
+
+      .maker-row {
+        top: 0;
+        left: 0;
+      }
+
+      .maker-col {
+        bottom: 0;
+        right: 0;
+      }
+
+      .maker-cell {
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+    }
+  }
+}

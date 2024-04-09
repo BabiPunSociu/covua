@@ -6,7 +6,9 @@
       unchecked: !value,
     }"
   >
-    <label v-if="hasLabel"><slot></slot></label>
+    <label v-if="hasLabel" :class="{ 'text-white': isTextWhite }"
+      ><slot></slot
+    ></label>
     <div class="checkbox-container">
       <span class="checkbox-background mi mi-24"
         ><input type="checkbox" :checked="value" @change="handleChange" />
@@ -24,6 +26,16 @@ export default {
     hasLabel: {
       type: Boolean,
       default: true,
+      required: false,
+    },
+
+    /**
+     * Hiển thị chữ màu trắng?
+     * Mặc định: false - hiện thị chữ màu đen.
+     */
+    isTextWhite: {
+      type: Boolean,
+      default: false,
       required: false,
     },
 
