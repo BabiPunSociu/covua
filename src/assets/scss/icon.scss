@@ -259,3 +259,18 @@ a:hover .mi-excel {
 .disabled .mi-next-page {
   background-position: -77px -404px;
 }
+
+/* ========== Facebook + Google ========== */
+.mi-facebook {
+  background: url(../images/logo/facebook.png) no-repeat;
+  cursor: pointer;
+  outline: auto;
+  background-size: cover;
+}
+
+.mi-google {
+  background: url(../images/logo/google.png) no-repeat;
+  cursor: pointer;
+  outline: auto;
+  background-size: cover;
+}

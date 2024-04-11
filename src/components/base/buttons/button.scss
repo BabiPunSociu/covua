@@ -1,0 +1,118 @@
+.m-btn {
+  min-width: 80px;
+  height: var(--btn-height-mobile);
+  @media screen and (min-width: 768px) {
+    height: var(--btn-height-tablet);
+  }
+  @media screen and (min-width: 1024px) {
+    height: var(--btn-height-desktop);
+  }
+
+  border-radius: var(--border-radius-default);
+  background-color: var(--primary-btn-background-color);
+  border: none;
+  color: #fff;
+  padding: 0 16px;
+  font-weight: var(--font-weight-default);
+
+  // Hover
+  &:hover {
+    background-color: var(--primary-btn--hover-background-color);
+    cursor: pointer;
+  }
+
+  // Active
+  &:active {
+    background-color: var(--primary-btn--active-background-color);
+  }
+
+  // Focus
+  &:focus {
+    background-color: var(--primary-btn--focus-background-color);
+    outline: #1b1b1b solid 1px;
+  }
+
+  // Focus visible
+  &:focus-visible {
+    /* background-color: var(--primary-btn--focus-background-color); */
+    outline: #1b1b1b solid 1px;
+  }
+
+  // Disabled
+  &:disabled {
+    opacity: 56%;
+  }
+
+  /* Nút chính có icon */
+  &.m-btn-icon {
+    display: flex;
+    align-items: center;
+    padding: 0 16px 0 12px;
+
+    div {
+      position: relative;
+      top: 0;
+      left: 0;
+      margin-right: 4px;
+    }
+  }
+
+  /* Nút phụ */
+  &.m-btn-secondary {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #e6e6e6;
+
+    // Hover NÚT PHỤ
+    &:hover {
+      background-color: #e6e6e6;
+    }
+
+    // Focus + Active NÚT PHỤ
+    &:focus,
+    &:active {
+      background-color: #bdbdbd;
+    }
+
+    // Focus visible NÚT PHỤ
+    &:focus-visible {
+      outline: #1b1b1b solid 1px;
+    }
+  }
+
+  /* Nút google */
+  &.m-btn-google {
+    background-color: var(--color-btn-google);
+
+    &:hover {
+      background-color: var(--color-btn-google-hover);
+    }
+
+    &:focus,
+    &:active {
+      background-color: var(--color-btn-google-click);
+    }
+
+    &:focus-visible {
+      outline: #1b1b1b solid 1px;
+    }
+  }
+
+  /* Nút facebook */
+  &.m-btn-facebook {
+    background-color: var(--color-btn-facebook);
+
+    &:hover {
+      background-color: var(--color-btn-facebook-hover);
+    }
+
+    &:focus,
+    &:active {
+      background-color: var(--color-btn-facebook-click);
+    }
+
+    &:focus-visible {
+      outline: #1b1b1b solid 1px;
+    }
+  }
+}

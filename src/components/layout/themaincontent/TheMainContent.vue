@@ -1,16 +1,12 @@
 <template>
-  
+  <div class="container-maincontent">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
 export default {
   name: "TheMainContent",
-
-  
-
-  mounted() {},
-
-  
 };
 </script>
 

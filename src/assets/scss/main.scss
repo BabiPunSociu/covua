@@ -4,9 +4,10 @@
 @import url(./chess-main.scss);
 @import url(./extension-flexbox.scss);
 
+/* Định nghĩa css chung */
 * {
-  /* font-family: MISA Fonts; */
-  font-size: var(--font-size-default);
+  font-family: NVD Fonts;
+  font-size: var(--font-size-mobile); /* mobile */
   color: #212121;
   box-sizing: border-box;
   margin: 0;
@@ -14,4 +15,14 @@
   text-decoration: none;
   outline: none;
   text-transform: none;
+
+  /* Tablet */
+  @media screen and (min-width: 600px) {
+    font-size: var(--font-size-tablet);
+  }
+
+  /* Desktop */
+  @media screen and (min-width: 768px) {
+    font-size: var(--font-size-desktop);
+  }
 }

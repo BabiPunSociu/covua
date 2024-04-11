@@ -282,5 +282,5 @@ export default {
 };
 </script>
 <style scoped>
-@import url(./text-field.css);
+@import url(./text-field.scss);
 </style>

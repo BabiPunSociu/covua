@@ -1,6 +1,6 @@
 <template>
   <div class="background flex flex-center">
-    <div class="login-container">
+    <div class="login-container scroller">
       <!-- Username -->
       <div class="username">
         <m-text-field
@@ -50,9 +50,21 @@
         <hr />
       </div>
 
-      <div class="oauth2 flex">
-        <m-button>Log in with Google</m-button>
-        <m-button>Log in with Facebook</m-button>
+      <div class="oauth2 flex flex-column">
+        <m-button
+          class="m-btn-google"
+          :hasIcon="true"
+          classIcon="mi-google"
+          style="width: 100%"
+          >Log in with Google</m-button
+        >
+        <m-button
+          class="m-btn-facebook"
+          :hasIcon="true"
+          classIcon="mi-facebook"
+          style="width: 100%"
+          >Log in with Facebook</m-button
+        >
       </div>
 
       <router-link to="/register" class="register"

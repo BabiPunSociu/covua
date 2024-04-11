@@ -6,27 +6,46 @@
   background-size: contain;
 
   .login-container {
+    max-height: 100vh;
+    width: 65%; // Screen 320
+
+    @media screen and (min-width: 480px) {
+      width: 65%;
+    }
+    @media screen and (min-width: 640px) {
+      width: 50%;
+    }
+    @media screen and (min-width: 768px) {
+      width: 45%;
+    }
+    @media screen and (min-width: 1024px) {
+      width: 35%;
+    }
+    @media screen and (min-width: 1280px) {
+      width: 25%;
+    }
+
     background: var(--color-bg-login);
     border-radius: var(--border-radius-default);
-    padding: 1rem;
+    padding: 2rem;
     // Username
     .username {
-      border: 1px solid #e6e6e6;
+      // border: 1px solid #e6e6e6;
     }
 
     // Password
     .password {
-      border: 1px solid #e6e6e6;
+      // border: 1px solid #e6e6e6;
       margin-top: 1rem;
     }
 
     .password-option {
-      border: 1px solid #e6e6e6;
+      // border: 1px solid #e6e6e6;
       margin-top: 1rem;
 
       .forgot-password {
         color: rgb(255, 255, 255, 0.5);
-        border: 1px solid #e6e6e6;
+        // border: 1px solid #e6e6e6;
 
         &:hover {
           color: var(--color-white);
@@ -38,25 +57,29 @@
       margin: 2rem 0;
     }
 
+    // Ngan cach
     .seperate-area {
       hr {
         height: 1px;
+        width: calc(94% / 2);
       }
       span {
+        width: 6%;
         color: var(--color-white);
       }
     }
 
     .oauth2 {
       margin: 2rem 0;
-      border: 1px solid #e6e6e6;
+      // border: 1px solid #e6e6e6;
     }
 
     // Register link
     .register {
       margin-top: 1rem;
+      text-decoration: underline;
       color: rgb(255, 255, 255, 0.5);
-      border: 1px solid #e6e6e6;
+      // border: 1px solid #e6e6e6;
       display: block;
       text-align: center;
 

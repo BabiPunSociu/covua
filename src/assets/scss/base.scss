@@ -4,10 +4,19 @@
 // }
 
 :root {
-  --font-size-default: 14px;
+  /* ===== FONT SIZE ===== */
+  --font-size-title: 24px;
+  --font-size-desktop: 14px;
+  --font-size-tablet: 11px;
+  --font-size-mobile: 8px;
+
   --border-radius-default: 4px;
   --font-weight-default: 500;
   --gap: 1rem;
+
+  --btn-height-desktop: 36px;
+  --btn-height-tablet: 28px;
+  --btn-height-mobile: 20px;
 
   --control-label-bottom-space: 4px;
   --primary-button-height: 34px;
@@ -43,6 +52,12 @@
   --color-bg-login: #262421;
   --color-overlay-login: #302e2b;
   --color-white: #fff;
+  --color-btn-google: #e60000;
+  --color-btn-google-hover: #eb3333;
+  --color-btn-google-click: #b80000;
+  --color-btn-facebook: #007aff;
+  --color-btn-facebook-hover: #3395ff;
+  --color-btn-facebook-click: #0062cc;
 
   --main-background-color: #e4e9e7;
   --control-border-color--active: #2ca01c;
