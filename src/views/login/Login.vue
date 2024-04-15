@@ -34,15 +34,18 @@
         <m-checkbox
           :isTextWhite="true"
           :value="isRememberPassword"
+          :tabIndex="4"
           @checkboxChangeValue="checkboxChangeValue"
           >Remember me</m-checkbox
         >
-        <router-link to="/forgot-password" class="forgot-password"
+        <router-link to="/forgot-password" class="forgot-password" tabindex="5"
           >Forgot Password?</router-link
         >
       </div>
 
-      <div class="btn-login flex flex-center"><m-button>Log In</m-button></div>
+      <div class="btn-login flex flex-center">
+        <m-button :tabIndex="3" :isOutlineWhite="true">Log In</m-button>
+      </div>
 
       <div class="seperate-area flex">
         <hr />
@@ -56,6 +59,8 @@
           :hasIcon="true"
           classIcon="mi-google"
           style="width: 100%"
+          :tabIndex="6"
+          :isOutlineWhite="true"
           >Log in with Google</m-button
         >
         <m-button
@@ -63,11 +68,13 @@
           :hasIcon="true"
           classIcon="mi-facebook"
           style="width: 100%"
+          :tabIndex="7"
+          :isOutlineWhite="true"
           >Log in with Facebook</m-button
         >
       </div>
 
-      <router-link to="/register" class="register"
+      <router-link to="/register" class="register" tabindex="8"
         >New? Sign up - and start playing chess!</router-link
       >
     </div>

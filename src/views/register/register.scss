@@ -3,18 +3,79 @@
   height: 100vh;
 
   .content {
+    border: 1px solid white;
     @media screen and (min-width: 768px) {
       width: 50%;
     }
-    h1 {
-      color: var(--color-white);
-      text-align: center;
-      font-size: 2.5rem;
 
-      -webkit-user-select: none; /* Safari */
-      -moz-user-select: none; /* Firefox */
-      -ms-user-select: none; /* IE 10 and IE 11 */
-      user-select: none; /* Standard syntax */
+    /* Step 1 */
+    &.content-1 {
+      padding: 1rem;
+      header {
+        border: 1px solid white;
+        width: 100%;
+
+        h1 {
+          color: var(--color-white);
+          text-align: center;
+          font-size: 2.5rem;
+          font-family: montserrat, sansita;
+          text-shadow: 0px 0px 1rem var(--color-white);
+
+          -webkit-user-select: none; /* Safari */
+          -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* IE 10 and IE 11 */
+          user-select: none; /* Standard syntax */
+        }
+      }
+      main,
+      footer {
+        width: 80%;
+      }
+
+      main {
+        border: 1px solid white;
+
+        .seperate-area {
+          width: 100%;
+          hr {
+            height: 1px;
+            width: calc(94% / 2);
+          }
+          span {
+            width: 6%;
+            color: var(--color-white);
+          }
+        }
+
+        .oauth2 {
+          border: 1px solid white;
+          width: 100%;
+        }
+      }
+
+      footer {
+        border: 1px solid white;
+
+        .link-login {
+          text-decoration: underline;
+          color: rgb(255, 255, 255, 0.5);
+          display: block;
+          text-align: center;
+
+          &:hover {
+            color: var(--color-white);
+          }
+        }
+      }
+    }
+
+    /* Step 2 */
+    &.content-2 {
+    }
+
+    /* Step 3 */
+    &.content-3 {
     }
   }
 }

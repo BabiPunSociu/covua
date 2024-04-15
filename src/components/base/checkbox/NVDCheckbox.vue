@@ -11,7 +11,12 @@
     ></label>
     <div class="checkbox-container">
       <span class="checkbox-background mi mi-24"
-        ><input type="checkbox" :checked="value" @change="handleChange" />
+        ><input
+          type="checkbox"
+          :tabindex="tabIndex"
+          :checked="value"
+          @change="handleChange"
+        />
       </span>
     </div>
   </div>
@@ -45,6 +50,16 @@ export default {
     value: {
       type: Boolean,
       default: false,
+      required: false,
+    },
+
+    /**
+     * Tạo giá trị tabIndex
+     * Mặc định: 1
+     */
+    tabIndex: {
+      type: Number,
+      default: 1,
       required: false,
     },
   },

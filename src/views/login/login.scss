@@ -50,6 +50,16 @@
         &:hover {
           color: var(--color-white);
         }
+
+        // Focus
+        &:focus {
+          outline: var(--color-white) solid 1px !important;
+        }
+
+        // Focus visible
+        &:focus-visible {
+          outline: var(--color-white) solid 1px !important;
+        }
       }
     }
 
@@ -85,6 +95,16 @@
 
       &:hover {
         color: var(--color-white);
+      }
+
+      // Focus
+      &:focus {
+        outline: var(--color-white) solid 1px !important;
+      }
+
+      // Focus visible
+      &:focus-visible {
+        outline: var(--color-white) solid 1px !important;
       }
     }
   }

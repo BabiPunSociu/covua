@@ -1,7 +1,15 @@
-// @font-face {
-//   font-family: NVD Fonts;
-//   src: url(../fonts/notosans-regular.2cb88a13.woff2);
-// }
+@font-face {
+  font-family: NVD Fonts;
+  src: url(../fonts/opensans/OpenSans-VariableFont.ttf);
+}
+@font-face {
+  font-family: montserrat;
+  src: url(../fonts/montserrat/Montserrat-VariableFont.ttf);
+}
+@font-face {
+  font-family: sansita;
+  src: url(../fonts/sansita/Sansita-Black.ttf);
+}
 
 :root {
   /* ===== FONT SIZE ===== */

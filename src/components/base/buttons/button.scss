@@ -115,4 +115,17 @@
       outline: #1b1b1b solid 1px;
     }
   }
+
+  /* ===== Outline White ===== */
+  &.outline-white {
+    // Focus
+    &:focus {
+      outline: var(--color-white) solid 1px !important;
+    }
+
+    // Focus visible
+    &:focus-visible {
+      outline: var(--color-white) solid 1px !important;
+    }
+  }
 }
