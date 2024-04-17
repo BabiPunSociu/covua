@@ -22,6 +22,8 @@ import createChessMan from "./js/chessman/create-chessman.js";
 import targetChessMan from "./js/targetchessman/target-chessman.js";
 // function checkEndGame()
 import checkEndGame from "./js/checkgameend/check-end-game.js";
+// Đối tượng NVDValidator
+import NVDValidator from "./js/validate-input.js";
 
 /* ==================== IMPORT VUE COMPONENT ==================== */
 import NVDButton from "./components/base/buttons/NVDButton.vue";
@@ -55,6 +57,7 @@ app.component("m-chess-board", NVDChessBoard);
 /* ==================== CREATE GLOBAL VARIABLE ==================== */
 app.config.globalProperties.$enum = NVDEnum;
 app.config.globalProperties.$resource = NVDResource;
+app.config.globalProperties.$validator = NVDValidator;
 app.config.globalProperties.$playSoundEffect = playSoundEffect;
 app.config.globalProperties.$createChessMan = createChessMan;
 app.config.globalProperties.$targetChessMan = targetChessMan;

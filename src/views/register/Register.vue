@@ -16,6 +16,7 @@
         <m-button
           ref="btnSignup"
           class="btn-signup"
+          style="width: 100%"
           autofocus="true"
           :tabindex="1"
           :isOutlineWhite="true"
@@ -118,6 +119,7 @@
       </main>
       <footer class="flex flex-center">
         <m-button
+          style="width: 90%"
           :tabIndex="5"
           :isOutlineWhite="true"
           :textAlignCenter="true"
@@ -220,6 +222,7 @@
       </main>
       <footer class="flex flex-center">
         <m-button
+          style="width: 90%"
           :tabIndex="5"
           :isOutlineWhite="true"
           :textAlignCenter="true"

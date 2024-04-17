@@ -55,9 +55,10 @@
         >
       </div>
 
+      <!-- Button Log in -->
       <div class="btn-login flex flex-center">
-        <!-- Button Log in -->
         <m-button
+          style="width: 100%"
           :tabIndex="3"
           :isOutlineWhite="true"
           :textAlignCenter="true"
