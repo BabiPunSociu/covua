@@ -1,5 +1,5 @@
 .mi {
-  background: url(../icons/Sprites.64af8f61.svg) no-repeat;
+  background: url(../icons/Sprites.svg) no-repeat;
   cursor: pointer;
 }
 
@@ -211,7 +211,8 @@ a:hover .mi-refresh {
   background-position: -144px -144px;
 }
 .mi-tick {
-  background-position: -1291px -557px;
+  background-position: -1291px -557px; // Cho mi-24 trở lên.
+  //background-position: -1296px -564px; // Cho mi-16 trở xuống.
 }
 .mi-calendar {
   background-position: -128px -312px;
@@ -273,4 +274,10 @@ a:hover .mi-excel {
   cursor: pointer;
   outline: auto;
   background-size: cover;
+}
+
+/* ========== Icon FontAwesome ==========*/
+.mi-arrow-left {
+  background: url(../icons/arrow-left.svg) no-repeat;
+  cursor: pointer;
 }

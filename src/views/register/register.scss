@@ -1,40 +1,59 @@
 .container {
   background: var(--color-overlay-login);
   height: 100vh;
+  position: relative;
 
   .content {
-    border: 1px solid white;
-    @media screen and (min-width: 768px) {
+    width: 65%; // Screen 320
+
+    @media screen and (min-width: 480px) {
+      width: 65%;
+    }
+    @media screen and (min-width: 640px) {
       width: 50%;
+    }
+    @media screen and (min-width: 768px) {
+      width: 45%;
+    }
+    @media screen and (min-width: 1024px) {
+      width: 35%;
+    }
+    @media screen and (min-width: 1280px) {
+      width: 25%;
     }
 
     /* Step 1 */
     &.content-1 {
-      padding: 1rem;
+      padding: 2rem;
       header {
-        border: 1px solid white;
+        //border: 1px solid white;
         width: 100%;
 
         h1 {
+          //border: 1px solid white;
           color: var(--color-white);
           text-align: center;
-          font-size: 2.5rem;
+          font-size: 2.5rem; // 36px
           font-family: montserrat, sansita;
           text-shadow: 0px 0px 1rem var(--color-white);
+        }
 
-          -webkit-user-select: none; /* Safari */
-          -moz-user-select: none; /* Firefox */
-          -ms-user-select: none; /* IE 10 and IE 11 */
-          user-select: none; /* Standard syntax */
+        img {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
         }
       }
       main,
       footer {
-        width: 80%;
+        width: 100%;
       }
 
       main {
-        border: 1px solid white;
+        //border: 1px solid white;
+        .btn-signup {
+          margin: 2rem 0;
+        }
 
         .seperate-area {
           width: 100%;
@@ -43,19 +62,20 @@
             width: calc(94% / 2);
           }
           span {
-            width: 6%;
+            width: auto;
             color: var(--color-white);
           }
         }
 
         .oauth2 {
-          border: 1px solid white;
+          //border: 1px solid white;
           width: 100%;
+          margin: 2rem 0;
         }
       }
 
       footer {
-        border: 1px solid white;
+        //border: 1px solid white;
 
         .link-login {
           text-decoration: underline;
@@ -66,16 +86,200 @@
           &:hover {
             color: var(--color-white);
           }
+
+          // Focus + Focus visible
+          &:focus,
+          &:focus-visible {
+            outline: var(--color-white) solid 1px !important;
+            border-radius: var(--border-radius-default);
+          }
         }
       }
     }
 
     /* Step 2 */
     &.content-2 {
+      header {
+        h1 {
+          color: var(--color-white);
+          text-align: center;
+          font-size: 2.5rem; // 36px
+          font-family: montserrat, sansita;
+          text-shadow: 0px 0px 1rem var(--color-white);
+        }
+
+        p {
+          color: #ffffffa6;
+          text-align: center;
+          font-size: 1.25rem; // 18px
+          font-family: montserrat, sansita;
+        }
+      }
+
+      main {
+        margin: 2rem 0;
+        padding: 1rem 0;
+        width: 100%;
+
+        /* Skills Level */
+        a {
+          width: 90%;
+          padding: 1rem;
+          background: var(--color-bg-level-skill);
+          border-radius: var(--border-radius-default);
+
+          /* item-selected */
+          &.item-selected {
+            border: 0.2rem solid var(--color-border-level-skill-selected);
+            .text {
+              color: var(--color-white);
+            }
+            .icon-chess-level {
+              background-color: var(--color-border-level-skill-selected);
+            }
+          }
+
+          .text {
+            color: var(--color-white);
+          }
+          .icon-selected,
+          .icon-chess-level {
+            width: 14px; // Screen 320
+            height: 14px;
+            @media screen and (min-width: 480px) {
+              width: 16px;
+              height: 16px;
+            }
+            @media screen and (min-width: 640px) {
+              width: 24px;
+              height: 24px;
+            }
+            @media screen and (min-width: 768px) {
+              width: 30px;
+              height: 30px;
+            }
+            @media screen and (min-width: 1024px) {
+              width: 32px;
+              height: 32px;
+            }
+            @media screen and (min-width: 1280px) {
+              width: 35px;
+              height: 35px;
+            }
+          }
+
+          /* Icon đánh dấu ĐÃ CHỌN */
+          .icon-selected {
+            @media screen and (max-width: 639px) {
+              background-position: -1296px -564px;
+            }
+          }
+
+          /* Icon level */
+          .icon-chess-level {
+            background-color: var(--color-white);
+            mask-repeat: no-repeat;
+            -webkit-mask-repeat: no-repeat;
+
+            &.icon-pawn {
+              mask-image: url(../../assets/icons/chessmandecoration/pawn.svg);
+              -webkit-mask-image: url(../../assets/icons/chessmandecoration/pawn.svg);
+            }
+            &.icon-knight {
+              mask-image: url(../../assets/icons/chessmandecoration/knight.svg);
+              -webkit-mask-image: url(../../assets/icons/chessmandecoration/knight.svg);
+            }
+            &.icon-rook {
+              mask-image: url(../../assets/icons/chessmandecoration/rook.svg);
+              -webkit-mask-image: url(../../assets/icons/chessmandecoration/rook.svg);
+            }
+            &.icon-queen {
+              mask-image: url(../../assets/icons/chessmandecoration/queen.svg);
+              -webkit-mask-image: url(../../assets/icons/chessmandecoration/queen.svg);
+            }
+          }
+
+          // Skills Level Hover
+          &:hover {
+            cursor: pointer;
+          }
+
+          // Skills Level Focus + Focus visible
+          &:focus,
+          &:focus-visible {
+            outline: var(--color-white) solid 1px !important;
+          }
+        }
+      }
+
+      // footer {
+      // }
     }
 
     /* Step 3 */
     &.content-3 {
+      header {
+        h1 {
+          color: var(--color-white);
+          text-align: center;
+          font-size: 2.5rem; // 36px
+          font-family: montserrat, sansita;
+          text-shadow: 0px 0px 1rem var(--color-white);
+        }
+
+        p {
+          color: #ffffffa6;
+          text-align: center;
+          font-size: 1.25rem; // 18px
+          font-family: montserrat, sansita;
+        }
+      }
+      main {
+        margin: 2rem 0;
+        padding: 1rem 0;
+        width: 100%;
+
+        .username,
+        .password,
+        .confirm-password,
+        .email {
+          width: 90%;
+        }
+      }
+      // footer {
+      // }
+    }
+  }
+
+  /* Button back */
+  .btn-back {
+    // border: 1px solid white;
+    position: absolute;
+    top: 2rem;
+    left: 20%;
+    width: 2rem;
+    height: 2rem;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    // Focus + Focus visible
+    &:focus,
+    &:focus-visible {
+      outline: var(--color-white) solid 1px !important;
+      border-radius: var(--border-radius-default);
+    }
+
+    .icon-arrow-left {
+      width: 100%;
+      height: 100%;
+      background-color: var(--color-white);
+      mask-repeat: no-repeat;
+      mask-size: cover;
+      -webkit-mask-repeat: no-repeat;
+      mask-image: url(../../assets/icons/arrow-left.svg);
+      -webkit-mask-image: url(../../assets/icons/arrow-left.svg);
     }
   }
 }

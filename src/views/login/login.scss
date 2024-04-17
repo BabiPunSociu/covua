@@ -74,7 +74,7 @@
         width: calc(94% / 2);
       }
       span {
-        width: 6%;
+        width: auto;
         color: var(--color-white);
       }
     }
@@ -97,14 +97,11 @@
         color: var(--color-white);
       }
 
-      // Focus
-      &:focus {
-        outline: var(--color-white) solid 1px !important;
-      }
-
-      // Focus visible
+      // Focus + Focus visible
+      &:focus,
       &:focus-visible {
         outline: var(--color-white) solid 1px !important;
+        border-radius: var(--border-radius-default);
       }
     }
   }
