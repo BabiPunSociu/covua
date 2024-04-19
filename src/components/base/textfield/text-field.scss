@@ -110,10 +110,27 @@
 
   /* ===== WARNING ===== */
   span.warning {
+    z-index: 100;
     position: absolute;
-    top: calc(100% + 8px);
-    color: red;
+    top: calc(100% + 0.8rem); // 100% + 8px;
+    color: var(--color-btn-google);
+    border: 1px solid var(--color-btn-google);
+    border-radius: var(--border-radius-default);
     font-size: 12px;
     font-weight: 400;
+    background-color: var(--color-white);
+    padding: 1rem;
+
+    /* Thêm mũi tên */
+    &:before {
+      content: "";
+      position: absolute;
+      top: calc(-0.5rem * 2);
+      left: 10%;
+      margin-left: 0;
+      border-width: 0.5rem;
+      border-style: solid;
+      border-color: transparent transparent var(--color-btn-google) transparent;
+    }
   }
 }

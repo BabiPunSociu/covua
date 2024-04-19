@@ -2,6 +2,7 @@
   <div class="background flex flex-center">
     <div class="login-container scroller">
       <!-- Username -->
+      <!--  -->
       <div class="username">
         <m-text-field
           ref="inputUsername"
@@ -10,12 +11,24 @@
           :isTextWhite="true"
           inputType="text"
           :tabIndex="1"
+          :validateFunctions="[
+            this.$validator.required,
+            this.$validator.minLength,
+            this.$validator.maxLength,
+          ]"
+          :minLength="5"
+          :maxLength="255"
           :isAutoFocused="true"
           @inputOnChange="usernameChanged"
         >
-          <template v-slot:lbl-content>{{
-            this.$resource["vi-VN"].resourcesLogin.textUsername
-          }}</template>
+          <!-- Text hiển thị tiêu đề -->
+          <template v-slot:lbl-content>
+            {{ this.$resource["vi-VN"].resourcesLogin.textUsername }}
+          </template>
+          <!-- Text hiển thị khi validate -->
+          <template v-slot:warning>
+            {{ this.$resource["vi-VN"].resourcesLogin.textWarningUsername }}
+          </template>
         </m-text-field>
       </div>
       <!-- Password -->
@@ -26,12 +39,24 @@
           :isTextWhite="true"
           inputType="password"
           :tabIndex="2"
+          :validateFunctions="[
+            this.$validator.required,
+            this.$validator.minLength,
+            this.$validator.maxLength,
+          ]"
+          :minLength="6"
+          :maxLength="255"
           :isAutoFocused="false"
           @inputOnChange="passwordChanged"
         >
-          <template v-slot:lbl-content>{{
-            this.$resource["vi-VN"].resourcesLogin.textPassword
-          }}</template>
+          <!-- Text hiển thị tiêu đề -->
+          <template v-slot:lbl-content>
+            {{ this.$resource["vi-VN"].resourcesLogin.textPassword }}
+          </template>
+          <!-- Text hiển thị khi validate -->
+          <template v-slot:warning>
+            {{ this.$resource["vi-VN"].resourcesLogin.textWarningPassword }}
+          </template>
         </m-text-field>
       </div>
 
@@ -122,6 +147,16 @@
 <script>
 export default {
   name: "Login",
+  inject: [
+    "toastSuccessNoButtonUndo",
+    "toastWarningNoButtonUndo",
+    "showDialogError",
+    "showDialogWarningOneButton",
+    "showDialogWarningTwoButtons",
+    "showDialogInfoThreeButtons",
+    "handleAPIError",
+  ],
+
   data() {
     return {
       username: "",

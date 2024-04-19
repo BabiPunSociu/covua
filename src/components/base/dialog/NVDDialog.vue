@@ -2,14 +2,14 @@
   <div class="container-dialog">
     <div class="dialog-background"></div>
     <div class="dialog-container">
-      <div class="dialog-header">
+      <header class="dialog-header">
         <div class="dialog-title">
           <slot name="title">{{ this.inputDialog.title }}</slot>
         </div>
         <!-- Nút close -->
         <div class="mi mi-24 mi-close" @click="closeDialog"></div>
-      </div>
-      <div class="dialog-content flex-row">
+      </header>
+      <main class="dialog-content flex flex-space-between">
         <div class="dialog-icon">
           <div class="mi mi-24" :class="inputDialog.iconClass"></div>
         </div>
@@ -18,8 +18,8 @@
             <p v-html="inputDialog.content"></p
           ></slot>
         </div>
-      </div>
-      <div class="dialog-footer flex-row flex-right" style="padding: 0">
+      </main>
+      <footer class="dialog-footer flex flex-space-between flex-right" style="padding: 0">
         <!-- button 3 -->
         <m-button
           tabindex="1002"
@@ -50,11 +50,14 @@
             this.inputDialog.buttonPrimaryText
           }}</slot></m-button
         >
-      </div>
+      </footer>
     </div>
   </div>
 </template>
 <script>
+// import class dialog.
+import dialog from "../../../js/dialog.js";
+
 export default {
   name: "NVDDialog",
   emits: [
@@ -64,20 +67,22 @@ export default {
     "dialogButton3Click",
   ],
   props: {
+    /**
+     * Đối tượng cung cấp dữ liệu cho component dialog.
+     * Kiểu dữ liệu: class dialog.
+     */
     inputDialog: {
-      type: Object,
-      default: {
-        title: "",
-        content: "",
-        iconClass: "mi-warning" /* mi-success, mi-warning, mi-info, mi-error */,
-        totalButtons: 3 /* 1, 2, 3 */,
-        buttonPrimaryText: "" /*this.$resource["vi-VN"].button.textButtonYes*/,
-        buttonSecondary1Text:
-          "" /*this.$resource["vi-VN"].button.textButtonNo*/,
-        buttonSecondary2Text:
-          "" /*this.$resource["vi-VN"].button.textButtonCancel*/,
-      },
-      required: false,
+      type: dialog,
+      default: new dialog(
+        "title",
+        "content",
+        "iconClass",
+        3,
+        "buttonPrimaryText",
+        "buttonSecondary1Text",
+        "buttonSecondary2Text"
+      ),
+      required: true,
     },
   },
   mounted() {
@@ -88,17 +93,19 @@ export default {
     /* ========== Đóng dialog ======== */
     /**
      * Phát sự kiện đóng dialog
-     * Author: NVDUNG (20/08/2023)
+     * @returns {void}
+     * @author NVDung (18-04-2024)
      */
     closeDialog() {
       // Phát sự kiện đóng dialog
       this.$emitter.emit("closeDialog");
     },
 
-    /* ========== Nút bấm click ======== */
+    /* ========== Button Primary click ======== */
     /**
-     * Phát sự kiện xác nhận tiếp tục hành động'
-     * Author: NVDUNG (20/08/2023)
+     * Phát sự kiện xác nhận tiếp tục hành động
+     * @returns {void}
+     * @author NVDung (18-04-2024)
      */
     btnPrimaryClick() {
       // Phát sự kiện xác nhận tiếp tục hành động
@@ -110,7 +117,8 @@ export default {
 
     /**
      * Phát sự kiện button 2 click
-     * Author: NVDUNG (20/08/2023)
+     * @returns {void}
+     * @author NVDung (18-04-2024)
      */
     btnSecond1Click() {
       this.$emitter.emit("dialogButton2Click");
@@ -121,7 +129,8 @@ export default {
 
     /**
      * Phát sự kiện button 3 click
-     * Author: NVDUNG (20/08/2023)
+     * @returns {void}
+     * @author NVDung (18-04-2024)
      */
     btnSecond2Click() {
       this.$emitter.emit("dialogButton3Click");
@@ -146,10 +155,10 @@ export default {
      */
     tabFocusAround(event, index) {
       if (event.key == "Tab") {
-        // Nút 2 và tổng 2 nút bấm => focus lại nút 1
-        // Nút 3 và tổng 3 nút bấm => focus lại nút 1
         if (
+          // Nút 2 và tổng 2 nút bấm => focus lại nút 1
           (index === 2 && this.inputDialog.totalButtons === 2) ||
+          // Nút 3 và tổng 3 nút bấm => focus lại nút 1
           (index === 3 && this.inputDialog.totalButtons >= 3)
         ) {
           // focus nút primary
@@ -164,5 +173,5 @@ export default {
 };
 </script>
 <style scoped>
-@import url(./dialog.css);
+@import url(./dialog.scss);
 </style>

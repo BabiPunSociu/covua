@@ -152,12 +152,27 @@
             :isTextWhite="true"
             inputType="text"
             :tabIndex="1"
+            :validateFunctions="[
+              this.$validator.required,
+              this.$validator.minLength,
+              this.$validator.maxLength,
+            ]"
+            :minLength="5"
+            :maxLength="255"
             :isAutoFocused="true"
             @inputOnChange="usernameChanged"
           >
-            <template v-slot:lbl-content>{{
-              this.$resource["vi-VN"].resourcesRegister.step3.textUsername
-            }}</template>
+            <!-- Text hiển thị tiêu đề -->
+            <template v-slot:lbl-content>
+              {{ this.$resource["vi-VN"].resourcesRegister.step3.textUsername }}
+            </template>
+            <!-- Text hiển thị khi validate -->
+            <template v-slot:warning>
+              {{
+                this.$resource["vi-VN"].resourcesRegister.step3
+                  .textWarningUsername
+              }}
+            </template>
           </m-text-field>
         </div>
 
@@ -171,12 +186,27 @@
             :isTextWhite="true"
             inputType="password"
             :tabIndex="2"
+            :validateFunctions="[
+              this.$validator.required,
+              this.$validator.minLength,
+              this.$validator.maxLength,
+            ]"
+            :minLength="6"
+            :maxLength="255"
             :isAutoFocused="false"
             @inputOnChange="passwordChanged"
           >
-            <template v-slot:lbl-content>{{
-              this.$resource["vi-VN"].resourcesRegister.step3.textPassword
-            }}</template>
+            <!-- Text hiển thị tiêu đề -->
+            <template v-slot:lbl-content>
+              {{ this.$resource["vi-VN"].resourcesRegister.step3.textPassword }}
+            </template>
+            <!-- Text hiển thị khi validate -->
+            <template v-slot:warning>
+              {{
+                this.$resource["vi-VN"].resourcesRegister.step3
+                  .textWarningPassword
+              }}
+            </template>
           </m-text-field>
         </div>
 
@@ -191,13 +221,30 @@
             :isTextWhite="true"
             inputType="password"
             :tabIndex="3"
+            :validateFunctions="[
+              this.$validator.required,
+              this.$validator.minLength,
+              this.$validator.maxLength,
+            ]"
+            :minLength="6"
+            :maxLength="255"
             :isAutoFocused="false"
             @inputOnChange="confirmPasswordChanged"
           >
-            <template v-slot:lbl-content>{{
-              this.$resource["vi-VN"].resourcesRegister.step3
-                .textConfirmPassword
-            }}</template>
+            <!-- Text hiển thị tiêu đề -->
+            <template v-slot:lbl-content>
+              {{
+                this.$resource["vi-VN"].resourcesRegister.step3
+                  .textConfirmPassword
+              }}
+            </template>
+            <!-- Text hiển thị khi validate -->
+            <template v-slot:warning>
+              {{
+                this.$resource["vi-VN"].resourcesRegister.step3
+                  .textWarningConfirmPassword
+              }}
+            </template>
           </m-text-field>
         </div>
 
@@ -211,12 +258,27 @@
             :isTextWhite="true"
             inputType="email"
             :tabIndex="4"
+            :validateFunctions="[
+              this.$validator.required,
+              this.$validator.minLength,
+              this.$validator.maxLength,
+              this.$validator.email,
+            ]"
+            :minLength="5"
+            :maxLength="255"
             :isAutoFocused="false"
             @inputOnChange="emailChanged"
           >
-            <template v-slot:lbl-content>{{
-              this.$resource["vi-VN"].resourcesRegister.step3.textEmail
-            }}</template>
+            <!-- Text hiển thị tiêu đề -->
+            <template v-slot:lbl-content>
+              {{ this.$resource["vi-VN"].resourcesRegister.step3.textEmail }}
+            </template>
+            <!-- Text hiển thị khi validate -->
+            <template v-slot:warning>
+              {{
+                this.$resource["vi-VN"].resourcesRegister.step3.textWarningEmail
+              }}
+            </template>
           </m-text-field>
         </div>
       </main>
@@ -252,11 +314,84 @@
 <script>
 export default {
   name: "Register",
-
+  inject: [
+    "toastSuccessNoButtonUndo",
+    "toastWarningNoButtonUndo",
+    "showDialogError",
+    "showDialogWarningOneButton",
+    "showDialogWarningTwoButtons",
+    "showDialogInfoThreeButtons",
+    "handleAPIError",
+  ],
   data() {
     return {
+      /**
+       * Bước thực hiện: 1 -> 3.
+       */
       step: 1,
+
+      /**
+       * Giá trị cấp độ kỹ năng được chọn trong bước 2.
+       */
       skillLevelSelected: 0,
+
+      /**
+       * Dữ liệu trong form.
+       */
+      formData: {
+        /**
+         * Dữ liệu Username.
+         */
+        username: {
+          /**
+           * Giá trị Username.
+           */
+          value: "",
+          /**
+           * Giá trị Username có hợp lệ không?
+           */
+          isValid: true,
+        },
+        /**
+         * Dữ liệu Password.
+         */
+        password: {
+          /**
+           * Giá trị Password.
+           */
+          value: "",
+          /**
+           * Giá trị Password có hợp lệ không?
+           */
+          isValid: true,
+        },
+        /**
+         * Dữ liệu ConfirmPassword.
+         */
+        confirmPassword: {
+          /**
+           * Giá trị ConfirmPassword.
+           */
+          value: "",
+          /**
+           * Giá trị ConfirmPassword có hợp lệ không?
+           */
+          isValid: true,
+        },
+        /**
+         * Dữ liệu Email.
+         */
+        email: {
+          /**
+           * Giá trị Email.
+           */
+          value: "",
+          /**
+           * Giá trị Email có hợp lệ không?
+           */
+          isValid: true,
+        },
+      },
     };
   },
   watch: {
@@ -309,13 +444,23 @@ export default {
      * Hàm thực hiện đăng kí Account mới thông qua Google.
      * @author NVDung (16-04-2024)
      */
-    btnGoogleClick() {},
+    btnGoogleClick() {
+      // Giả sử rằng hiển thị toast message success
+      this.toastSuccessNoButtonUndo("Đăng kí account thành công với Google.");
+
+      setTimeout(() => {
+        this.toastWarningNoButtonUndo("Đăng kí account thất bại với Google.");
+      }, 3000);
+    },
 
     /**
      * Hàm thực hiện đăng kí Account mới thông qua Facebook.
      * @author NVDung (16-04-2024)
      */
-    btnFacebookClick() {},
+    btnFacebookClick() {
+      // Giả sử rằng hiện thị dialog warning 1 button
+      this.showDialogWarningOneButton("Canh bao facebook sai thong tin.");
+    },
 
     /**
      * Hàm thực hiện focus về button Đăng kí khi bấm phím Tab.
@@ -397,6 +542,116 @@ export default {
      */
     submitOnClick() {
       alert("Submit onClick");
+
+      // ========== Kiểm tra validate input ========== //
+      let errorMessage = this.checkValidateInput();
+
+      // Nếu errorMessage không rỗng => Thực hiện hiển thị thông báo lỗi.
+      if (errorMessage) {
+        alert(errorMessage);
+      }
+      // ======== Kiểm tra validate nghiệp vụ ======== //
+      // Kiểm tra password và confirm password không trùng khớp.
+      if (this.password != this.confirmPassword) {
+        alert("Password and Confirm Password not match");
+      }
+
+      // Thực hiện gọi API đăng kí
+    },
+
+    /**
+     * Hàm kiểm tra validate input.
+     * @returns {String} errorMessage - Nội dung thông báo lỗi.
+     * @author NVDung (18-04-2024)
+     */
+    checkValidateInput() {
+      /**
+       * Nội dung thông điệp lỗi (Nếu có).
+       */
+      let errorMessage = ``;
+
+      // ========== KIỂM TRA VALIDATE INPUT USERNAME ========== //
+      if (
+        // Kiểm tra Required
+        !this.$validator.required(this.formData.username.value) ||
+        // Kiểm tra min-length
+        !this.$validator.minLength(this.formData.username.value, 5) ||
+        // Kiểm tra max-length
+        !this.$validator.maxLength(this.formData.username.value, 255)
+      ) {
+        // Đánh dấu invalid
+        this.formData.username.isValid = false;
+
+        // Thêm thông điệp lỗi để hiển thị thông báo
+        errorMessage +=
+          this.$resource["vi-VN"].resourcesRegister.step3.textWarningUsername +
+          `<br/>`;
+      }
+
+      // ========== KIỂM TRA VALIDATE INPUT PASSWORD ========== //
+      if (
+        // Kiểm tra Required
+        !this.$validator.required(this.formData.password.value) ||
+        // Kiểm tra min-length
+        !this.$validator.minLength(this.formData.password.value, 6) ||
+        // Kiểm tra max-length
+        !this.$validator.maxLength(this.formData.password.value, 255)
+      ) {
+        // Đánh dấu invalid
+        this.formData.password.isValid = false;
+
+        // Thêm thông điệp lỗi để hiển thị thông báo
+        errorMessage +=
+          this.$resource["vi-VN"].resourcesRegister.step3.textWarningPassword +
+          `<br/>`;
+      }
+
+      // ========== KIỂM TRA VALIDATE INPUT CONFIRM PASSWORD ========== //
+      if (
+        // Kiểm tra Required
+        !this.$validator.required(this.formData.confirmPassword.value) ||
+        // Kiểm tra min-length
+        !this.$validator.minLength(this.formData.confirmPassword.value, 6) ||
+        // Kiểm tra max-length
+        !this.$validator.maxLength(this.formData.confirmPassword.value, 255)
+      ) {
+        // Đánh dấu invalid
+        this.formData.confirmPassword.isValid = false;
+
+        // Thêm thông điệp lỗi để hiển thị thông báo
+        errorMessage +=
+          this.$resource["vi-VN"].resourcesRegister.step3
+            .textWarningConfirmPassword + `<br/>`;
+      }
+
+      // ========== KIỂM TRA VALIDATE INPUT EMAIL ========== //
+      if (
+        // Kiểm tra Required
+        !this.$validator.required(this.formData.email.value) ||
+        // Kiểm tra min-length
+        !this.$validator.minLength(this.formData.email.value, 6) ||
+        // Kiểm tra max-length
+        !this.$validator.maxLength(this.formData.email.value, 255) ||
+        // Kiểm tra định dạng email
+        !this.$validator.email(this.formData.email.value)
+      ) {
+        // Đánh dấu invalid
+        this.formData.email.isValid = false;
+
+        // Thêm thông điệp lỗi để hiển thị thông báo
+        errorMessage +=
+          this.$resource["vi-VN"].resourcesRegister.step3.textWarningEmail +
+          `<br/>`;
+      }
+
+      // Xóa '<br/>' ở cuối cùng
+      if (errorMessage.length > 0) {
+        errorMessage = errorMessage.slice(0, -5);
+      }
+
+      console.log(errorMessage);
+
+      return errorMessage;
     },
 
     /* ========== HÀM XỬ LÝ BACK Ở BƯỚC 2+3 ========== */
@@ -427,7 +682,7 @@ export default {
           }
           // Nếu đang ở bước 3
           else if (this.step == 3) {
-            // Thực hiện focus Input Username.
+            // Thực hiện focus Input password.
             this.focusInputUsername();
           }
           break;

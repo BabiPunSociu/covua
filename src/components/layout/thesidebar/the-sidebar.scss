@@ -3,6 +3,7 @@
   height: 100vh;
   background-color: #041434;
 
+  /* Logo */
   .logo-container {
     display: flex;
     height: 48px;
@@ -10,10 +11,11 @@
     align-items: center;
     justify-content: center;
 
-    .menu-container-options {
-      margin-right: 10px;
-    }
+    // .menu-container-options {
+    //   margin-right: 10px;
+    // }
 
+    /*  */
     .logo {
       img {
         height: 36px;

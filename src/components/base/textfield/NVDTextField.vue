@@ -48,12 +48,6 @@ export default {
   props: {
     /**
      * Set tooltip cho label
-     * Author: NVDUNG (20/08/2023)
-     * @type {String}
-     * @default ""
-     * @required false
-     * @since 1.0
-     * @version 1.0
      */
     lblTooltip: {
       type: String,
@@ -62,12 +56,6 @@ export default {
     },
     /**
      * Hiển thị label hay không?
-     * Author: NVDUNG (20/08/2023)
-     * @type {Boolean}
-     * @default true
-     * @required false
-     * @since 1.0
-     * @version 1.0
      */
     haveLabel: {
       type: Boolean,
@@ -76,10 +64,6 @@ export default {
     },
     /**
      * Hiển thị * required hay không?
-     * Author: NVDUNG (20/08/2023)
-     * @type {Boolean}
-     * @default false
-     * @required false
      */
     textFieldRequired: {
       type: Boolean,
@@ -98,12 +82,6 @@ export default {
 
     /**
      * Truyền type của input
-     * Author: NVDUNG (20/08/2023)
-     * @type {String}
-     * @default "text"
-     * @required false
-     * @since 1.0
-     * @version 1.0
      * @optional: "text", "number", "password", "email", ...
      */
     inputType: {
@@ -113,12 +91,6 @@ export default {
     },
     /**
      * Hiển thị placeholder cho input
-     * Author: NVDUNG (20/08/2023)
-     * @type {String}
-     * @default ""
-     * @required false
-     * @since 1.0
-     * @version 1.0
      */
     placeholderTextField: {
       type: String,
@@ -127,12 +99,6 @@ export default {
     },
     /**
      * Truyền giá trị tabindex cho input
-     * Author: NVDUNG (20/08/2023)
-     * @type {Number}
-     * @default 1
-     * @required false
-     * @since 1.0
-     * @version 1.0
      */
     tabIndex: {
       type: Number,
@@ -141,12 +107,6 @@ export default {
     },
     /**
      * Truyền giá trị value cho input
-     * Author: NVDUNG (20/08/2023)
-     * @type {String}
-     * @default ""
-     * @required false
-     * @since 1.0
-     * @version 1.0
      */
     valueInput: {
       type: String,
@@ -155,26 +115,13 @@ export default {
     },
     /**
      * Truyền mảng các hàm validate để validate input
-     * Author: NVDUNG (20/08/2023)
-     * @type {Array}
-     * @default []
-     * @required false
-     * @since 1.0
-     * @version 1.0
-     * @optional: required, minLength, ... (xem trong file validate.js)
      */
     validateFunctions: {
-      type: Array,
+      type: Array, // Các hàm trong đối tượng validator trong file validate-input.js
       required: false,
     },
     /**
      * Truyền trạng thái lỗi để hiển thị lỗi ban đầu
-     * Author: NVDUNG (17/09/2023)
-     * @type {boolean}
-     * @default false
-     * @required false
-     * @since 1.0
-     * @version 1.0
      */
     isErrorInput: {
       type: Boolean,
@@ -188,6 +135,24 @@ export default {
     isAutoFocused: {
       type: Boolean,
       default: false,
+      required: false,
+    },
+
+    /**
+     * Giá trị min-length để validate input.
+     */
+    minLength: {
+      type: Number,
+      default: 0,
+      required: false,
+    },
+
+    /**
+     * Giá trị max-length để validate input.
+     */
+    maxLength: {
+      type: Number,
+      default: 255,
       required: false,
     },
   },
@@ -205,12 +170,12 @@ export default {
   methods: {
     /**
      * Kiểm tra input rỗng
-     * Author: NVDUNG (20/08/2023)
+     * @author NVDung (19-04-2024)
      * @param {$event} event: newValue
      */
     validate(event) {
       // Kiểm tra mảng các hàm validate
-      if (this.validateFunctions == null) {
+      if (this.validateFunctions.length == 0) {
         this.isError = false;
       } // Có hàm validate
       else {
@@ -219,15 +184,29 @@ export default {
         // Giá trị thay đổi
         let valueInput = event.target.value;
 
-        // Kiểm tra rỗng
-        // if (this.textFieldRequired) {
-        //   let isNotEmpty = this.$validate(valueInput);
-        //   boolArray.push(isNotEmpty);
-        // }
-
         // Kiểm tra các hàm validate khác
-        this.validateFunctions.forEach((item) => {
-          let isValidFunction = item(valueInput);
+        this.validateFunctions.forEach((func) => {
+          // Nếu kết quả validate hợp lệ thì trả về True.
+          let isValidFunction = null;
+          switch (func) {
+            /**
+             * Min length
+             */
+            case this.$validator.minLength:
+              isValidFunction = func(valueInput, this.minLength);
+              break;
+
+            /**
+             * Max length
+             */
+            case this.$validator.maxLength:
+              isValidFunction = func(valueInput, this.maxLength);
+              break;
+
+            default:
+              isValidFunction = func(valueInput);
+              break;
+          }
           boolArray.push(isValidFunction);
         });
 
@@ -239,17 +218,19 @@ export default {
     /**
      * Hàm xử lý event khi nhấn Enter
      * @param {*} event
-     * Author: NVDUNG (18/09/2023)
+     * @returns {void}
+     * @author NVDung (19-04-2024)
      */
     keydownEnter(event) {
-      if (event.keyCode === 13) {
+      if (event.key === "Enter") {
         this.iConActionClick();
       }
     },
 
     /**
      * Phát sự kiện iconActionClick cho component cha xử lý
-     * Author: NVDUNG (18/09/2023)
+     * @returns {void}
+     * @author NVDung (19-04-2024)
      */
     iConActionClick() {
       // Chuyển active icon
@@ -260,7 +241,8 @@ export default {
 
     /**
      * Hàm thực hiện focus input
-     * Author: NVDUNG (18/09/2023)
+     * @returns {void}
+     * @author NVDung (19-04-2024)
      */
     autoFocusInput() {
       if (this.isAutoFocused) {
@@ -272,7 +254,7 @@ export default {
   watch: {
     /**
      * Gửi dữ liệu cho component cha khi data thay đổi
-     * Author: NVDUNG (20/08/2023)
+     * @author NVDung (19-04-2024)
      */
     valueOutput(newValue) {
       // Tạo sự kiện để truyền giá trị mới cho component cha

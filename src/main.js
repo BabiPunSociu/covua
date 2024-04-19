@@ -24,6 +24,10 @@ import targetChessMan from "./js/targetchessman/target-chessman.js";
 import checkEndGame from "./js/checkgameend/check-end-game.js";
 // Đối tượng NVDValidator
 import NVDValidator from "./js/validate-input.js";
+// class Toast
+import toast from "./js/toast.js";
+// class Dialog
+import dialog from "./js/dialog.js";
 
 /* ==================== IMPORT VUE COMPONENT ==================== */
 import NVDButton from "./components/base/buttons/NVDButton.vue";
@@ -64,6 +68,8 @@ app.config.globalProperties.$targetChessMan = targetChessMan;
 app.config.globalProperties.$checkEndGame = checkEndGame;
 app.config.globalProperties.$emitter = emitter;
 app.config.globalProperties.$axios = axios;
+app.config.globalProperties.$toast = toast;
+app.config.globalProperties.$dialog = dialog;
 
 app.use(createPinia());
 app.use(router);

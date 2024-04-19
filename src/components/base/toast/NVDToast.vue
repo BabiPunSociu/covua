@@ -9,7 +9,7 @@
         <span class="toast-message">{{ message }}</span>
       </div>
       <!-- Nút hoàn tác không bắt buộc -->
-      <a v-if="showButton" class="toast-button">Hoàn tác</a>
+      <a v-if="showButtonUndo" class="toast-button">Hoàn tác</a>
       <div @click="closeToast" class="toast-close mi mi-24 mi-close"></div>
     </div>
   </div>
@@ -21,20 +21,35 @@ export default {
     return {};
   },
   props: {
-    /* Các giá trị: success, error, warning, info */
+    /**
+     * Kiểu toast message: success, error, warning, info
+     */
     typeToast: {
       type: String,
       required: true,
     },
-    showButton: {
+
+    /**
+     * Hiển thị nút hoàn tác?
+     * Mặc định: true.
+     */
+    showButtonUndo: {
       type: Boolean,
       default: true,
       required: false,
     },
+
+    /**
+     * Tiêu đề toast message.
+     */
     title: {
       type: String,
       required: true,
     },
+
+    /**
+     * Nội dung thông điệp.
+     */
     message: {
       type: String,
       required: true,
@@ -43,7 +58,7 @@ export default {
   methods: {
     /**
      * Phát sự kiện đóng Toast Message đến component cha
-     * Author: NVDUNG (20/08/2023)
+     * @author: NVDUNG (18-04-2024)
      */
     closeToast() {
       this.$emit("closeToast");
@@ -52,12 +67,11 @@ export default {
   mounted() {
     /**
      * Phát sự kiện đóng Toast Message đến component cha sau 5 giây
-     * Author: NVDUNG (20/08/2023)
      */
     setTimeout(this.closeToast, 5000);
   },
 };
 </script>
 <style scoped>
-@import url(./toast.css);
+@import url(./toast.scss);
 </style>

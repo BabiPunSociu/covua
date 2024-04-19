@@ -1,11 +1,10 @@
 <template>
-  <div class="container-maincontent">
+  <div class="container-maincontent scroller">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "TheMainContent",
 };

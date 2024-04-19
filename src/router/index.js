@@ -4,21 +4,31 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   mode: "history",
   routes: [
+    /**
+     * Render component 'Layout'.
+     */
     {
       path: "/",
-      name: "HomeRouter",
-      // component: Home
-      // component: () => import("../views/home/Home.vue"),
-
+      name: "LayoutRouter",
+      // component: Layout dùng chung có header, sidebar.
+      component: () => import("../components/layout/thelayout/TheLayout.vue"),
+      /**
+       * Render component con của component 'Layout'.
+       */
       children: [
+        // Render component 'Home'. => URL="/"
         {
           path: "",
           name: "HomeRouter",
+          // component: HomeView
           component: () => import("../views/home/Home.vue"),
         },
       ],
     },
 
+    /**
+     * Render component 'Login'.
+     */
     {
       path: "/login",
       name: "LoginRouter",
@@ -26,6 +36,9 @@ const router = createRouter({
       component: () => import("../views/login/Login.vue"),
     },
 
+    /**
+     * Render component 'Register'.
+     */
     {
       path: "/register",
       name: "RegisterRouter",
@@ -33,6 +46,9 @@ const router = createRouter({
       component: () => import("../views/register/Register.vue"),
     },
 
+    /**
+     * Render component 'ForgotPassword'.
+     */
     {
       path: "/forgotPassword",
       name: "ForgotPasswordRouter",
@@ -40,6 +56,9 @@ const router = createRouter({
       component: () => import("../views/forgotpassword/ForgotPassword.vue"),
     },
 
+    /**
+     * Render component 'NotFound'.
+     */
     {
       path: "/:catchAll(.*)", // Bắt tất cả
       name: "NotFoundRouter",

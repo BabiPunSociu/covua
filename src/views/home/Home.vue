@@ -1,25 +1,10 @@
 <template>
-  <div class="container flex">
-    <TheSideBar></TheSideBar>
-    <div class="main">
-      <TheHeader></TheHeader>
-      <TheMainContent></TheMainContent>
-    </div>
-  </div>
+  <h1 v-for="i in 100" :key="i">Test page home</h1>
 </template>
 
 <script>
-import TheSideBar from "../../components/layout/thesidebar/TheSideBar.vue";
-import TheHeader from "../../components/layout/theheader/TheHeader.vue";
-import TheMainContent from "../../components/layout/themaincontent/TheMainContent.vue";
-
 export default {
   name: "Home",
-  components: {
-    TheSideBar,
-    TheHeader,
-    TheMainContent,
-  },
 };
 </script>
 

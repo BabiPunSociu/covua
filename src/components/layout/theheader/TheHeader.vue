@@ -2,13 +2,15 @@
   <header class="header">
     <div class="header-left">
       <!-- Icon three stripes -->
-      <div class="header-icon mi mi-24 mi-three-stripes pointer"></div>
       <div
+        class="header-icon mi mi-24 mi-three-stripes"
+        @click="toggleSidebar"
+      ></div>
+      <!-- <div
         class="header-branch"
         title="CÔNG TY TNHH SẢN XUẤT - THƯƠNG MẠI - DỊCH VỤ QUI PHÚC"
       >
         <div class="con-ms-tooltip">
-          <!-- Thẻ hiện tooltip -->
           <div class="msTooltipParent"></div>
           <div class="header-branch-name">
             CÔNG TY TNHH SẢN XUẤT - THƯƠNG MẠI - DỊCH VỤ QUI PHÚC
@@ -19,7 +21,18 @@
             class="header-icon mi mi-24 mi-chevron-right header-branch-icon"
           ></div>
         </a>
-      </div>
+      </div> -->
+      <!-- TextField search -->
+      <m-text-field
+        ref="textFieldSearch"
+        class="m-textfield-icon-action"
+        :haveLabel="false"
+        :placeholderTextField="
+          this.$resource['vi-VN'].textField.textSearchOnNVDChess
+        "
+        @iconActionClick="btnSearchClick"
+        @inputOnChange="textFieldOnChange"
+      ></m-text-field>
     </div>
     <div class="header-right">
       <div class="notify">
@@ -58,6 +71,29 @@
 <script>
 export default {
   name: "TheHeader",
+  data() {
+    return {};
+  },
+
+  methods: {
+    /**
+     * Hàm thực hiện ẩn / hiện component sidebar.
+     * @returns {void}
+     * @author NVDung (19-04-2024)
+     */
+    toggleSidebar() {
+      this.$emit("toggleSidebar");
+    },
+
+    /**
+     * Hàm xử lý sự kiện khi người dùng click vào icon search trên input.
+     * @returns {void}
+     * @author NVDung (19-04-2024)
+     */
+    btnSearchClick() {
+      alert("Search icon clicked!");
+    },
+  },
 };
 </script>
 
