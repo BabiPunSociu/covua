@@ -1,0 +1,20 @@
+.icon-resize {
+  transform: scale(var(--scale-mobile)); // Mobile
+
+  /* ========== Tablet ========== */
+  @media screen and (min-width: 481px) {
+    transform: scale(var(--scale-tablet));
+  }
+  /* ========== Laptop ========== */
+  @media screen and (min-width: 769px) {
+    transform: scale(var(--scale-desktop));
+  }
+  /* ========== Large Desktop ========== */
+  @media screen and (min-width: 1025px) {
+    transform: scale(var(--scale-large-desktop));
+  }
+  /* ========== VERY Large Desktop ========== */
+  @media screen and (min-width: 1200px) {
+    transform: scale(var(--scale-large-desktop));
+  }
+}

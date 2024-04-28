@@ -23,11 +23,11 @@
         >
           <!-- Text hiển thị tiêu đề -->
           <template v-slot:lbl-content>
-            {{ this.$resource["vi-VN"].resourcesLogin.textUsername }}
+            {{ this.$resource.resourcesLogin.textUsername["vi-VN"] }}
           </template>
           <!-- Text hiển thị khi validate -->
           <template v-slot:warning>
-            {{ this.$resource["vi-VN"].resourcesLogin.textWarningUsername }}
+            {{ this.$resource.resourcesLogin.textWarningUsername["vi-VN"] }}
           </template>
         </m-text-field>
       </div>
@@ -51,11 +51,11 @@
         >
           <!-- Text hiển thị tiêu đề -->
           <template v-slot:lbl-content>
-            {{ this.$resource["vi-VN"].resourcesLogin.textPassword }}
+            {{ this.$resource.resourcesLogin.textPassword["vi-VN"] }}
           </template>
           <!-- Text hiển thị khi validate -->
           <template v-slot:warning>
-            {{ this.$resource["vi-VN"].resourcesLogin.textWarningPassword }}
+            {{ this.$resource.resourcesLogin.textWarningPassword["vi-VN"] }}
           </template>
         </m-text-field>
       </div>
@@ -67,7 +67,7 @@
           :tabIndex="4"
           @checkboxChangeValue="checkboxChangeValue"
           >{{
-            this.$resource["vi-VN"].resourcesLogin.textRememberMe
+            this.$resource.resourcesLogin.textRememberMe["vi-VN"]
           }}</m-checkbox
         >
         <router-link
@@ -75,7 +75,7 @@
           class="forgot-password"
           tabindex="5"
           >{{
-            this.$resource["vi-VN"].resourcesLogin.textForgotPassword
+            this.$resource.resourcesLogin.textForgotPassword["vi-VN"]
           }}</router-link
         >
       </div>
@@ -89,14 +89,14 @@
           :textAlignCenter="true"
           :functionHandlePessEnter="btnLoginOnClick"
           @click="btnLoginOnClick"
-          >{{ this.$resource["vi-VN"].resourcesLogin.textLogin }}</m-button
+          >{{ this.$resource.resourcesLogin.textLogin["vi-VN"] }}</m-button
         >
       </div>
 
       <div class="seperate-area flex">
         <hr />
         <span class="block-user-select">{{
-          this.$resource["vi-VN"].resourcesLogin.textOr
+          this.$resource.resourcesLogin.textOr["vi-VN"]
         }}</span>
         <hr />
       </div>
@@ -113,7 +113,7 @@
           :functionHandlePessEnter="btnLoginGoogleOnClick"
           @click="btnLoginGoogleOnClick"
           >{{
-            this.$resource["vi-VN"].resourcesLogin.textLoginGoogle
+            this.$resource.resourcesLogin.textLoginGoogle["vi-VN"]
           }}</m-button
         >
 
@@ -128,7 +128,7 @@
           :functionHandlePessEnter="btnLoginFacebookOnClick"
           @click="btnLoginFacebookOnClick"
           >{{
-            this.$resource["vi-VN"].resourcesLogin.textLoginFacebook
+            this.$resource.resourcesLogin.textLoginFacebook["vi-VN"]
           }}</m-button
         >
       </div>
@@ -138,7 +138,7 @@
         class="register"
         tabindex="8"
         @keydown="tabFocusAround"
-        >{{ this.$resource["vi-VN"].resourcesLogin.textRegister }}</router-link
+        >{{ this.$resource.resourcesLogin.textRegister["vi-VN"] }}</router-link
       >
     </div>
   </div>

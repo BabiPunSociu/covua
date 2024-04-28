@@ -1,3 +1,5 @@
+import NVDResource from "./js/resources/resource.js";
+
 /* ==================== IMPORT SCSS ==================== */
 import "./assets/scss/main.scss";
 
@@ -13,7 +15,7 @@ import axios from "axios";
 // Đối tượng NVDEnum
 import NVDEnum from "./js/enum.js";
 // Đối tượng NVDResource
-import NVDResource from "./js/resource.js";
+
 // function playSoundEffect()
 import playSoundEffect from "./js/cloudinary/sound-effect.js";
 // function createChessMan()

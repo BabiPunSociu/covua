@@ -1,6 +1,9 @@
 <template>
   <!-- Ngoài ra, có thể thêm class: .m-btn-secondary -->
+
+  <!-- Bình thường là button -->
   <button
+    v-if="!isRouterLink"
     class="m-btn flex"
     :class="{
       'outline-white': isOutlineWhite,
@@ -14,6 +17,24 @@
     <div :class="classIcon" class="mi mi-16" v-if="hasIcon"></div>
     <slot></slot>
   </button>
+
+  <!-- Dùng router-link -->
+  <router-link
+    v-else
+    :to="to"
+    class="m-btn router-link flex"
+    :class="{
+      'outline-white': isOutlineWhite,
+      'flex-center': textAlignCenter && !hasIcon,
+    }"
+    :tabindex="tabIndex"
+    @keydown.enter="buttonPressEnter($event, functionHandlePessEnter)"
+    ref="myButton"
+  >
+    <!-- Hiển thị icon (nếu có) -->
+    <div :class="classIcon" class="mi mi-16" v-if="hasIcon"></div>
+    <slot></slot>
+  </router-link>
 </template>
 <style scoped>
 @import url(./button.scss);
@@ -75,6 +96,24 @@ export default {
     textAlignCenter: {
       type: Boolean,
       default: false,
+      required: false,
+    },
+
+    /**
+     * Dùng router-link thay vì button?
+     */
+    isRouterLink: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+
+    /**
+     * Địa chỉ khi dùng router-link.
+     */
+    to: {
+      type: String,
+      default: "",
       required: false,
     },
   },

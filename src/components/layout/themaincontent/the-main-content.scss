@@ -1,9 +1,12 @@
 .container-maincontent {
-  margin: 24px; /* zero */
-  width: calc(100% - 48px); /* margin-left = margin-right = 24px */
-  height: calc(
-    100vh - 104px
-  ); /* height-header = 56px, margin-top = 24px, margin-bottom = 24px */
-  background-color: var(--main-background-color);
+  margin: calc(24 / 14 * 1rem); /* zero */
+
+  /* margin-left = margin-right = 24px */
+  width: calc(100% - 2 * (24 / 14 * 1rem));
+
+  /* height-header = 56px, margin-top = 24px, margin-bottom = 24px */
+  height: calc(100vh - ((56 + 24 + 24) / 14) * 1rem);
+
+  background-color: var(--color-white);
   padding: 0;
 }

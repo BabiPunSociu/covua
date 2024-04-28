@@ -1,0 +1,346 @@
+.home-container {
+  width: 100%;
+  border-radius: var(--border-radius-default);
+  background-color: var(--color-white);
+  gap: 1.5rem;
+
+  .grid {
+    display: grid;
+    justify-items: center;
+    justify-content: center;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(calc((640px - 1rem) / 2), 1fr)
+    );
+    gap: 2rem;
+    border: 1px solid red;
+
+    .grid-item {
+      border: 1px solid red;
+      display: flex;
+
+      height: auto;
+      width: 100%; // Mobile min-width: 320px
+      // /* ========== Tablets ========== */
+      // @media screen and (min-width: 480px) {
+      //   width: 100%;
+      // }
+      // /* ========== Laptops ========== */
+      // @media screen and (min-width: 768px) {
+      //   width: 70%;
+      // }
+      // /* ========== Large Laptops ========== */
+      // @media screen and (min-width: 1024px) {
+      //   width: 100%;
+      // }
+      // /* ========== VERY Large Laptops ========== */
+      // @media screen and (min-width: 1200px) {
+      //   width: 70%;
+      // }
+    }
+
+    /* ========== Section play ========== */
+    &.section-play {
+      width: 100%;
+      .link {
+        display: grid;
+        place-items: center;
+
+        @media screen and (max-width: 768px) {
+          display: none !important;
+        }
+
+        .play-link-image {
+          cursor: pointer;
+          display: inline;
+
+          img {
+            width: calc(400 / 14 * 1rem);
+            height: calc(410 / 14 * 1rem);
+            @media screen and (min-width: 880px) and (max-width: 1090px) {
+              width: calc(((400 / 14) - 7) * 1rem);
+              height: calc(((410 / 14) - 7) * 1rem);
+            }
+
+            object-fit: cover;
+            border-radius: calc(2 * var(--border-radius-default));
+          }
+        }
+      }
+
+      .intro {
+        width: 100%;
+
+        // Giới thiệu
+        .intro-title {
+          border: 1px solid red;
+          font-size: 2.1rem; // Mobile min-width: 320px
+          /* ========== Tablets ========== */
+          @media screen and (min-width: 480px) {
+            font-size: 2.25rem;
+          }
+          /* ========== Laptops ========== */
+          @media screen and (min-width: 768px) {
+            font-size: 2.5rem;
+          }
+          /* ========== Large Laptops ========== */
+          @media screen and (min-width: 1024px) {
+            font-size: 2.75rem;
+          }
+          /* ========== VERY Large Laptops ========== */
+          @media screen and (min-width: 1200px) {
+            font-size: 3rem;
+          }
+
+          font-family: montserrat sansita;
+          text-align: center;
+          overflow-wrap: break-word;
+          flex-grow: 1;
+        }
+
+        // Thông tin giới thiệu
+        .intro-info {
+          border: 1px solid red;
+          justify-content: space-between; // Mobile
+          @media screen and (min-width: 768px) {
+            flex-direction: column;
+            justify-content: space-around;
+          }
+          // flex-grow: 1;
+
+          .game-today,
+          .playing-now {
+            border: 1px solid royalblue;
+            .number {
+              font-weight: bold;
+              font-size: calc(15 / 14 * 1rem);
+              font-family: montserrat sansita;
+              margin-right: 3px;
+            }
+
+            .text {
+              font-size: calc(17 / 14 * 1rem);
+            }
+          }
+        }
+
+        // Group button
+        .group-button-play {
+          border: 1px solid red;
+
+          .button-play {
+            border: 1px solid red;
+            border-radius: var(--border-radius-default);
+            padding: calc(16 / 14 * 1rem);
+            height: calc(36 / 14 * 1rem);
+            width: -webkit-fill-available;
+            min-width: calc(80 / 14 * 1rem);
+
+            // Button chơi online
+            &.button-play-online {
+              background-color: var(--primary-btn-background-color);
+
+              .icon {
+                background: url(../../assets/icons/play-white.svg) no-repeat;
+                background-size: cover;
+              }
+
+              .text {
+                flex-grow: 1;
+                color: var(--color-white);
+                font-size: calc((24 / 14) * 1rem);
+                white-space: nowrap;
+              }
+            }
+
+            // Button chơi với máy
+            &.button-play-computer {
+              .icon {
+                background: url(../../assets/icons/computer.svg) no-repeat;
+                background-size: cover;
+              }
+
+              .text {
+                flex-grow: 1;
+                color: var(--color-white--color-btn-secondary);
+                font-size: calc((24 / 14) * 1rem);
+                white-space: nowrap;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    /* ========== Section Puzzle ========== */
+    &.section-puzzle {
+      width: 100%;
+      .puzzle-intro {
+        border: 1px solid red;
+        width: 100%;
+
+        h1.title {
+          border: 1px solid red;
+          font-size: 2.1rem; // Mobile min-width: 320px
+          /* ========== Tablets ========== */
+          @media screen and (min-width: 480px) {
+            font-size: 2.25rem;
+          }
+          /* ========== Laptops ========== */
+          @media screen and (min-width: 768px) {
+            font-size: 2.5rem;
+          }
+          /* ========== Large Laptops ========== */
+          @media screen and (min-width: 1024px) {
+            font-size: 2.75rem;
+          }
+          /* ========== VERY Large Laptops ========== */
+          @media screen and (min-width: 1200px) {
+            font-size: 3rem;
+          }
+
+          font-family: montserrat sansita;
+          overflow-wrap: break-word;
+          flex-grow: 1;
+        }
+
+        .quote-group {
+          .img-author {
+            border: 1px solid red;
+            width: calc(148 / 14 * 1rem); // 148px ~ 14px
+            height: calc(148 / 14 * 1rem); // 148px ~ 14px
+            object-fit: cover;
+            border-radius: calc(2 * var(--border-radius-default));
+          }
+
+          .quote {
+            border: 1px solid red;
+            width: calc((100% - ((148 / 14 - 1) * 1rem)));
+            height: 100%;
+            padding: 1rem;
+
+            h3.quote-text {
+              flex-grow: 1;
+
+              font-weight: bold;
+              font-size: calc(17 / 14 * 1rem);
+              font-family: montserrat sansita;
+            }
+
+            h4.quote-author {
+              text-align: center;
+              font-weight: bold;
+              font-size: calc(15 / 14 * 1rem);
+              font-family: montserrat sansita;
+            }
+          }
+        }
+      }
+
+      .link {
+        display: grid;
+        place-items: center;
+        border: 1px solid greenyellow;
+
+        .puzzle-link-image {
+          border: 1px solid rgb(67, 15, 222);
+          cursor: pointer;
+          display: inline-block;
+          max-width: 100%;
+
+          img {
+            width: calc(400 / 14 * 1rem);
+            height: calc(410 / 14 * 1rem);
+            @media screen and (min-width: 880px) and (max-width: 1090px) {
+              width: calc(((400 / 14) - 7) * 1rem);
+              height: calc(((410 / 14) - 7) * 1rem);
+            }
+
+            object-fit: cover;
+            border-radius: calc(2 * var(--border-radius-default));
+          }
+        }
+      }
+    }
+
+    /* ========== Section Lesson ========== */
+    &.section-lesson {
+      .link {
+        // Row-reverse
+        @media screen and (min-width: 880px) {
+          grid-area: 1 / 1 / 2 / 2;
+        }
+      }
+    }
+  }
+
+  /* ========== Section Article ========== */
+  .section-article {
+    width: 100%;
+
+    h1.title {
+      border: 1px solid red;
+      font-size: 2.1rem; // Mobile min-width: 320px
+      /* ========== Tablets ========== */
+      @media screen and (min-width: 480px) {
+        font-size: 2.25rem;
+      }
+      /* ========== Laptops ========== */
+      @media screen and (min-width: 768px) {
+        font-size: 2.5rem;
+      }
+      /* ========== Large Laptops ========== */
+      @media screen and (min-width: 1024px) {
+        font-size: 2.75rem;
+      }
+      /* ========== VERY Large Laptops ========== */
+      @media screen and (min-width: 1200px) {
+        font-size: 3rem;
+      }
+
+      font-family: montserrat sansita;
+      overflow-wrap: break-word;
+    }
+
+    .article-list {
+      margin-top: 1rem;
+      border: 1px solid red;
+      width: 100%;
+      flex-wrap: wrap;
+
+      .article-item {
+        width: 100%; // Mobile
+        @media screen and (min-width: 768px) {
+          width: calc((100% - 1rem) / 2);
+        }
+
+        border: 1px solid greenyellow;
+        text-align: center;
+
+        // Thẻ a
+        .article-link {
+          img,
+          video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+          }
+
+          h3.article-title {
+            margin-top: calc(4 / 14 * 1rem);
+            font-size: calc(17 / 14 * 1rem);
+          }
+
+          div.article-author {
+            margin-top: calc(4 / 14 * 1rem);
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+
+    .btn-chess-today {
+      margin: 1rem auto 0;
+    }
+  }
+}

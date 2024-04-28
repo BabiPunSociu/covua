@@ -1,5 +1,5 @@
 <template>
-  <div class="container-maincontent scroller">
+  <div class="container-maincontent scroller scroller-y">
     <router-view></router-view>
   </div>
 </template>

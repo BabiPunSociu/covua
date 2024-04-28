@@ -1,9 +1,30 @@
 .menu-container {
-  width: 200px;
+  width: 45%; // Mobile
   height: 100vh;
-  background-color: #041434;
+  background-color: var(--color-bg-sidebar);
+  display: none; // Mobile
 
-  /* Logo */
+  /* ========== Tablets ========== */
+  @media screen and (min-width: 481px) {
+    width: 30%;
+  }
+  /* ========== Laptops ========== */
+  @media screen and (min-width: 769px) {
+    display: block;
+    width: 20%;
+  }
+  /* ========== Large Laptops ========== */
+  @media screen and (min-width: 1025px) {
+    display: block;
+    width: 20%;
+  }
+  /* ========== VERY Large Laptops ========== */
+  @media screen and (min-width: 1200px) {
+    display: block;
+    width: 20%;
+  }
+
+  /* Logo container */
   .logo-container {
     display: flex;
     height: 48px;
@@ -11,11 +32,7 @@
     align-items: center;
     justify-content: center;
 
-    // .menu-container-options {
-    //   margin-right: 10px;
-    // }
-
-    /*  */
+    /* Logo */
     .logo {
       img {
         height: 36px;

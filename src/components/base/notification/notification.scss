@@ -1,0 +1,107 @@
+.notification {
+  position: relative;
+
+  // Button quả chuông
+  .button-notification {
+    position: relative;
+    // Quả chuông active
+    .notification-button-active {
+      mask-image: url(../../../assets/icons/Sprites.svg);
+      -webkit-mask-image: url(../../../assets/icons/Sprites.svg);
+      mask-repeat: no-repeat;
+      -webkit-mask-repeat: no-repeat;
+      mask-position: -788px -30px; // Quả chuông
+
+      background-color: var(--primary-btn--hover-background-color);
+    }
+
+    // Số lượng thông báo
+    .notification-count {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      width: fit-content;
+      height: auto;
+
+      padding: 0.1rem;
+      border-radius: 50%;
+
+      color: var(--color-white);
+      background-color: var(--color-btn-google);
+
+      transform: translateX(50%) translateY(-50%);
+    }
+  }
+
+  // Nội dung thông báo
+  .notification-content {
+    z-index: 100 !important;
+    background-color: #e4e9e7;
+    position: absolute;
+    // 24px là kích thước quả chuông, 10px khoảng cách
+    top: calc((24 + 10) / 14 * 1rem);
+    left: 50%;
+    transform: translateX(-50%);
+
+    padding: 0.5rem;
+    border-radius: var(--border-radius-default);
+    border: 1px solid var(--color-bg-sidebar);
+
+    height: 90vh !important;
+    width: 50vw; // Mobile
+    /* ========== Tablets ========== */
+    @media screen and (min-width: 481px) {
+      // width: 50vw;
+    }
+    /* ========== Laptops ========== */
+    @media screen and (min-width: 769px) {
+      display: flex !important;
+      width: 45vw;
+    }
+    /* ========== Large Laptops ========== */
+    @media screen and (min-width: 1025px) {
+      // display: block;
+      width: 40vw;
+    }
+    /* ========== VERY Large Laptops ========== */
+    @media screen and (min-width: 1200px) {
+      // display: block;
+      width: 30vw;
+    }
+
+    //header
+    .notification-content-header {
+      width: 100%;
+      .row {
+        height: calc(36 / 14 * 1rem); // 36px ~ font 14px
+
+        // Tiêu đề
+        .notification-content-title {
+          font-size: 1.5rem;
+        }
+
+        &.group-option {
+          border: 1px solid green;
+        }
+      }
+    }
+
+    // Danh sách thông báo
+    .notification-content-list {
+      width: 100%;
+      flex-grow: 1;
+
+      border: 1px solid blue;
+
+      .notification-item {
+        border: 1px solid red;
+        width: 100%;
+      }
+    }
+  }
+}

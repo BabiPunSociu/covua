@@ -18,13 +18,18 @@
   --font-size-tablet: 11px;
   --font-size-mobile: 8px;
 
+  /* ===== SCALE ===== */
+  --scale-large-desktop: 1;
+  --scale-desktop: 1; // 14/14
+  --scale-tablet: 0.7857; // 11/14
+  --scale-mobile: 0.57; // 8/14
+
+  /* ===== BORDER RADIUS ===== */
   --border-radius-default: 4px;
   --font-weight-default: 500;
   --gap: 1rem;
 
-  --btn-height-desktop: 36px;
-  --btn-height-tablet: 28px;
-  --btn-height-mobile: 20px;
+  --btn-height-desktop: 36;
 
   --control-label-bottom-space: 4px;
   --primary-button-height: 34px;
@@ -57,17 +62,42 @@
   --footer-height: 50px;
   --suggest-short-key-position-top: -14px;
 
+  /* ===== MÀU GENERAL ===== */
+  --color-white: #fff;
+
+  /* ===== MÀU BACKGROUND ===== */
   --color-bg-login: #262421;
   --color-overlay-login: #302e2b;
-  --color-white: #fff;
+  --color-bg-level-skill: #262522;
+  --color-bg-sidebar: #041434;
+
+  /* ===== MÀU BUTTONS ===== */
   --color-btn-google: #e60000;
   --color-btn-google-hover: #eb3333;
   --color-btn-google-click: #b80000;
   --color-btn-facebook: #007aff;
   --color-btn-facebook-hover: #3395ff;
   --color-btn-facebook-click: #0062cc;
+  --color-btn-secondary: #1f1f1f;
 
-  --color-bg-level-skill: #262522;
+  /* ===== MÀU ICONS ===== */
+  --color-icon-facebook: #039be5;
+  --color-icon-android: #7cb342;
+  --color-icon-discord: #8c9eff;
+  --color-icon-instagram: linear-gradient(
+    45deg,
+    #405de6,
+    #5851db,
+    #833ab4,
+    #c13584,
+    #e1306c,
+    #fd1d1d
+  );
+  --color-icon-tiktok: #000;
+  --color-icon-twitter: #212121;
+  --color-icon-youtube: #ff3d00;
+
+  /* ===== MÀU BORDER ===== */
   --color-border-level-skill-selected: #81b64c;
 
   --main-background-color: #e4e9e7;

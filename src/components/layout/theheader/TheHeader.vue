@@ -1,78 +1,68 @@
 <template>
   <header class="header">
-    <div class="header-left">
+    <div class="header-left flex">
       <!-- Icon three stripes -->
       <div
-        class="header-icon mi mi-24 mi-three-stripes"
+        class="header-icon mi mi-24 mi-three-stripes icon-resize"
         @click="toggleSidebar"
       ></div>
-      <!-- <div
-        class="header-branch"
-        title="CÔNG TY TNHH SẢN XUẤT - THƯƠNG MẠI - DỊCH VỤ QUI PHÚC"
-      >
-        <div class="con-ms-tooltip">
-          <div class="msTooltipParent"></div>
-          <div class="header-branch-name">
-            CÔNG TY TNHH SẢN XUẤT - THƯƠNG MẠI - DỊCH VỤ QUI PHÚC
-          </div>
-        </div>
-        <a class="flex items-center">
-          <div
-            class="header-icon mi mi-24 mi-chevron-right header-branch-icon"
-          ></div>
-        </a>
-      </div> -->
+
       <!-- TextField search -->
       <m-text-field
         ref="textFieldSearch"
         class="m-textfield-icon-action"
         :haveLabel="false"
         :placeholderTextField="
-          this.$resource['vi-VN'].textField.textSearchOnNVDChess
+          this.$resource.resourcesTextField.textSearchOnNVDChess['vi-VN']
         "
         @iconActionClick="btnSearchClick"
         @inputOnChange="textFieldOnChange"
       ></m-text-field>
     </div>
-    <div class="header-right">
-      <div class="notify">
-        <div
-          class="con-ms-tooltip header-menu-icon header-menu-icon-notify"
-        ></div>
-        <div class="msTooltipParent"></div>
-        <div class="tooltip-content">
-          <div class="pointer header-icon">
-            <div class="wrap-notify header-menu-icon-simple">
-              <div class="mi mi-24 mi-bell__nav wiggle"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="header-right flex">
+      <!-- Thông báo -->
+      <notification></notification>
 
-      <div class="account-info">
-        <a>
-          <div class="ms-button-text">
-            <div class="user-ava">
-              <div class="mi mi-32 mi-user-avatar avatar">
-                <img src="" alt="" />
-              </div>
-            </div>
-          </div>
-          <div class="user-name">
-            <div class="pr-6 display-user">Nguyễn Văn Mạnh</div>
-          </div>
-          <div class="mi mi-14 mi-chev-ron-down header-branch-icon"></div>
-        </a>
-      </div>
+      <!-- Light mode / Dark mode -->
+      <m-switch-light-dark></m-switch-light-dark>
+
+      <a class="account-info">
+        <!-- Hiện thị avatar -->
+        <div class="user-ava mi mi-32 mi-user-avatar avatar icon-resize">
+          <img src="" alt="" />
+        </div>
+        <!-- Tên người dùng -->
+        <div class="user-name">
+          <div class="pr-6 display-user">Vũ Thu Hiền</div>
+        </div>
+        <!-- Icon dropdown -->
+        <div class="mi mi-14 mi-chev-ron-down header-branch-icon"></div>
+      </a>
     </div>
   </header>
 </template>
 
 <script>
+import NVDNotification from "@/components/base/notification/NVDNotification.vue";
+import NVDSwitchLightDark from "@/components/base/switchlightdark/NVDSwitchLightDark.vue";
 export default {
   name: "TheHeader",
+  components: {
+    notification: NVDNotification,
+    "m-switch-light-dark": NVDSwitchLightDark,
+  },
   data() {
-    return {};
+    return {
+      /**
+       * Đối tượng chứa thông tin về textFieldSearch.
+       */
+      textFieldSearch: {
+        /**
+         * Giá trị value của input.
+         */
+        value: "",
+      },
+    };
   },
 
   methods: {
@@ -82,7 +72,8 @@ export default {
      * @author NVDung (19-04-2024)
      */
     toggleSidebar() {
-      this.$emit("toggleSidebar");
+      // Phát sự kiện toggle hiển thị sidebar menu.
+      this.$emitter.emit("toggleShowSidebar");
     },
 
     /**
@@ -92,6 +83,15 @@ export default {
      */
     btnSearchClick() {
       alert("Search icon clicked!");
+    },
+
+    /**
+     * Hàm thực hiện nhận dữ liệu input thay đổi
+     * @param {string} newValue Giá trị mới thay đổi từ input.
+     * @author NVDung (19-04-2024)
+     */
+    textFieldOnChange(newValue) {
+      this.textFieldSearch.value = newValue;
     },
   },
 };

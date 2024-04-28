@@ -1,8 +1,8 @@
 <template>
   <div class="container flex">
-    <TheSideBar v-if="isShowSidebar"></TheSideBar>
+    <TheSideBar></TheSideBar>
     <div class="main">
-      <TheHeader @toggleSidebar="toggleSidebar"></TheHeader>
+      <TheHeader></TheHeader>
       <TheMainContent></TheMainContent>
     </div>
   </div>
@@ -19,26 +19,6 @@ export default {
     TheSideBar,
     TheHeader,
     TheMainContent,
-  },
-
-  data() {
-    return {
-      /**
-       * Hiển thị sidebar?
-       */
-      isShowSidebar: true,
-    };
-  },
-
-  methods: {
-    /**
-     * Hàm thực hiện toggle sidebar.
-     * @returns {void}
-     * @author NVDung (19-04-2024)
-     */
-    toggleSidebar() {
-      this.isShowSidebar = !this.isShowSidebar;
-    },
   },
 };
 </script>

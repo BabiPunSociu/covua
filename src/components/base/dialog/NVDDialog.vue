@@ -19,12 +19,16 @@
           ></slot>
         </div>
       </main>
-      <footer class="dialog-footer flex flex-space-between flex-right" style="padding: 0">
+      <footer
+        class="dialog-footer flex flex-space-between flex-right"
+        style="padding: 0"
+      >
         <!-- button 3 -->
         <m-button
           tabindex="1002"
           class="m-btn-secondary"
           v-if="inputDialog.totalButtons >= 3"
+          :functionHandlePessEnter="btnSecond2Click"
           @click="btnSecond2Click"
           @keydown="tabFocusAround($event, 3)"
           ><slot name="btn-second-text_2">{{
@@ -37,6 +41,7 @@
           tabindex="1001"
           class="m-btn-secondary"
           v-if="inputDialog.totalButtons >= 2"
+          :functionHandlePessEnter="btnSecond1Click"
           @click="btnSecond1Click"
           @keydown="tabFocusAround($event, 2)"
           ><slot name="btn-second-text_1">{{
@@ -45,7 +50,11 @@
         >
 
         <!-- button 1 -->
-        <m-button ref="primaryButton" tabindex="1000" @click="btnPrimaryClick"
+        <m-button
+          ref="primaryButton"
+          tabindex="1000"
+          @click="btnPrimaryClick"
+          :functionHandlePessEnter="btnPrimaryClick"
           ><slot name="btn-continue-text">{{
             this.inputDialog.buttonPrimaryText
           }}</slot></m-button

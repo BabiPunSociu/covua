@@ -1,11 +1,12 @@
 <template>
-  <nav class="menu-container">
+  <nav ref="sidebarMenu" class="menu-container">
     <div class="logo-container">
       <!-- <a class="menu-container-options mi mi-16 mi-app"></a> -->
       <router-link to="/" class="logo">
         <!-- Logo App -->
         <img
-          src="../../../assets/images/logo/logo-app.png"
+          loading="lazy"
+          :src="this.$resource.resourcesImage.logo.logoApp"
           alt="Logo phần mềm"
         />
       </router-link>
@@ -22,7 +23,7 @@
             </div>
             <!-- Text -->
             <div class="menu-item__title block-user-select">
-              {{ this.$resource["vi-VN"].sideBar.play }}
+              {{ this.$resource.resourcesSideBar.play["vi-VN"] }}
             </div>
           </a>
         </div>
@@ -34,7 +35,7 @@
               <div class="mi mi-24 mi-sidebar-cash"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource["vi-VN"].sideBar.puzzle }}
+              {{ this.$resource.resourcesSideBar.puzzle["vi-VN"] }}
             </div>
           </a>
         </div>
@@ -46,7 +47,7 @@
               <div class="mi mi-24 mi-sidebar-bank"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource["vi-VN"].sideBar.learn }}
+              {{ this.$resource.resourcesSideBar.learn["vi-VN"] }}
             </div>
           </a>
         </div>
@@ -58,7 +59,7 @@
               <div class="mi mi-24 mi-sidebar-purchase"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource["vi-VN"].sideBar.watch }}
+              {{ this.$resource.resourcesSideBar.watch["vi-VN"] }}
             </div>
           </a>
         </div>
@@ -70,7 +71,7 @@
               <div class="mi mi-24 mi-sidebar-sale"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource["vi-VN"].sideBar.news }}
+              {{ this.$resource.resourcesSideBar.news["vi-VN"] }}
             </div>
           </a>
         </div>
@@ -82,7 +83,7 @@
               <div class="mi mi-24 mi-sidebar-invoice"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource["vi-VN"].sideBar.social }}
+              {{ this.$resource.resourcesSideBar.social["vi-VN"] }}
             </div>
           </a>
         </div>
@@ -188,6 +189,38 @@
 <script>
 export default {
   name: "TheSideBar",
+  created() {
+    /**
+     * Nhận sự kiện toogle hiển thị sidebar.
+     */
+    this.$emitter.on("toggleShowSidebar", () => {
+      // Gọi hàm xử lý toogle hiển thị sidebar.
+      this.toggleShowSidebar();
+    });
+  },
+
+  beforeUnmount() {
+    /**
+     * Hủy lắng nghe sự kiện toggleShowSidebar.
+     */
+    this.$emitter.off("toggleShowSidebar");
+  },
+  methods: {
+    /**
+     * Hàm thực hiện toogle hiện thị sidebar.
+     * @author NVDung (21-04-2024)
+     */
+    toggleShowSidebar() {
+      // Lấy thẻ nav sidebar qua ref
+      let el = this.$refs.sidebarMenu;
+
+      // Lấy giá trị css display hiện tại
+      let display = getComputedStyle(el).display;
+
+      // Thực hiện thay đổi display
+      el.style.display = display == "none" ? "block" : "none";
+    },
+  },
 };
 </script>
 

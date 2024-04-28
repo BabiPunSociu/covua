@@ -28,7 +28,7 @@
       @click="iConActionClick"
       v-on:mouseover="isHover = true"
       v-on:mouseleave="isHover = false"
-      ><div class="mi mi-24 mi-search"></div
+      ><div class="mi mi-24 mi-search icon-resize"></div
     ></a>
     <span class="warning" v-if="isError"> <slot name="warning"></slot></span>
   </div>
@@ -254,11 +254,12 @@ export default {
   watch: {
     /**
      * Gửi dữ liệu cho component cha khi data thay đổi
+     * @param {string} newValue: Giá trị mới của thuộc tính 'valueOutput'.
      * @author NVDung (19-04-2024)
      */
     valueOutput(newValue) {
       // Tạo sự kiện để truyền giá trị mới cho component cha
-      this.$emit("inputOnChange", this.valueOutput);
+      this.$emit("inputOnChange", newValue);
     },
   },
 };

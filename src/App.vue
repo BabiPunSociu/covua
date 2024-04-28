@@ -209,8 +209,8 @@ export default {
      */
     toastSuccess(toastMessage) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const toastType = this.$resource.toastType.success;
-      const toastTitle = this.$resource["vi-VN"].toast.title.success;
+      const toastType = this.$resource.resourcesToast.toastType.success;
+      const toastTitle = this.$resource.resourcesToast.title.success["vi-VN"];
 
       // Tạo đối tượng toast
       const toastObject = new toast(
@@ -233,8 +233,8 @@ export default {
      */
     toastWarning(toastMessage) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const toastType = this.$resource.toastType.warning;
-      const toastTitle = this.$resource["vi-VN"].toast.title.warning;
+      const toastType = this.$resource.resourcesToast.toastType.warning;
+      const toastTitle = this.$resource.resourcesToast.title.warning["vi-VN"];
 
       // Tạo đối tượng toast
       const toastObject = new toast(
@@ -274,10 +274,10 @@ export default {
      */
     dialogError(message) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const title = this.$resource["vi-VN"].dialog.title.error;
-      const iconClass = this.$resource.dialog.iconClass.error;
+      const title = this.$resource.resourcesDialog.title.error["vi-VN"];
+      const iconClass = this.$resource.resourcesDialog.iconClass.error;
       const totalButton = 1;
-      const buttonPrimaryText = this.$resource["vi-VN"].button.close; // Đóng.
+      const buttonPrimaryText = this.$resource.resourceButton.close["vi-VN"]; // Đóng.
 
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
@@ -302,10 +302,10 @@ export default {
      */
     dialogWarningOneButton(message) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const title = this.$resource["vi-VN"].dialog.title.warning;
-      const iconClass = this.$resource.dialog.iconClass.warning;
+      const title = this.$resource.resourcesDialog.title.warning["vi-VN"];
+      const iconClass = this.$resource.resourcesDialog.iconClass.warning;
       const totalButton = 1;
-      const buttonPrimaryText = this.$resource["vi-VN"].button.ok; // Đồng ý.
+      const buttonPrimaryText = this.$resource.resourceButton.ok["vi-VN"]; // Đồng ý.
 
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
@@ -329,11 +329,11 @@ export default {
      */
     dialogWarningTwoButtons(message) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const title = this.$resource["vi-VN"].dialog.title.warning;
-      const iconClass = this.$resource.dialog.iconClass.warning;
+      const title = this.$resource.resourcesDialog.title.warning["vi-VN"];
+      const iconClass = this.$resource.resourcesDialog.iconClass.warning;
       const totalButton = 2;
-      const buttonPrimaryText = this.$resource["vi-VN"].button.yes; // Có.
-      const buttonSecondary1Text = this.$resource["vi-VN"].button.no; // Không.
+      const buttonPrimaryText = this.$resource.resourceButton.yes["vi-VN"]; // Có.
+      const buttonSecondary1Text = this.$resource.resourceButton.no["vi-VN"]; // Không.
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
         title,
@@ -356,12 +356,13 @@ export default {
      */
     dialogInfoThreeButtons(message) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const title = this.$resource["vi-VN"].dialog.title.info;
-      const iconClass = this.$resource.dialog.iconClass.info;
+      const title = this.$resource.resourcesDialog.title.info["vi-VN"];
+      const iconClass = this.$resource.resourcesDialog.iconClass.info;
       const totalButton = 3;
-      const buttonPrimaryText = this.$resource["vi-VN"].button.yes; // Có.
-      const buttonSecondary1Text = this.$resource["vi-VN"].button.no; // Không.
-      const buttonSecondary2Text = this.$resource["vi-VN"].button.cancel; // Hủy.
+      const buttonPrimaryText = this.$resource.resourceButton.yes["vi-VN"]; // Có.
+      const buttonSecondary1Text = this.$resource.resourceButton.no["vi-VN"]; // Không.
+      const buttonSecondary2Text =
+        this.$resource.resourceButton.cancel["vi-VN"]; // Hủy.
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
         title,
@@ -407,16 +408,24 @@ export default {
 
 <style lang="scss" scoped>
 /* ==================== START CSS App.vue ==================== */
-/* ========== Toast message ========== */
-.toast-container {
-  z-index: 20;
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  display: flex;
-  flex-direction: column; /* Hiện theo chiều dọc */
-  background-color: transparent;
+.app-container {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+
+  // Toast message
+  .toast-container {
+    z-index: 20;
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column; /* Hiện theo chiều dọc */
+    background-color: transparent;
+  }
 }
+
 /* ==================== END CSS App.vue ==================== */
 
 /* ==================== START TRANSITION GROUP FOR TOAST MESSAGE ==================== */

@@ -1,5 +1,6 @@
+$path-sprite: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120930/image/icons/general/Sprites_zv9wnv.svg";
 .mi {
-  background: url(../icons/Sprites.svg) no-repeat;
+  background: url($path-sprite) no-repeat;
   cursor: pointer;
 }
 
@@ -160,7 +161,8 @@
   background-position: -845px -30px;
 }
 
-.mi-bell__nav {
+// Quả chuông
+.mi-bell {
   background-position: -788px -30px;
 }
 .mi-user-avatar {
@@ -261,23 +263,162 @@ a:hover .mi-excel {
   background-position: -77px -404px;
 }
 
-/* ========== Facebook + Google ========== */
+/* ========== Social Media Icons ========== */
+
+// Facebook
+$path-facebook: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286169/image/icons/logo/logo-facebook_wchsli.svg";
 .mi-facebook {
-  background: url(../images/logo/facebook.png) no-repeat;
-  cursor: pointer;
-  outline: auto;
+  background-color: var(--color-icon-facebook);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-facebook);
+  -webkit-mask-image: url($path-facebook);
+}
+
+// Google
+$path-google: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286172/image/icons/logo/logo-google_e9dgmh.svg";
+.mi-google {
+  background: url($path-google) no-repeat;
+
   background-size: cover;
 }
 
-.mi-google {
-  background: url(../images/logo/google.png) no-repeat;
-  cursor: pointer;
-  outline: auto;
-  background-size: cover;
+// Android
+$path-android: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286165/image/icons/logo/logo-android_uvwxla.svg";
+.mi-android {
+  background-color: var(--color-icon-android);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-android);
+  -webkit-mask-image: url($path-android);
+}
+
+// IOS
+$path-ios: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286160/image/icons/logo/logo-apple_xfk30s.svg";
+.mi-ios {
+  background-color: var(--color-white);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-ios);
+  -webkit-mask-image: url($path-ios);
+}
+
+// Discord
+$path-discord: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286162/image/icons/logo/logo-discord_kvxenc.svg";
+.mi-discord {
+  background-color: var(--color-icon-discord);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-discord);
+  -webkit-mask-image: url($path-discord);
+}
+
+// Instagram
+$path-instagram: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286175/image/icons/logo/logo-instagram_prk5nx.svg";
+.mi-instagram {
+  background-color: var(--color-icon-instagram);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-instagram);
+  -webkit-mask-image: url($path-instagram);
+}
+
+// Tiktok
+$path-tiktok: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286437/image/icons/logo/logo-tiktok_eahecn.svg";
+.mi-tiktok {
+  background-color: var(--color-icon-tiktok);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-tiktok);
+  -webkit-mask-image: url($path-tiktok);
+}
+
+// Twitter
+$path-twitter: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286446/image/icons/logo/logo-twitterx_sltwk8.svg";
+.mi-twitter {
+  background-color: var(--color-icon-twitter);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-twitter);
+  -webkit-mask-image: url($path-twitter);
+}
+
+// Youtube
+$path-youtube: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286448/image/icons/logo/logo-youtube_hgwrvs.svg";
+.mi-youtube {
+  background-color: var(--color-icon-youtube);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-youtube);
+  -webkit-mask-image: url($path-youtube);
 }
 
 /* ========== Icon FontAwesome ==========*/
+
+$path-arrow-left: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120919/image/icons/general/arrow-left_u4hutw.svg";
 .mi-arrow-left {
-  background: url(../icons/arrow-left.svg) no-repeat;
-  cursor: pointer;
+  background-color: var(--color-white);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-arrow-left);
+  -webkit-mask-image: url($path-arrow-left);
+}
+
+$path-ellipsis: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120926/image/icons/general/ellipsis_sflpto.svg";
+.mi-ellipsis {
+  background-color: var(--color-white);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-ellipsis);
+  -webkit-mask-image: url($path-ellipsis);
 }

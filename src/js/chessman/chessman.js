@@ -1,4 +1,4 @@
-import NVDResource from "../resource.js";
+import NVDResource from "../resources/resource.js";
 import NVDEnum from "../enum.js";
 import createChessMan from "./create-chessman.js";
 import playSoundEffect from "../cloudinary/sound-effect.js";

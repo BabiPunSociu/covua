@@ -1,0 +1,26 @@
+.footer-container {
+  .navigation-pages-component {
+    flex-wrap: wrap;
+
+    .link-page-component {
+      &:hover {
+        scale: 1.1;
+      }
+    }
+  }
+
+  .navigation-flatforms-component {
+    flex-wrap: wrap;
+    height: 30px;
+    border: 1px solid blue;
+
+    .link-flatform-component {
+      .icon {
+        background: url(../../../assets/icons/logo/logo-apple.svg) no-repeat;
+        background-size: cover;
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+}

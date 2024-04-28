@@ -2,6 +2,16 @@
   overflow: auto;
 }
 
+.scroller-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.scroller-y {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 /* Tùy chỉnh thanh cuộn cho trình duyệt Chrome */
 .scroller::-webkit-scrollbar {
   width: 6px;
@@ -33,5 +43,3 @@
   width: 10px;
   height: 10px;
 }
-
-

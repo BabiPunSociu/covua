@@ -1,11 +1,15 @@
 <template>
   <div class="container flex flex-center">
-    <div class="content content-1 flex flex-column scroller" v-if="step === 1">
+    <section
+      class="content content-1 flex flex-column scroller"
+      v-if="step === 1"
+    >
       <header class="flex flex-column">
         <h1 class="block-user-select">
-          {{ this.$resource["vi-VN"].resourcesRegister.step1.textLable }}
+          {{ this.$resource.resourcesRegister.step1.textLable["vi-VN"] }}
         </h1>
         <img
+          loading="lazy"
           src="../../assets/images/chessboard/pawn-on-board.svg"
           alt="Hinh anh quan co"
           class="block-user-select"
@@ -24,7 +28,7 @@
           :functionHandlePessEnter="nextStep"
           @click="nextStep"
           >{{
-            this.$resource["vi-VN"].resourcesRegister.step1.textSignUp
+            this.$resource.resourcesRegister.step1.textSignUp["vi-VN"]
           }}</m-button
         >
 
@@ -32,7 +36,7 @@
         <div class="seperate-area flex">
           <hr />
           <span class="block-user-select">{{
-            this.$resource["vi-VN"].resourcesRegister.step1.textOr
+            this.$resource.resourcesRegister.step1.textOr["vi-VN"]
           }}</span>
           <hr />
         </div>
@@ -49,7 +53,7 @@
             :functionHandlePessEnter="btnGoogleClick"
             @click="btnGoogleClick"
             >{{
-              this.$resource["vi-VN"].resourcesRegister.step1.textGoogle
+              this.$resource.resourcesRegister.step1.textGoogle["vi-VN"]
             }}</m-button
           >
           <!-- Button login facebook -->
@@ -63,7 +67,7 @@
             :functionHandlePessEnter="btnFacebookClick"
             @click="btnFacebookClick"
             >{{
-              this.$resource["vi-VN"].resourcesRegister.step1.textFacebook
+              this.$resource.resourcesRegister.step1.textFacebook["vi-VN"]
             }}</m-button
           >
         </div>
@@ -75,19 +79,19 @@
           tabindex="4"
           @keydown="step1TabIndexAround"
           >{{
-            this.$resource["vi-VN"].resourcesRegister.step1.textLogin
+            this.$resource.resourcesRegister.step1.textLogin["vi-VN"]
           }}</router-link
         >
       </footer>
-    </div>
-    <div class="content content-2 flex flex-column" v-if="step === 2">
+    </section>
+    <section class="content content-2 flex flex-column" v-if="step === 2">
       <header class="flex flex-column">
         <h1 class="block-user-select">
-          {{ this.$resource["vi-VN"].resourcesRegister.step2.textLable }}
+          {{ this.$resource.resourcesRegister.step2.textLable["vi-VN"] }}
         </h1>
         <p class="block-user-select">
           {{
-            this.$resource["vi-VN"].resourcesRegister.step2.textLableDescription
+            this.$resource.resourcesRegister.step2.textLableDescription["vi-VN"]
           }}
         </p>
       </header>
@@ -95,8 +99,7 @@
         <!-- Skills Level -->
         <!-- Lưu ý: item.value chạy từ 0. -->
         <a
-          v-for="item in this.$resource['vi-VN'].resourcesRegister.step2
-            .skillLevels"
+          v-for="item in this.$resource.resourcesRegister.step2.skillLevels"
           :key="item.value"
           :ref="'skillLevel' + item.value"
           :tabindex="item.value + 1"
@@ -106,7 +109,7 @@
           @keydown.enter="skillLevelSelectedChanged(item.value)"
         >
           <div class="flex">
-            <span class="text">{{ item.text }}</span>
+            <span class="text">{{ item.text["vi-VN"] }}</span>
             <!-- Icon selected -->
             <span
               class="mi mi-tick icon-selected"
@@ -126,17 +129,17 @@
           :functionHandlePessEnter="nextStep"
           @click="nextStep"
           >{{
-            this.$resource["vi-VN"].resourcesRegister.step2.textContinue
+            this.$resource.resourcesRegister.step2.textContinue["vi-VN"]
           }}</m-button
         >
       </footer>
-    </div>
-    <div class="content content-3" v-if="step === 3">
+    </section>
+    <section class="content content-3" v-if="step === 3">
       <header class="flex flex-column">
-        <h1>{{ this.$resource["vi-VN"].resourcesRegister.step3.textLable }}</h1>
+        <h1>{{ this.$resource.resourcesRegister.step3.textLable["vi-VN"] }}</h1>
         <p>
           {{
-            this.$resource["vi-VN"].resourcesRegister.step3.textLableDescription
+            this.$resource.resourcesRegister.step3.textLableDescription["vi-VN"]
           }}
         </p>
       </header>
@@ -146,7 +149,7 @@
           <m-text-field
             ref="inputUsername"
             :lblTooltip="
-              this.$resource['vi-VN'].resourcesRegister.step3.textUsername
+              this.$resource.resourcesRegister.step3.textUsername['vi-VN']
             "
             :haveLabel="true"
             :isTextWhite="true"
@@ -164,12 +167,12 @@
           >
             <!-- Text hiển thị tiêu đề -->
             <template v-slot:lbl-content>
-              {{ this.$resource["vi-VN"].resourcesRegister.step3.textUsername }}
+              {{ this.$resource.resourcesRegister.step3.textUsername["vi-VN"] }}
             </template>
             <!-- Text hiển thị khi validate -->
             <template v-slot:warning>
               {{
-                this.$resource["vi-VN"].resourcesRegister.step3
+                this.$resource.resourcesRegister.step3["vi-VN"]
                   .textWarningUsername
               }}
             </template>
@@ -180,7 +183,7 @@
         <div class="password">
           <m-text-field
             :lblTooltip="
-              this.$resource['vi-VN'].resourcesRegister.step3.textPassword
+              this.$resource.resourcesRegister.step3.textPassword['vi-VN']
             "
             :haveLabel="true"
             :isTextWhite="true"
@@ -198,13 +201,14 @@
           >
             <!-- Text hiển thị tiêu đề -->
             <template v-slot:lbl-content>
-              {{ this.$resource["vi-VN"].resourcesRegister.step3.textPassword }}
+              {{ this.$resource.resourcesRegister.step3.textPassword["vi-VN"] }}
             </template>
             <!-- Text hiển thị khi validate -->
             <template v-slot:warning>
               {{
-                this.$resource["vi-VN"].resourcesRegister.step3
-                  .textWarningPassword
+                this.$resource.resourcesRegister.step3.textWarningPassword[
+                  "vi-VN"
+                ]
               }}
             </template>
           </m-text-field>
@@ -214,8 +218,9 @@
         <div class="confirm-password">
           <m-text-field
             :lblTooltip="
-              this.$resource['vi-VN'].resourcesRegister.step3
-                .textConfirmPassword
+              this.$resource.resourcesRegister.step3.textConfirmPassword[
+                'vi-VN'
+              ]
             "
             :haveLabel="true"
             :isTextWhite="true"
@@ -234,15 +239,16 @@
             <!-- Text hiển thị tiêu đề -->
             <template v-slot:lbl-content>
               {{
-                this.$resource["vi-VN"].resourcesRegister.step3
-                  .textConfirmPassword
+                this.$resource.resourcesRegister.step3.textConfirmPassword[
+                  "vi-VN"
+                ]
               }}
             </template>
             <!-- Text hiển thị khi validate -->
             <template v-slot:warning>
               {{
-                this.$resource["vi-VN"].resourcesRegister.step3
-                  .textWarningConfirmPassword
+                this.$resource.resourcesRegister.step3
+                  .textWarningConfirmPassword["vi-VN"]
               }}
             </template>
           </m-text-field>
@@ -252,7 +258,7 @@
         <div class="email">
           <m-text-field
             :lblTooltip="
-              this.$resource['vi-VN'].resourcesRegister.step3.textEmail
+              this.$resource.resourcesRegister.step3.textEmail['vi-VN']
             "
             :haveLabel="true"
             :isTextWhite="true"
@@ -271,12 +277,12 @@
           >
             <!-- Text hiển thị tiêu đề -->
             <template v-slot:lbl-content>
-              {{ this.$resource["vi-VN"].resourcesRegister.step3.textEmail }}
+              {{ this.$resource.resourcesRegister.step3.textEmail["vi-VN"] }}
             </template>
             <!-- Text hiển thị khi validate -->
             <template v-slot:warning>
               {{
-                this.$resource["vi-VN"].resourcesRegister.step3.textWarningEmail
+                this.$resource.resourcesRegister.step3.textWarningEmail["vi-VN"]
               }}
             </template>
           </m-text-field>
@@ -291,11 +297,11 @@
           :functionHandlePessEnter="submitOnClick"
           @click="submitOnClick"
           >{{
-            this.$resource["vi-VN"].resourcesRegister.step3.textContinue
+            this.$resource.resourcesRegister.step3.textContinue["vi-VN"]
           }}</m-button
         >
       </footer>
-    </div>
+    </section>
 
     <!-- Back to forward step -->
     <a
@@ -584,7 +590,7 @@ export default {
 
         // Thêm thông điệp lỗi để hiển thị thông báo
         errorMessage +=
-          this.$resource["vi-VN"].resourcesRegister.step3.textWarningUsername +
+          this.$resource.resourcesRegister.step3.textWarningUsername["vi-VN"] +
           `<br/>`;
       }
 
@@ -602,7 +608,7 @@ export default {
 
         // Thêm thông điệp lỗi để hiển thị thông báo
         errorMessage +=
-          this.$resource["vi-VN"].resourcesRegister.step3.textWarningPassword +
+          this.$resource.resourcesRegister.step3.textWarningPassword["vi-VN"] +
           `<br/>`;
       }
 
@@ -620,8 +626,9 @@ export default {
 
         // Thêm thông điệp lỗi để hiển thị thông báo
         errorMessage +=
-          this.$resource["vi-VN"].resourcesRegister.step3
-            .textWarningConfirmPassword + `<br/>`;
+          this.$resource.resourcesRegister.step3.textWarningConfirmPassword[
+            "vi-VN"
+          ] + `<br/>`;
       }
 
       // ========== KIỂM TRA VALIDATE INPUT EMAIL ========== //
@@ -640,7 +647,7 @@ export default {
 
         // Thêm thông điệp lỗi để hiển thị thông báo
         errorMessage +=
-          this.$resource["vi-VN"].resourcesRegister.step3.textWarningEmail +
+          this.$resource.resourcesRegister.step3.textWarningEmail["vi-VN"] +
           `<br/>`;
       }
 
