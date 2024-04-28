@@ -10,7 +10,7 @@
         </h1>
         <img
           loading="lazy"
-          src="../../assets/images/chessboard/pawn-on-board.svg"
+          :src="this.$resource.resourcesImage.chessboard.pawnOnBoard"
           alt="Hinh anh quan co"
           class="block-user-select"
         />
@@ -312,7 +312,7 @@
       @keydown="btnBackKeyDown"
     >
       <!-- Icon arrow left -->
-      <div class="icon-arrow-left" title="Back"></div>
+      <div class="mi mi-16 mi-arrow-left icon-resize" title="Back"></div>
     </a>
   </div>
 </template>

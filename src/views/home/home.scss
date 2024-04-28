@@ -141,7 +141,8 @@
               background-color: var(--primary-btn-background-color);
 
               .icon {
-                background: url(../../assets/icons/play-white.svg) no-repeat;
+                background: url(https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120928/image/icons/buttonplay/play-white_fmfipn.svg)
+                  no-repeat;
                 background-size: cover;
               }
 
@@ -156,7 +157,8 @@
             // Button chơi với máy
             &.button-play-computer {
               .icon {
-                background: url(../../assets/icons/computer.svg) no-repeat;
+                background: url(https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120925/image/icons/buttonplay/computer_wrhrbs.svg)
+                  no-repeat;
                 background-size: cover;
               }
 

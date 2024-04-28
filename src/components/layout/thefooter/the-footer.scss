@@ -3,23 +3,21 @@
     flex-wrap: wrap;
 
     .link-page-component {
+      font-size: calc(12 / 14 * 1rem);
       &:hover {
-        scale: 1.1;
+        scale: 1.2;
+        color: red;
       }
     }
   }
 
   .navigation-flatforms-component {
     flex-wrap: wrap;
-    height: 30px;
-    border: 1px solid blue;
+    margin-top: 1rem;
 
     .link-flatform-component {
-      .icon {
-        background: url(../../../assets/icons/logo/logo-apple.svg) no-repeat;
-        background-size: cover;
-        width: 24px;
-        height: 24px;
+      &:hover {
+        scale: 1.2;
       }
     }
   }

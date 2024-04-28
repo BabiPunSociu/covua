@@ -96,6 +96,11 @@
     &:focus-visible {
       outline: #1b1b1b solid 1px;
     }
+
+    .mi-google {
+      background-color: #fff;
+      border-radius: 50%;
+    }
   }
 
   /* Nút facebook */
@@ -113,6 +118,10 @@
 
     &:focus-visible {
       outline: #1b1b1b solid 1px;
+    }
+
+    .mi-facebook {
+      background-color: #fff;
     }
   }
 

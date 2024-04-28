@@ -306,7 +306,7 @@ $path-android: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286
 // IOS
 $path-ios: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286160/image/icons/logo/logo-apple_xfk30s.svg";
 .mi-ios {
-  background-color: var(--color-white);
+  background-color: var(--color-icon-twitter);
 
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
@@ -336,7 +336,7 @@ $path-discord: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286
 // Instagram
 $path-instagram: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714286175/image/icons/logo/logo-instagram_prk5nx.svg";
 .mi-instagram {
-  background-color: var(--color-icon-instagram);
+  background: var(--color-icon-instagram);
 
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;

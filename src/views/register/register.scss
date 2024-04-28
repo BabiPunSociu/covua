@@ -181,21 +181,28 @@
             mask-repeat: no-repeat;
             -webkit-mask-repeat: no-repeat;
 
+            $path-pawn: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120921/image/icons/chessmandecoration/pawn_dd8al1.svg";
             &.icon-pawn {
-              mask-image: url(../../assets/icons/chessmandecoration/pawn.svg);
-              -webkit-mask-image: url(../../assets/icons/chessmandecoration/pawn.svg);
+              mask-image: url($path-pawn);
+              -webkit-mask-image: url($path-pawn);
             }
+
+            $path-knight: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120920/image/icons/chessmandecoration/knight_e9z5ac.svg";
             &.icon-knight {
-              mask-image: url(../../assets/icons/chessmandecoration/knight.svg);
-              -webkit-mask-image: url(../../assets/icons/chessmandecoration/knight.svg);
+              mask-image: url($path-knight);
+              -webkit-mask-image: url($path-knight);
             }
+
+            $path-rook: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120923/image/icons/chessmandecoration/rook_whbvs1.svg";
             &.icon-rook {
-              mask-image: url(../../assets/icons/chessmandecoration/rook.svg);
-              -webkit-mask-image: url(../../assets/icons/chessmandecoration/rook.svg);
+              mask-image: url($path-rook);
+              -webkit-mask-image: url($path-rook);
             }
+
+            $path-queen: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120922/image/icons/chessmandecoration/queen_u0ras2.svg";
             &.icon-queen {
-              mask-image: url(../../assets/icons/chessmandecoration/queen.svg);
-              -webkit-mask-image: url(../../assets/icons/chessmandecoration/queen.svg);
+              mask-image: url($path-queen);
+              -webkit-mask-image: url($path-queen);
             }
           }
 
@@ -270,17 +277,6 @@
     &:focus-visible {
       outline: var(--color-white) solid 1px !important;
       border-radius: var(--border-radius-default);
-    }
-
-    .icon-arrow-left {
-      width: 100%;
-      height: 100%;
-      background-color: var(--color-white);
-      mask-repeat: no-repeat;
-      mask-size: cover;
-      -webkit-mask-repeat: no-repeat;
-      mask-image: url(../../assets/icons/arrow-left.svg);
-      -webkit-mask-image: url(../../assets/icons/arrow-left.svg);
     }
   }
 }

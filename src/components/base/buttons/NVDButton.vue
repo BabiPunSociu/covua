@@ -1,5 +1,9 @@
 <template>
-  <!-- Ngoài ra, có thể thêm class: .m-btn-secondary -->
+  <!-- Ngoài ra, có thể thêm class: 
+    .m-btn-secondary || 
+    .m-btn-facebook || 
+    .m-btn-google 
+  -->
 
   <!-- Bình thường là button -->
   <button
