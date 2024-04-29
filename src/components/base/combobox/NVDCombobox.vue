@@ -112,7 +112,11 @@ export default {
   },
   props: {
     // item selected
-    valueInputCombobox: { type: String, default: "", required: false },
+    valueInputCombobox: {
+      type: String,
+      default: "",
+      required: false,
+    },
 
     /**
      * Hiển thị label
@@ -354,10 +358,10 @@ export default {
         const vueIntance = this;
         // Lấy thẻ combobox
         const combobox = this.$refs.comboboxElement;
-        console.log("combobox: " + combobox);
+        // console.log("combobox: " + combobox);
         if (this.comboboxProps.isShowDropDown) {
           document.addEventListener("click", function documentClick(event) {
-            console.log("clickOutCombobox");
+            // console.log("clickOutCombobox");
             // console.log("cbo: " + combobox.innerHTML);
             // Kiểm tra click bên ngoài combobox
             if (combobox && !combobox.contains(event.target)) {
@@ -391,7 +395,7 @@ export default {
   },
   watch: {
     "comboboxProps.isShowDropDown": function (newValue) {
-      console.log("watch isShowDropDown: " + newValue);
+      // console.log("watch isShowDropDown: " + newValue);
       this.clickOutCombobox();
     },
   },

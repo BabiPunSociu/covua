@@ -1,5 +1,3 @@
-import NVDResource from "./js/resources/resource.js";
-
 /* ==================== IMPORT SCSS ==================== */
 import "./assets/scss/main.scss";
 
@@ -15,7 +13,7 @@ import axios from "axios";
 // Đối tượng NVDEnum
 import NVDEnum from "./js/enum.js";
 // Đối tượng NVDResource
-
+import NVDResource from "./js/resources/resource.js";
 // function playSoundEffect()
 import playSoundEffect from "./js/cloudinary/sound-effect.js";
 // function createChessMan()
@@ -25,11 +23,11 @@ import targetChessMan from "./js/targetchessman/target-chessman.js";
 // function checkEndGame()
 import checkEndGame from "./js/checkgameend/check-end-game.js";
 // Đối tượng NVDValidator
-import NVDValidator from "./js/validate-input.js";
+import NVDValidator from "./js/validate/validate-input.js";
 // class Toast
-import toast from "./js/toast.js";
+import toast from "./js/classconstructor/toast.js";
 // class Dialog
-import dialog from "./js/dialog.js";
+import dialog from "./js/classconstructor/dialog.js";
 
 /* ==================== IMPORT VUE COMPONENT ==================== */
 import NVDButton from "./components/base/buttons/NVDButton.vue";
@@ -73,6 +71,7 @@ app.config.globalProperties.$axios = axios;
 app.config.globalProperties.$toast = toast;
 app.config.globalProperties.$dialog = dialog;
 
+// Add Middleware
 app.use(createPinia());
 app.use(router);
 

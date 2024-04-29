@@ -28,6 +28,14 @@ const resourcesImage = {
   },
 
   // folder
+  language: {
+    languageTranslate:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714311914/image/images/language/icons8-language-50_exxofh.png",
+    languageTranslateWorld:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714311913/image/images/language/icons8-language-skill-50_gbyxzf.png",
+  },
+
+  // folder
   logo: {
     logoApp:
       "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714121003/image/images/logo/logo-app_xnq5ff.png",

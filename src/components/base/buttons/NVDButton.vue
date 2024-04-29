@@ -8,7 +8,7 @@
   <!-- Bình thường là button -->
   <button
     v-if="!isRouterLink"
-    class="m-btn flex"
+    class="m-btn flex block-user-select"
     :class="{
       'outline-white': isOutlineWhite,
       'flex-center': textAlignCenter && !hasIcon,

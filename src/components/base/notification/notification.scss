@@ -5,9 +5,10 @@
   .button-notification {
     position: relative;
     // Quả chuông active
+    $path-sprite: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120930/image/icons/general/Sprites_zv9wnv.svg";
     .notification-button-active {
-      mask-image: url(../../../assets/icons/Sprites.svg);
-      -webkit-mask-image: url(../../../assets/icons/Sprites.svg);
+      mask-image: url($path-sprite);
+      -webkit-mask-image: url($path-sprite);
       mask-repeat: no-repeat;
       -webkit-mask-repeat: no-repeat;
       mask-position: -788px -30px; // Quả chuông
@@ -35,13 +36,15 @@
       background-color: var(--color-btn-google);
 
       transform: translateX(50%) translateY(-50%);
+
+      font-size: calc(10 / 14 * 1rem);
     }
   }
 
   // Nội dung thông báo
   .notification-content {
     z-index: 100 !important;
-    background-color: #e4e9e7;
+    background-color: var(--main-background-color);
     position: absolute;
     // 24px là kích thước quả chuông, 10px khoảng cách
     top: calc((24 + 10) / 14 * 1rem);
@@ -83,6 +86,12 @@
         // Tiêu đề
         .notification-content-title {
           font-size: 1.5rem;
+        }
+
+        .option-function {
+          .mi-ellipsis {
+            background: #111;
+          }
         }
 
         &.group-option {

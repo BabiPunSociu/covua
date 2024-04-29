@@ -13,10 +13,10 @@
       minmax(calc((640px - 1rem) / 2), 1fr)
     );
     gap: 2rem;
-    border: 1px solid red;
+    // border: 1px solid red;
 
     .grid-item {
-      border: 1px solid red;
+      // border: 1px solid red;
       display: flex;
 
       height: auto;
@@ -73,7 +73,7 @@
 
         // Giới thiệu
         .intro-title {
-          border: 1px solid red;
+          // border: 1px solid red;
           font-size: 2.1rem; // Mobile min-width: 320px
           /* ========== Tablets ========== */
           @media screen and (min-width: 480px) {
@@ -100,7 +100,7 @@
 
         // Thông tin giới thiệu
         .intro-info {
-          border: 1px solid red;
+          // border: 1px solid red;
           justify-content: space-between; // Mobile
           @media screen and (min-width: 768px) {
             flex-direction: column;
@@ -110,7 +110,7 @@
 
           .game-today,
           .playing-now {
-            border: 1px solid royalblue;
+            // border: 1px solid royalblue;
             .number {
               font-weight: bold;
               font-size: calc(15 / 14 * 1rem);
@@ -126,10 +126,10 @@
 
         // Group button
         .group-button-play {
-          border: 1px solid red;
+          // border: 1px solid red;
 
           .button-play {
-            border: 1px solid red;
+            // border: 1px solid red;
             border-radius: var(--border-radius-default);
             padding: calc(16 / 14 * 1rem);
             height: calc(36 / 14 * 1rem);
@@ -178,11 +178,11 @@
     &.section-puzzle {
       width: 100%;
       .puzzle-intro {
-        border: 1px solid red;
+        // border: 1px solid red;
         width: 100%;
 
         h1.title {
-          border: 1px solid red;
+          // border: 1px solid red;
           font-size: 2.1rem; // Mobile min-width: 320px
           /* ========== Tablets ========== */
           @media screen and (min-width: 480px) {
@@ -208,7 +208,7 @@
 
         .quote-group {
           .img-author {
-            border: 1px solid red;
+            // border: 1px solid red;
             width: calc(148 / 14 * 1rem); // 148px ~ 14px
             height: calc(148 / 14 * 1rem); // 148px ~ 14px
             object-fit: cover;
@@ -216,7 +216,7 @@
           }
 
           .quote {
-            border: 1px solid red;
+            // border: 1px solid red;
             width: calc((100% - ((148 / 14 - 1) * 1rem)));
             height: 100%;
             padding: 1rem;
@@ -242,10 +242,10 @@
       .link {
         display: grid;
         place-items: center;
-        border: 1px solid greenyellow;
+        // border: 1px solid greenyellow;
 
         .puzzle-link-image {
-          border: 1px solid rgb(67, 15, 222);
+          // border: 1px solid rgb(67, 15, 222);
           cursor: pointer;
           display: inline-block;
           max-width: 100%;
@@ -281,7 +281,7 @@
     width: 100%;
 
     h1.title {
-      border: 1px solid red;
+      // border: 1px solid red;
       font-size: 2.1rem; // Mobile min-width: 320px
       /* ========== Tablets ========== */
       @media screen and (min-width: 480px) {
@@ -306,7 +306,7 @@
 
     .article-list {
       margin-top: 1rem;
-      border: 1px solid red;
+      // border: 1px solid red;
       width: 100%;
       flex-wrap: wrap;
 
@@ -316,7 +316,7 @@
           width: calc((100% - 1rem) / 2);
         }
 
-        border: 1px solid greenyellow;
+        // border: 1px solid greenyellow;
         text-align: center;
 
         // Thẻ a

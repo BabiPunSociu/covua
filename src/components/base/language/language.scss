@@ -1,0 +1,24 @@
+.language {
+  position: relative;
+  .language-button {
+    .mi-language {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      -o-object-fit: cover;
+    }
+  }
+
+  .language-list {
+    z-index: 100 !important;
+    padding: 0.5rem;
+
+    position: absolute;
+    width: max-content;
+
+    // 24px là kích thước quả chuông, 10px khoảng cách
+    top: calc((24 + 10) / 14 * 1rem);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

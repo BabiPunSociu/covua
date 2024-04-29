@@ -6,14 +6,17 @@
       font-size: calc(12 / 14 * 1rem);
       &:hover {
         scale: 1.2;
-        color: red;
+        color: transparent;
+        background: var(--color-icon-instagram);
+        -webkit-background-clip: text;
+        background-clip: text;
       }
     }
   }
 
   .navigation-flatforms-component {
     flex-wrap: wrap;
-    margin-top: 1rem;
+    margin: 1rem 0;
 
     .link-flatform-component {
       &:hover {

@@ -33,14 +33,20 @@
 
 <script>
 // import toast để có class gắn vào DataType.
-import toast from "./js/toast.js";
+import toast from "./js/classconstructor/toast.js";
 // import dialog để có class gắn vào DataType.
-import dialog from "./js/dialog.js";
+import dialog from "./js/classconstructor/dialog.js";
 
+import { useLanguageStore } from "@/stores/languagestore.js";
 export default {
   name: "App",
   data() {
     return {
+      /**
+       * Đối tượng chứa store giá trị ngôn ngữ.
+       */
+      languageStore: useLanguageStore(),
+
       /**
        * Dữ liệu về component loading.
        */
@@ -78,9 +84,6 @@ export default {
          * Type: Dialog
          */
         inputDialog: {},
-        /* obj {title: "", content: "", iconClass: "",
-        hasButtonSecondary: true/false, buttonSecondaryText: "",
-        buttonContinueText: ""} */
       },
     };
   },
@@ -210,7 +213,10 @@ export default {
     toastSuccess(toastMessage) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
       const toastType = this.$resource.resourcesToast.toastType.success;
-      const toastTitle = this.$resource.resourcesToast.title.success["vi-VN"];
+      const toastTitle =
+        this.$resource.resourcesToast.title.success[
+          this.languageStore.getLanguage
+        ];
 
       // Tạo đối tượng toast
       const toastObject = new toast(
@@ -234,7 +240,10 @@ export default {
     toastWarning(toastMessage) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
       const toastType = this.$resource.resourcesToast.toastType.warning;
-      const toastTitle = this.$resource.resourcesToast.title.warning["vi-VN"];
+      const toastTitle =
+        this.$resource.resourcesToast.title.warning[
+          this.languageStore.getLanguage
+        ];
 
       // Tạo đối tượng toast
       const toastObject = new toast(
@@ -274,10 +283,14 @@ export default {
      */
     dialogError(message) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const title = this.$resource.resourcesDialog.title.error["vi-VN"];
+      const title =
+        this.$resource.resourcesDialog.title.error[
+          this.languageStore.getLanguage
+        ];
       const iconClass = this.$resource.resourcesDialog.iconClass.error;
       const totalButton = 1;
-      const buttonPrimaryText = this.$resource.resourceButton.close["vi-VN"]; // Đóng.
+      const buttonPrimaryText =
+        this.$resource.resourceButton.close[this.languageStore.getLanguage]; // Đóng.
 
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
@@ -302,10 +315,14 @@ export default {
      */
     dialogWarningOneButton(message) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const title = this.$resource.resourcesDialog.title.warning["vi-VN"];
+      const title =
+        this.$resource.resourcesDialog.title.warning[
+          this.languageStore.getLanguage
+        ];
       const iconClass = this.$resource.resourcesDialog.iconClass.warning;
       const totalButton = 1;
-      const buttonPrimaryText = this.$resource.resourceButton.ok["vi-VN"]; // Đồng ý.
+      const buttonPrimaryText =
+        this.$resource.resourceButton.ok[this.languageStore.getLanguage]; // Đồng ý.
 
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
@@ -329,11 +346,16 @@ export default {
      */
     dialogWarningTwoButtons(message) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const title = this.$resource.resourcesDialog.title.warning["vi-VN"];
+      const title =
+        this.$resource.resourcesDialog.title.warning[
+          this.languageStore.getLanguage
+        ];
       const iconClass = this.$resource.resourcesDialog.iconClass.warning;
       const totalButton = 2;
-      const buttonPrimaryText = this.$resource.resourceButton.yes["vi-VN"]; // Có.
-      const buttonSecondary1Text = this.$resource.resourceButton.no["vi-VN"]; // Không.
+      const buttonPrimaryText =
+        this.$resource.resourceButton.yes[this.languageStore.getLanguage]; // Có.
+      const buttonSecondary1Text =
+        this.$resource.resourceButton.no[this.languageStore.getLanguage]; // Không.
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
         title,
@@ -356,13 +378,18 @@ export default {
      */
     dialogInfoThreeButtons(message) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
-      const title = this.$resource.resourcesDialog.title.info["vi-VN"];
+      const title =
+        this.$resource.resourcesDialog.title.info[
+          this.languageStore.getLanguage
+        ];
       const iconClass = this.$resource.resourcesDialog.iconClass.info;
       const totalButton = 3;
-      const buttonPrimaryText = this.$resource.resourceButton.yes["vi-VN"]; // Có.
-      const buttonSecondary1Text = this.$resource.resourceButton.no["vi-VN"]; // Không.
+      const buttonPrimaryText =
+        this.$resource.resourceButton.yes[this.languageStore.getLanguage]; // Có.
+      const buttonSecondary1Text =
+        this.$resource.resourceButton.no[this.languageStore.getLanguage]; // Không.
       const buttonSecondary2Text =
-        this.$resource.resourceButton.cancel["vi-VN"]; // Hủy.
+        this.$resource.resourceButton.cancel[this.languageStore.getLanguage]; // Hủy.
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
         title,

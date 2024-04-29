@@ -13,7 +13,9 @@
         class="m-textfield-icon-action"
         :haveLabel="false"
         :placeholderTextField="
-          this.$resource.resourcesTextField.textSearchOnNVDChess['vi-VN']
+          this.$resource.resourcesTextField.textSearchOnNVDChess[
+            languageStore.getLanguage
+          ]
         "
         @iconActionClick="btnSearchClick"
         @inputOnChange="textFieldOnChange"
@@ -22,6 +24,9 @@
     <div class="header-right flex">
       <!-- Thông báo -->
       <notification></notification>
+
+      <!-- Language -->
+      <m-language></m-language>
 
       <!-- Light mode / Dark mode -->
       <m-switch-light-dark></m-switch-light-dark>
@@ -43,16 +48,26 @@
 </template>
 
 <script>
+import { useLanguageStore } from "@/stores/languagestore.js";
+
 import NVDNotification from "@/components/base/notification/NVDNotification.vue";
+import NVDLanguage from "@/components/base/language/NVDLanguage.vue";
 import NVDSwitchLightDark from "@/components/base/switchlightdark/NVDSwitchLightDark.vue";
+
 export default {
   name: "TheHeader",
   components: {
     notification: NVDNotification,
+    "m-language": NVDLanguage,
     "m-switch-light-dark": NVDSwitchLightDark,
   },
   data() {
     return {
+      /**
+       * Đối tượng chứa store giá trị ngôn ngữ.
+       */
+      languageStore: useLanguageStore(),
+
       /**
        * Đối tượng chứa thông tin về textFieldSearch.
        */

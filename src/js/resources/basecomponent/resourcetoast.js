@@ -36,7 +36,15 @@ const resourcesToast = {
   /**
    * Đối tượng nội dung thông báo.
    */
-  message: {},
+  message: {
+    /**
+     * Chuyển đổi ngôn ngữ thành công.
+     */
+    languageSwitchSuccessful: {
+      "en-US": "Switched to English",
+      "vi-VN": "Đã chuyển sang tiếng Việt",
+    },
+  },
 };
 
 export default resourcesToast;

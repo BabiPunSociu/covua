@@ -28,11 +28,11 @@
         <div class="row flex flex-space-between">
           <!-- Tiêu đề -->
           <h2 class="notification-content-title block-user-select">
-            {{ this.$resource.resourcesNotification.textNotification["vi-VN"] }}
+            {{ this.$resource.resourcesNotification.textNotification[languageStore.getLanguage] }}
           </h2>
           <!-- Các chức năng khác -->
           <div class="option-function">
-            <div class="mi mi-24 mi-ellipsis"></div>
+            <div class="mi mi-24 mi-ellipsis icon-resize"></div>
           </div>
         </div>
         <div class="row group-option-filter flex">
@@ -42,8 +42,9 @@
                 'All' != notificationContent.OptionFilterSelected,
             }"
             @click="FilterByAllClick"
+            :textAlignCenter="true"
           >
-            {{ this.$resource.resourcesNotification.textAll["vi-VN"] }}
+            {{ this.$resource.resourcesNotification.textAll[languageStore.getLanguage] }}
           </m-button>
           <m-button
             :class="{
@@ -51,8 +52,9 @@
                 'Unread' != notificationContent.OptionFilterSelected,
             }"
             @click="FilterByUnreadClick"
+            :textAlignCenter="true"
           >
-            {{ this.$resource.resourcesNotification.textUnRead["vi-VN"] }}
+            {{ this.$resource.resourcesNotification.textUnRead[languageStore.getLanguage] }}
           </m-button>
         </div>
       </div>
@@ -74,11 +76,18 @@
 </template>
 
 <script>
+import { useLanguageStore } from "@/stores/languagestore.js";
+
 export default {
   name: "NVDNotification",
 
   data() {
     return {
+      /**
+       * Đối tượng chứa store giá trị ngôn ngữ.
+       */
+      languageStore: useLanguageStore(),
+
       /**
        * Ẩn / hiện dropdownlist notificationContent
        */

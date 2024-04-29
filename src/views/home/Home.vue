@@ -6,7 +6,7 @@
         <!-- Bàn cờ -->
         <router-link
           to="/play/online"
-          :title="this.$resource.resourcesHome.sectionPlay.playOnline['vi-VN']"
+          :title="this.$resource.resourcesHome.sectionPlay.playOnline[languageStore.getLanguage]"
           class="play-link-image block-user-select"
         >
           <img
@@ -21,7 +21,7 @@
       <div class="grid-item intro flex flex-column">
         <!-- Giới thiệu -->
         <h1 class="intro-title block-user-select flex flex-center">
-          {{ this.$resource.resourcesHome.sectionPlay.textTitleIntro["vi-VN"] }}
+          {{ this.$resource.resourcesHome.sectionPlay.textTitleIntro[languageStore.getLanguage] }}
         </h1>
         <!-- Thông tin giới thiệu -->
         <div class="intro-info flex block-user-select">
@@ -29,7 +29,7 @@
             <span class="number">1000</span>
             <span class="text">
               {{
-                this.$resource.resourcesHome.sectionPlay.textGameToday["vi-VN"]
+                this.$resource.resourcesHome.sectionPlay.textGameToday[languageStore.getLanguage]
               }}
             </span>
           </div>
@@ -37,7 +37,7 @@
             <span class="number">1000</span>
             <span class="text">
               {{
-                this.$resource.resourcesHome.sectionPlay.textPlayingNow["vi-VN"]
+                this.$resource.resourcesHome.sectionPlay.textPlayingNow[languageStore.getLanguage]
               }}
             </span>
           </div>
@@ -48,27 +48,27 @@
           <router-link
             to="/play/online"
             :title="
-              this.$resource.resourcesHome.sectionPlay.playOnline['vi-VN']
+              this.$resource.resourcesHome.sectionPlay.playOnline[languageStore.getLanguage]
             "
             class="button-play button-play-online flex"
           >
             <div class="icon mi mi-24 icon-resize"></div>
             <span class="text">
-              {{ this.$resource.resourcesHome.sectionPlay.playOnline["vi-VN"] }}
+              {{ this.$resource.resourcesHome.sectionPlay.playOnline[languageStore.getLanguage] }}
             </span>
           </router-link>
           <!-- Button chơi với máy -->
           <router-link
             to="/play/computer"
             :title="
-              this.$resource.resourcesHome.sectionPlay.playComputer['vi-VN']
+              this.$resource.resourcesHome.sectionPlay.playComputer[languageStore.getLanguage]
             "
             class="button-play button-play-computer flex"
           >
             <div class="icon mi mi-24 icon-resize"></div>
             <span class="text">
               {{
-                this.$resource.resourcesHome.sectionPlay.playComputer["vi-VN"]
+                this.$resource.resourcesHome.sectionPlay.playComputer[languageStore.getLanguage]
               }}
             </span>
           </router-link>
@@ -80,13 +80,13 @@
     <section class="grid section-puzzle">
       <div class="grid-item puzzle-intro flex flex-column">
         <h1 class="title block-user-select flex flex-center">
-          {{ this.$resource.resourcesHome.sectionPuzzle.textTitle["vi-VN"] }}
+          {{ this.$resource.resourcesHome.sectionPuzzle.textTitle[languageStore.getLanguage] }}
         </h1>
 
         <m-button :textAlignCenter="true">
           {{
             this.$resource.resourcesHome.sectionPuzzle.textButtonSolvePuzzle[
-              "vi-VN"
+              languageStore.getLanguage
             ]
           }}
         </m-button>
@@ -103,7 +103,7 @@
           <div class="quote flex flex-column">
             <h3 class="quote-text block-user-select flex flex-center">
               {{
-                this.$resource.resourcesHome.sectionPuzzle.textQuote["vi-VN"]
+                this.$resource.resourcesHome.sectionPuzzle.textQuote[languageStore.getLanguage]
               }}
             </h3>
             <h4 class="quote-author block-user-select">
@@ -135,13 +135,13 @@
     <section class="grid section-puzzle section-lesson">
       <div class="grid-item puzzle-intro flex flex-column">
         <h1 class="title block-user-select flex flex-center">
-          {{ this.$resource.resourcesHome.sectionLesson.textTitle["vi-VN"] }}
+          {{ this.$resource.resourcesHome.sectionLesson.textTitle[languageStore.getLanguage] }}
         </h1>
 
         <m-button :textAlignCenter="true">
           {{
             this.$resource.resourcesHome.sectionLesson.textButtonStartLesson[
-              "vi-VN"
+              languageStore.getLanguage
             ]
           }}
         </m-button>
@@ -156,7 +156,7 @@
           <div class="quote flex flex-column">
             <h3 class="quote-text block-user-select flex flex-center">
               {{
-                this.$resource.resourcesHome.sectionLesson.textQuote["vi-VN"]
+                this.$resource.resourcesHome.sectionLesson.textQuote[languageStore.getLanguage]
               }}
             </h3>
             <h4 class="quote-author block-user-select">
@@ -183,7 +183,7 @@
 
     <section class="section-article">
       <h1 class="title block-user-select flex flex-center">
-        {{ this.$resource.resourcesHome.sectionArticle.textTitle["vi-VN"] }}
+        {{ this.$resource.resourcesHome.sectionArticle.textTitle[languageStore.getLanguage] }}
       </h1>
       <div class="article-list flex">
         <div class="article-item" v-for="item in 4" :key="item">
@@ -216,11 +216,21 @@
 </template>
 
 <script>
+import { useLanguageStore } from "@/stores/languagestore.js";
+
 import TheFooter from "@/components/layout/thefooter/TheFooter.vue";
 
 export default {
   name: "Home",
   components: { "m-footer": TheFooter },
+  data() {
+    return {
+      /**
+       * Đối tượng chứa store giá trị ngôn ngữ.
+       */
+      languageStore: useLanguageStore(),
+    };
+  },
 };
 </script>
 

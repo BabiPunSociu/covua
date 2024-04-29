@@ -65,7 +65,7 @@
 </template>
 <script>
 // import class dialog.
-import dialog from "../../../js/dialog.js";
+import dialog from "../../../js/classconstructor/dialog.js";
 
 export default {
   name: "NVDDialog",

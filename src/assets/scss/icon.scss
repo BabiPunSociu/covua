@@ -422,3 +422,31 @@ $path-ellipsis: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v171412
   mask-image: url($path-ellipsis);
   -webkit-mask-image: url($path-ellipsis);
 }
+
+$path-language: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714311914/image/images/language/icons8-language-50_exxofh.png";
+.mi-language {
+  background: var(--color-icon-instagram);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-language);
+  -webkit-mask-image: url($path-language);
+}
+
+$path-language-world: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714311913/image/images/language/icons8-language-skill-50_gbyxzf.png";
+.mi-language-world {
+  background: var(--color-icon-instagram);
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-language-world);
+  -webkit-mask-image: url($path-language-world);
+}

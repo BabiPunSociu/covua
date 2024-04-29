@@ -3,37 +3,37 @@
     <!-- PAGES -->
     <div class="navigation-pages-component flex flex-center">
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textHelp["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textHelp[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textChessTerms["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textChessTerms[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textAbout["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textAbout[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textJobs["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textJobs[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textDevelopers["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textDevelopers[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textUserAgreement["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textUserAgreement[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textPrivacy["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textPrivacy[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textFairPlay["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textFairPlay[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textPartners["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textPartners[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textCompliance["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textCompliance[languageStore.getLanguage] }}
       </router-link>
       <router-link taget="_blank" to="" class="link-page-component">
-        {{ this.$resource.resourcesFooter.textCopyright["vi-VN"] }}
+        {{ this.$resource.resourcesFooter.textCopyright[languageStore.getLanguage] }}
       </router-link>
     </div>
 
@@ -78,8 +78,18 @@
 </template>
 
 <script>
+import { useLanguageStore } from "@/stores/languagestore.js";
+
 export default {
   name: "TheFooter",
+  data() {
+    return {
+      /**
+       * Đối tượng chứa store giá trị ngôn ngữ.
+       */
+      languageStore: useLanguageStore(),
+    };
+  },
 };
 </script>
 

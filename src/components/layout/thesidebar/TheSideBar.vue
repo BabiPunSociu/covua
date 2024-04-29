@@ -23,7 +23,7 @@
             </div>
             <!-- Text -->
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.play["vi-VN"] }}
+              {{ this.$resource.resourcesSideBar.play[languageStore.getLanguage] }}
             </div>
           </a>
         </div>
@@ -35,7 +35,7 @@
               <div class="mi mi-24 mi-sidebar-cash"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.puzzle["vi-VN"] }}
+              {{ this.$resource.resourcesSideBar.puzzle[languageStore.getLanguage] }}
             </div>
           </a>
         </div>
@@ -47,7 +47,7 @@
               <div class="mi mi-24 mi-sidebar-bank"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.learn["vi-VN"] }}
+              {{ this.$resource.resourcesSideBar.learn[languageStore.getLanguage] }}
             </div>
           </a>
         </div>
@@ -59,7 +59,7 @@
               <div class="mi mi-24 mi-sidebar-purchase"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.watch["vi-VN"] }}
+              {{ this.$resource.resourcesSideBar.watch[languageStore.getLanguage] }}
             </div>
           </a>
         </div>
@@ -71,7 +71,7 @@
               <div class="mi mi-24 mi-sidebar-sale"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.news["vi-VN"] }}
+              {{ this.$resource.resourcesSideBar.news[languageStore.getLanguage] }}
             </div>
           </a>
         </div>
@@ -83,7 +83,7 @@
               <div class="mi mi-24 mi-sidebar-invoice"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.social["vi-VN"] }}
+              {{ this.$resource.resourcesSideBar.social[languageStore.getLanguage] }}
             </div>
           </a>
         </div>
@@ -187,8 +187,19 @@
 </template>
 
 <script>
+import { useLanguageStore } from "@/stores/languagestore.js";
+
 export default {
   name: "TheSideBar",
+  data() {
+    return {
+      /**
+       * Đối tượng chứa store giá trị ngôn ngữ.
+       */
+      languageStore: useLanguageStore(),
+    };
+  },
+
   created() {
     /**
      * Nhận sự kiện toogle hiển thị sidebar.
