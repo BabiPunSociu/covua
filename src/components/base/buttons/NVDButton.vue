@@ -18,7 +18,7 @@
     ref="myButton"
   >
     <!-- Hiển thị icon (nếu có) -->
-    <div :class="classIcon" class="mi mi-16" v-if="hasIcon"></div>
+    <div :class="classIcon" class="mi mi-16 icon-resize" v-if="hasIcon"></div>
     <slot></slot>
   </button>
 
@@ -32,11 +32,11 @@
       'flex-center': textAlignCenter && !hasIcon,
     }"
     :tabindex="tabIndex"
-    @keydown.enter="buttonPressEnter($event, functionHandlePessEnter)"
+    @keydown.enter="linkPressEnter"
     ref="myButton"
   >
     <!-- Hiển thị icon (nếu có) -->
-    <div :class="classIcon" class="mi mi-16" v-if="hasIcon"></div>
+    <div :class="classIcon" class="mi mi-16 icon-resize" v-if="hasIcon"></div>
     <slot></slot>
   </router-link>
 </template>
@@ -139,6 +139,22 @@ export default {
       } catch (error) {
         console.error("Lỗi khi thực thi hàm buttonPressEnter");
         console.error(error);
+      }
+    },
+
+    /**
+     * Hàm xử lý sự kiện router-link nhấm Enter.
+     * @author NVDUNG (29-04-2024)
+     */
+    linkPressEnter() {
+      /**
+       * Kiểm tra giá trị prop 'to' để chuyển hướng.
+       * - to="" -> Trang hiện tại. (không chuyển hướng).
+       * - to="/" -> Trang chủ. (Chuyển hướng).
+       */
+      if (this.to.length > 0) {
+        // Thực hiện chuyển hướng
+        this.$router.push(this.to);
       }
     },
   },

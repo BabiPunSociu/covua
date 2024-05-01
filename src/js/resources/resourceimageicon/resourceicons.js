@@ -1,6 +1,12 @@
 const resourcesIcon = {
   // folder
   buttonPlay: {
+    tournaments:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714381802/image/icons/buttonplay/blitz_dsoblu.svg",
+    blitz:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714381802/image/icons/buttonplay/blitz_dsoblu.svg",
+    handshake:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714381801/image/icons/buttonplay/handshake_k9i1jt.svg",
     computer:
       "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120925/image/icons/buttonplay/computer_wrhrbs.svg",
     playWhite:
@@ -19,7 +25,39 @@ const resourcesIcon = {
   },
 
   // folder
+  game: {
+    // Viên đạn
+    ammo: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497740/image/icons/game/ammo-64_i9ooxr.png",
+
+    // Bạn bè
+    friends:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497740/image/icons/game/ammo-64_i9ooxr.png",
+
+    // Add new
+    addNew:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497740/image/icons/game/add-50_cscinx.png",
+
+    // chessboard
+    chessboard:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497739/image/icons/game/chessboard-48_fukbrc.png",
+
+    // Tia sét
+    lightning:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497739/image/icons/game/lightning-50_zzilrs.png",
+
+    // Lưu trữ
+    archive:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714404476/image/icons/game/archive_lxursx.svg",
+
+    // Bảng xếp hạng
+    leaderboard:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714404476/image/icons/game/leaderboard_smaqb2.svg",
+  },
+
+  // folder
   general: {
+    clock:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714446650/image/icons/general/alarm-clock-50_g4evwq.png",
     sprite:
       "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120930/image/icons/general/Sprites_zv9wnv.svg",
     ellipsis:

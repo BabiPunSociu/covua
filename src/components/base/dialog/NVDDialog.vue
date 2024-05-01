@@ -29,6 +29,7 @@
           class="m-btn-secondary"
           v-if="inputDialog.totalButtons >= 3"
           :functionHandlePessEnter="btnSecond2Click"
+          :textAlignCenter="true"
           @click="btnSecond2Click"
           @keydown="tabFocusAround($event, 3)"
           ><slot name="btn-second-text_2">{{
@@ -42,6 +43,7 @@
           class="m-btn-secondary"
           v-if="inputDialog.totalButtons >= 2"
           :functionHandlePessEnter="btnSecond1Click"
+          :textAlignCenter="true"
           @click="btnSecond1Click"
           @keydown="tabFocusAround($event, 2)"
           ><slot name="btn-second-text_1">{{
@@ -55,6 +57,7 @@
           tabindex="1000"
           @click="btnPrimaryClick"
           :functionHandlePessEnter="btnPrimaryClick"
+          :textAlignCenter="true"
           ><slot name="btn-continue-text">{{
             this.inputDialog.buttonPrimaryText
           }}</slot></m-button

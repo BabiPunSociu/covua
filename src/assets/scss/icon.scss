@@ -31,6 +31,13 @@ $path-sprite: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v17141209
   min-height: 32px;
 }
 
+.mi-48 {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+}
+
 .mi-app {
   background-position: -428px -92px;
 }
@@ -449,4 +456,139 @@ $path-language-world: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v
 
   mask-image: url($path-language-world);
   -webkit-mask-image: url($path-language-world);
+}
+
+$path-play-white: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120928/image/icons/buttonplay/play-white_fmfipn.svg";
+.mi-play-white {
+  background: url($path-play-white) no-repeat;
+  background-size: cover;
+}
+
+$path-computer: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714120925/image/icons/buttonplay/computer_wrhrbs.svg";
+.mi-computer {
+  background: url($path-computer) no-repeat;
+  background-size: cover;
+}
+
+$path-tournaments: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714381807/image/icons/buttonplay/tournaments_sbpcwt.svg";
+.mi-tournaments {
+  background: url($path-tournaments) no-repeat;
+  background-size: cover;
+}
+
+// Tia chớp
+$path-blitz: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714381802/image/icons/buttonplay/blitz_dsoblu.svg";
+.mi-blitz {
+  background: url($path-blitz) no-repeat;
+  background-size: cover;
+}
+
+$path-handshake: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714381801/image/icons/buttonplay/handshake_k9i1jt.svg";
+.mi-handshake {
+  background: url($path-handshake) no-repeat;
+  background-size: cover;
+}
+
+// Lưu trữ
+$path-archive: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714404476/image/icons/game/archive_lxursx.svg";
+.mi-archive {
+  background: url($path-archive) no-repeat;
+  background-size: cover;
+}
+
+// Bảng xếp hạng
+$path-leaderboard: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714404476/image/icons/game/leaderboard_smaqb2.svg";
+.mi-leaderboard {
+  background: url($path-leaderboard) no-repeat;
+  background-size: cover;
+}
+
+// Đồng hồ
+$path-clock: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714446650/image/icons/general/alarm-clock-50_g4evwq.png";
+.mi-clock {
+  background-color: #1f1f1f;
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-clock);
+  -webkit-mask-image: url($path-clock);
+}
+
+// Viên đạn
+$path-ammo: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497740/image/icons/game/ammo-64_i9ooxr.png";
+.mi-ammo {
+  background-color: #1f1f1f;
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-ammo);
+  -webkit-mask-image: url($path-ammo);
+}
+
+// Bạn bè
+$path-friends: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497739/image/icons/game/friends-50_jn62o9.png";
+.mi-friends {
+  background-color: #1f1f1f;
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-friends);
+  -webkit-mask-image: url($path-friends);
+}
+
+// Thêm mới, add
+$path-add-new: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497740/image/icons/game/add-50_cscinx.png";
+.mi-add-new {
+  background-color: #1f1f1f;
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-add-new);
+  -webkit-mask-image: url($path-add-new);
+}
+
+// Bàn cờ
+$path-chessboard: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497739/image/icons/game/chessboard-48_fukbrc.png";
+.mi-chessboard {
+  background-color: #1f1f1f;
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-chessboard);
+  -webkit-mask-image: url($path-chessboard);
+}
+
+// Tia sét
+$path-lightning: "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714497739/image/icons/game/lightning-50_zzilrs.png";
+.mi-lightning {
+  background-color: #1f1f1f;
+
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+
+  mask-size: cover;
+  -webkit-mask-size: cover;
+
+  mask-image: url($path-lightning);
+  -webkit-mask-image: url($path-lightning);
 }

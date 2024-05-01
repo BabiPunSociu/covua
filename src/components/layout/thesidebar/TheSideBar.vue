@@ -16,76 +16,92 @@
       <div class="menu-item-list scroller">
         <!-- Play -->
         <div class="parent-item-menu">
-          <a class="menu-item">
+          <router-link to="/play" class="menu-item">
             <div class="menu-item__icon">
               <!-- Icon -->
               <div class="mi mi-24 mi-sidebar-dashboard"></div>
             </div>
             <!-- Text -->
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.play[languageStore.getLanguage] }}
+              {{
+                this.$resource.resourcesSideBar.play[languageStore.getLanguage]
+              }}
             </div>
-          </a>
+          </router-link>
         </div>
 
         <!-- Puzzle -->
         <div class="parent-item-menu">
-          <a class="menu-item">
+          <router-link to="/pluzzles" class="menu-item">
             <div class="menu-item__icon">
               <div class="mi mi-24 mi-sidebar-cash"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.puzzle[languageStore.getLanguage] }}
+              {{
+                this.$resource.resourcesSideBar.puzzle[
+                  languageStore.getLanguage
+                ]
+              }}
             </div>
-          </a>
+          </router-link>
         </div>
 
         <!-- Learn -->
         <div class="parent-item-menu">
-          <a class="menu-item">
+          <router-link to="/learn" class="menu-item">
             <div class="menu-item__icon">
               <div class="mi mi-24 mi-sidebar-bank"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.learn[languageStore.getLanguage] }}
+              {{
+                this.$resource.resourcesSideBar.learn[languageStore.getLanguage]
+              }}
             </div>
-          </a>
+          </router-link>
         </div>
 
         <!-- Watch -->
         <div class="parent-item-menu">
-          <a class="menu-item">
+          <router-link to="/watch" class="menu-item">
             <div class="menu-item__icon">
               <div class="mi mi-24 mi-sidebar-purchase"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.watch[languageStore.getLanguage] }}
+              {{
+                this.$resource.resourcesSideBar.watch[languageStore.getLanguage]
+              }}
             </div>
-          </a>
+          </router-link>
         </div>
 
         <!-- News -->
         <div class="parent-item-menu">
-          <a class="menu-item">
+          <router-link to="/today" class="menu-item">
             <div class="menu-item__icon">
               <div class="mi mi-24 mi-sidebar-sale"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.news[languageStore.getLanguage] }}
+              {{
+                this.$resource.resourcesSideBar.news[languageStore.getLanguage]
+              }}
             </div>
-          </a>
+          </router-link>
         </div>
 
         <!-- Social -->
         <div class="parent-item-menu">
-          <a class="menu-item">
+          <router-link to="/social" class="menu-item">
             <div class="menu-item__icon">
               <div class="mi mi-24 mi-sidebar-invoice"></div>
             </div>
             <div class="menu-item__title block-user-select">
-              {{ this.$resource.resourcesSideBar.social[languageStore.getLanguage] }}
+              {{
+                this.$resource.resourcesSideBar.social[
+                  languageStore.getLanguage
+                ]
+              }}
             </div>
-          </a>
+          </router-link>
         </div>
 
         <!--         

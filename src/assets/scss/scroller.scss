@@ -14,8 +14,8 @@
 
 /* Tùy chỉnh thanh cuộn cho trình duyệt Chrome */
 .scroller::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: calc(6 / 14 * 1rem);
+  height: calc(6 / 14 * 1rem);
 }
 
 /* Tùy chỉnh track, đường ray */
@@ -40,6 +40,6 @@
 
 /* ========== Scroll cho table ========== */
 .table-scroll::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: calc(10 / 14 * 1rem);
+  height: calc(10 / 14 * 1rem);
 }

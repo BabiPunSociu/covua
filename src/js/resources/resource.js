@@ -20,6 +20,8 @@ import resourcesFooter from "./layoutcomponent/resourcefooter.js";
 import resourcesLogin from "./view/resourceslogin.js";
 import resourcesRegister from "./view/resourcesregister.js";
 import resourcesHome from "./view/resourceshome.js";
+import resourcesPlay from "./view/resourceplay.js";
+import resourcesPlayOnline from "./view/resourceplayonline.js";
 
 /**
  * Đối tượng cung cấp resources cho ứng dụng.
@@ -111,6 +113,16 @@ const NVDResource = {
    * Đối tượng cung cấp resources cho Home view-component.
    */
   resourcesHome,
+
+  /**
+   * Đối tượng cung cấp resources cho Play view-component.
+   */
+  resourcesPlay,
+
+  /**
+   * Đối tượng cung cấp resources cho PlayOnline view-component.
+   */
+  resourcesPlayOnline,
 };
 
 export default NVDResource;

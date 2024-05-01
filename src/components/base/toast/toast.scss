@@ -1,20 +1,20 @@
 /* ===== toast ===== */
 .toast-block {
   position: relative;
-  height: 44px;
-  margin-bottom: 8px;
+  height: calc(44 / 14 * 1rem);
+  margin-bottom: calc(8 / 14 * 1rem);
 
-  min-width: 450px; /* zero */
-  max-width: 650px; /* zero */
-  padding: 10px 16px; /* zero */
+  min-width: calc(450 / 14 * 1rem); /* zero */
+  max-width: calc(650 / 14 * 1rem); /* zero */
+  padding: calc(10 / 14 * 1rem) calc(16 / 14 * 1rem); /* zero */
   border-radius: var(--border-radius-default); /* zero */
-  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.078); /* zero */
+  box-shadow: 0 calc(4 / 14 * 1rem) calc(40 / 14 * 1rem) rgba(0, 0, 0, 0.078); /* zero */
 
   background-color: var(--color-white);
 
   .toast {
     /* visibility: visible; */
-    height: 24px; /* zero */
+    height: calc(24 / 14 * 1rem); /* zero */
     display: flex;
     align-items: center;
 
@@ -22,10 +22,10 @@
       flex: 1;
       font-weight: 400;
       color: #1f1f1f;
-      padding: 0 8px; /* zero */
+      padding: 0 calc(8 / 14 * 1rem); /* zero */
 
       .toast-title {
-        padding-right: 8px;
+        padding-right: calc(8 / 14 * 1rem);
       }
     }
 
@@ -34,7 +34,7 @@
       text-decoration: underline; /* zero */
       color: #1f1f1f; /* zero */
       cursor: pointer;
-      margin-right: 16px;
+      margin-right: calc(16 / 14 * 1rem);
     }
   }
 

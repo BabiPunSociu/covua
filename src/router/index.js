@@ -23,6 +23,30 @@ const router = createRouter({
           // component: HomeView
           component: () => import("../views/home/Home.vue"),
         },
+
+        // Render component 'Play'. => URL="/play"
+        {
+          path: "/play",
+          name: "PlayRouter",
+          // component: PlayView
+          component: () => import("../views/play/Play.vue"),
+        },
+
+        // Render component 'PlayOnline'. => URL="/play/online"
+        {
+          path: "/play/online",
+          name: "PlayOnlineRouter",
+          // component: PlayView
+          component: () => import("../views/playonline/PlayOnline.vue"),
+        },
+
+        // Render component 'PlayComputer'. => URL="/play/computer"
+        {
+          path: "/play",
+          name: "PlayComputerRouter",
+          // component: PlayView
+          component: () => import("../views/play/Play.vue"),
+        },
       ],
     },
 

@@ -12,6 +12,10 @@
 }
 
 :root {
+  /* ===== VALUE CONSTRUCTOR ===== */
+  --width-table-chess-board: 100%;
+  --height-table-chess-board: 100%;
+
   /* ===== FONT SIZE ===== */
   --font-size-title: 24px;
   --font-size-desktop: 14px;
@@ -64,12 +68,15 @@
 
   /* ===== MÀU GENERAL ===== */
   --color-white: #fff;
+  --color-white-light: #ffffffb8;
 
   /* ===== MÀU BACKGROUND ===== */
   --color-bg-login: #262421;
   --color-overlay-login: #302e2b;
   --color-bg-level-skill: #262522;
   --color-bg-sidebar: #041434;
+  --color-bg-section: beige;
+  --color-bg-section-selected: #ffe0b5;
 
   /* ===== MÀU BUTTONS ===== */
   --color-btn-google: #e60000;

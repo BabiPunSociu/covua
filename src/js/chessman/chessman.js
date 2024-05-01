@@ -54,7 +54,7 @@ class chessMan {
   getChessManName(chessManValue) {
     try {
       if (chessManValue >= 1 && chessManValue <= 12) {
-        return NVDResource.classChessMan[chessManValue];
+        return NVDResource.resourcesClassChessMan[chessManValue];
       }
     } catch (e) {
       console.error("Lỗi khi lấy tên quân cờ", e);

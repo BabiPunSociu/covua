@@ -1,7 +1,7 @@
 <template>
   <div class="toast-block">
     <div class="toast" :class="'toast-' + typeToast">
-      <div :class="'mi mi-24 mi-' + typeToast"></div>
+      <div :class="'mi mi-24 mi-' + typeToast + ' icon-resize'"></div>
       <div class="toast-text">
         <!-- Title -->
         <span class="toast-title">{{ title }}</span>
@@ -10,7 +10,10 @@
       </div>
       <!-- Nút hoàn tác không bắt buộc -->
       <a v-if="showButtonUndo" class="toast-button">Hoàn tác</a>
-      <div @click="closeToast" class="toast-close mi mi-24 mi-close"></div>
+      <div
+        @click="closeToast"
+        class="toast-close mi mi-24 mi-close icon-resize"
+      ></div>
     </div>
   </div>
 </template>

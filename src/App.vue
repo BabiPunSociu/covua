@@ -28,6 +28,23 @@
       v-if="dataLoading.showLoading"
       :isLoadingControl="false"
     ></m-loading>
+
+    <vue-identify-network @network-speed="networlSpeedChanged">
+      <span slot="unknown"> REEE! Unable to identify your network type. </span>
+      <span slot="slow">
+        <img
+          src="../../assets/images/1378473.e42c196c.507x286o.0efca59bad6a.png"
+          alt="you got slow internet"
+        />
+      </span>
+      <span slot="fast">
+        <video width="400" controls>
+          <source src="../../assets/videos/bear.mp4" type="video/mp4" />
+
+          Your browser does not support HTML5 video.
+        </video>
+      </span>
+    </vue-identify-network>
   </div>
 </template>
 
@@ -37,9 +54,16 @@ import toast from "./js/classconstructor/toast.js";
 // import dialog để có class gắn vào DataType.
 import dialog from "./js/classconstructor/dialog.js";
 
+import { VueIdentifyNetwork } from "vue-identify-network";
+
 import { useLanguageStore } from "@/stores/languagestore.js";
 export default {
   name: "App",
+
+  components: {
+    "vue-identify-network": VueIdentifyNetwork,
+  },
+
   data() {
     return {
       /**
@@ -429,6 +453,57 @@ export default {
       // Tạo dialog thông báo lỗi
       this.dialogError(message);
     },
+
+    /* ========================== Network ========================== */
+    /**
+     * Hàm xử lý sự kiện thay đổi tốc độ mạng.
+     * @param {Number} newSpeed Giá trị tốc độ mạng mới.
+     */
+    networlSpeedChanged(newSpeed) {
+      console.log(`Network speed: ${newSpeed}`);
+
+      // Kiểm tra kết nối mạng
+      if (!navigator.onLine) {
+        // Hiển thị dialog thông báo lỗi, mất kết nối mạng
+        this.dialogError(
+          this.$resource.resourcesDialog.message.network.offline[
+            this.languageStore.getLanguage
+          ]
+        );
+      }
+      // Mạng không tốt: 0.4 0.35
+      else if (newSpeed <= 1) {
+        // Hiển thị toast massages.
+        this.toastWarning(
+          this.$resource.resourcesDialog.message.network.badConnection[
+            this.languageStore.getLanguage
+          ]
+        );
+      }
+      // Mạng tạm chấp nhận: 1.45 1.3
+      else if (newSpeed <= 1.5) {
+        // Hiện thị toast messages.
+        this.toastWarning(
+          this.$resource.resourcesDialog.message.network.averageConnection[
+            this.languageStore.getLanguage
+          ]
+        );
+      }
+      // Mạng tốt: 1.7 3.85
+      else if (newSpeed <= 5) {
+        // Hiện thị toast messages.
+        this.toastWarning(
+          this.$resource.resourcesDialog.message.network.goodConnection[
+            this.languageStore.getLanguage
+          ]
+        );
+      }
+      // Mạng rất tốt (Lag rất ít): 10
+      else {
+      }
+    },
+
+    /* ======================== END Network ======================== */
   },
 };
 </script>
@@ -445,8 +520,8 @@ export default {
   .toast-container {
     z-index: 20;
     position: fixed;
-    right: 24px;
-    bottom: 24px;
+    right: calc(24 / 14 * 1rem);
+    bottom: calc(24 / 14 * 1rem);
     display: flex;
     flex-direction: column; /* Hiện theo chiều dọc */
     background-color: transparent;
@@ -460,7 +535,7 @@ export default {
   opacity: 0;
   scale: 0;
   /* rotate: 360deg; */
-  translate: 0 100px;
+  translate: 0 calc(100 / 14 * 1rem);
 }
 .v-enter-to {
   opacity: 1;
@@ -482,7 +557,7 @@ export default {
 }
 .v-leave-to {
   opacity: 0;
-  translate: 1000px;
+  translate: calc(1000 / 14 * 1rem);
   /* rotate: 360deg; */
 }
 

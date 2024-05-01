@@ -6,7 +6,7 @@
       @click="toggleShowComboboxLanguage"
     >
       <!-- Icon -->
-      <div class="mi mi-24 mi-language-world"></div>
+      <div class="mi mi-24 icon-resize mi-language-world"></div>
     </a>
     <div class="language-list" v-if="isShowLanguageList">
       <m-combobox

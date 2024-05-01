@@ -37,7 +37,11 @@
 
       transform: translateX(50%) translateY(-50%);
 
-      font-size: calc(10 / 14 * 1rem);
+      font-size: calc(20 / 14 * 1rem); // Mobile
+      font-weight: bold;
+      @media screen and (min-width: 601px) {
+        font-size: calc(10 / 14 * 1rem);
+      }
     }
   }
 

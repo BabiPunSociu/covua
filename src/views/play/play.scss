@@ -1,0 +1,153 @@
+.play-container {
+  width: 100%;
+  height: 100%;
+
+  .board-layout-main {
+    background: var(--color-bg-section);
+    flex-grow: 1;
+    height: 100%;
+    padding: 0.5rem;
+
+    display: none;
+    /* ========== Tablets ========== */
+    @media screen and (min-width: 480px) {
+      display: none;
+    }
+    /* ========== Laptops ========== */
+    @media screen and (min-width: 768px) {
+      display: flex;
+    }
+    /* ========== Large Laptops ========== */
+    @media screen and (min-width: 1024px) {
+      display: flex;
+    }
+    /* ========== VERY Large Laptops ========== */
+    @media screen and (min-width: 1200px) {
+      display: flex;
+    }
+
+    .board-layout-player-top,
+    .board-layout-player-bottom {
+      width: 100%;
+      height: 8%;
+
+      img {
+        height: 100%;
+        width: auto;
+        object-fit: cover;
+        border-radius: var(--border-radius-default);
+      }
+    }
+
+    .board-layout-chessboard {
+      position: relative;
+      width: 100%;
+      flex-grow: 1;
+
+      .overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        z-index: 1;
+      }
+
+      .chess-board {
+        width: var(--width-table-chess-board);
+        height: var(--height-table-chess-board);
+        border-radius: var(--border-radius-default);
+      }
+    }
+  }
+
+  .board-layout-sidebar {
+    background: var(--color-bg-section);
+    height: 100%;
+    width: 100%; // Mobile 320px
+    /* ========== Tablets ========== */
+    @media screen and (min-width: 480px) {
+      width: 100%;
+    }
+    /* ========== Laptops ========== */
+    @media screen and (min-width: 768px) {
+      width: calc((100% - var(--gap)) / 2);
+    }
+    /* ========== Large Laptops ========== */
+    @media screen and (min-width: 1024px) {
+      width: 43%;
+    }
+    /* ========== VERY Large Laptops ========== */
+    @media screen and (min-width: 1200px) {
+      width: 30%;
+    }
+
+    .direct-menu-header {
+      position: relative;
+      text-align: center;
+      width: 100%;
+
+      &::before {
+        content: "";
+
+        background: radial-gradient(
+          180% 160% at top center,
+          #ffe0b5 40%,
+          transparent 0
+        );
+
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 0;
+      }
+
+      h1.direct-menu-header-title {
+        position: relative;
+        font-size: calc(31 / 14 * 1rem);
+        font-family: montserrat sansita;
+        margin: 1rem;
+        font-weight: 800;
+        line-height: 1;
+        z-index: 1;
+      }
+
+      .direct-menu-header-img {
+        width: 88px;
+        height: 88px;
+        max-width: 88px;
+        max-height: 88px;
+
+        margin: 1rem auto;
+      }
+    }
+
+    .direct-menu-main {
+      flex-grow: 1;
+      .direct-menu-items {
+        .btn-menu-link {
+          height: calc(88 / 14 * 1rem);
+          padding: 1rem 0.5rem;
+          width: calc(100% - 1rem);
+
+          .content {
+            .title {
+              color: var(--color-white);
+              font-size: calc(22 / 14 * 1rem);
+              font-family: montserrat sansita;
+            }
+
+            .description {
+              color: var(--color-white-light);
+            }
+          }
+        }
+      }
+
+      .direct-menu-sub-items {
+        padding: 1rem 0.5rem;
+      }
+    }
+  }
+}

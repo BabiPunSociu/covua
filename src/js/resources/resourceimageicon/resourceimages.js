@@ -37,6 +37,21 @@ const resourcesImage = {
 
   // folder
   logo: {
+    /**
+     * Avatar đen mặc định (20x20)
+     */
+    avatarBlack:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714385840/image/images/logo/avatar_black_20_20_ke6sa3.png",
+
+    /**
+     * Avatar trắng mặc định (20x20)
+     */
+    avatarWhite:
+      "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714385841/image/images/logo/avatar_white_20_20_r6tktw.png",
+
+    /**
+     * Logo app
+     */
     logoApp:
       "https://res.cloudinary.com/nvdwebsitecovua/image/upload/v1714121003/image/images/logo/logo-app_xnq5ff.png",
   },

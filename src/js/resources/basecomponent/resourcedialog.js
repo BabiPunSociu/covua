@@ -30,7 +30,33 @@ const resourcesDialog = {
       "vi-VN": "Thông tin!",
     },
   },
-  message: {},
+  message: {
+    network: {
+      offline: {
+        "en-US": "You are OFFLINE!",
+        "vi-VN": "Mất kết nối mạng!",
+      },
+      badConnection: {
+        "en-US": "Bad connection!",
+        "vi-VN": "Kết nối không tốt!",
+      },
+
+      averageConnection: {
+        "en-US": "Average connection!",
+        "vi-VN": "Kết nối tạm được!",
+      },
+
+      goodConnection: {
+        "en-US": "Good connection!",
+        "vi-VN": "Kết nối tốt!",
+      },
+
+      veryGoodConnection: {
+        "en-US": "Very good connection!",
+        "vi-VN": "Kết nối rất tốt!",
+      },
+    },
+  },
 };
 
 export default resourcesDialog;

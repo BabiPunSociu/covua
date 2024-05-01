@@ -1,6 +1,5 @@
 <template>
-  <div class="container">
-    <!-- <video
+  <!-- <video
       style="display: none"
       height="90%"
       controls
@@ -14,59 +13,62 @@
       />
     </video> -->
 
-    <table :key="reRender">
-      <tr
-        v-for="(row, indexRow) in theStartMatrix"
-        :key="row"
-        :data-row="indexRow"
+  <table ref="tableChessBoard" :key="reRender">
+    <tr
+      v-for="(row, indexRow) in theStartMatrix"
+      :key="indexRow"
+      :data-row="indexRow"
+    >
+      <!-- Thuộc tính v-draggable để chỉ thị thẻ <td> là một vùng THẢ -->
+      <!-- @dragover.prevent="handleDragOver" -->
+      <td
+        v-for="(cell, indexCol) in row"
+        :ref="'td' + indexRow.toString() + indexCol"
+        :key="indexCol"
+        :data-col="indexCol"
+        :class="{
+          'cell-color': true,
+          'cell-color-caro': (indexRow + indexCol) % 2 !== 0,
+          'border-radius-top-left': indexRow === 0 && indexCol === 0,
+          'border-radius-top-right': indexRow === 0 && indexCol === 7,
+          'border-radius-bottom-left': indexRow === 7 && indexCol === 0,
+          'border-radius-bottom-right': indexRow === 7 && indexCol === 7,
+        }"
+        @dragenter="handleDragEnter($event, cell, indexRow, indexCol)"
+        @dragover.prevent="handleDragOver($event)"
+        @dragleave="handleDragLeave"
+        @drop="handleDrop"
       >
-        <!-- Thuộc tính v-draggable để chỉ thị thẻ <td> là một vùng THẢ -->
-        <!-- @dragover.prevent="handleDragOver" -->
-        <td
-          v-for="(cell, indexCol) in row"
-          :ref="'td' + indexRow.toString() + indexCol"
-          :key="cell"
-          :data-col="indexCol"
-          :class="{
-            'cell-color': true,
-            'cell-color-caro': (indexRow + indexCol) % 2 !== 0,
-          }"
-          @dragenter="handleDragEnter($event, cell, indexRow, indexCol)"
-          @dragover.prevent="handleDragOver($event)"
-          @dragleave="handleDragLeave"
-          @drop="handleDrop"
+        <!-- Thuộc tính draggable="true" để cho phép Drag -->
+        <!-- Hiển thị ảnh quân cờ bằng class -->
+        <div
+          v-if="cell !== this.$enum.chessMan.empty"
+          :ref="'div' + indexRow.toString() + indexCol"
+          :data-chessman="cell"
+          class="chess-man chess-man-neo"
+          :class="this.$resource.resourcesClassChessMan[cell]"
+          draggable="true"
+          @dragstart="handleDragStart"
+          @dragend="handleDragEnd"
+        ></div>
+        <!-- Đánh dấu hàng ở cột 0 -->
+        <span
+          class="maker-row"
+          :class="{ 'maker-text-white': (indexRow + indexCol) % 2 !== 0 }"
+          v-if="indexCol === 0"
+          >{{ indexRow }}</span
         >
-          <!-- Thuộc tính draggable="true" để cho phép Drag -->
-          <!-- Hiển thị ảnh quân cờ bằng class -->
-          <div
-            v-if="cell !== this.$enum.chessMan.empty"
-            :ref="'div' + indexRow.toString() + indexCol"
-            :data-chessman="cell"
-            class="chess-man chess-man-neo"
-            :class="this.$resource.classChessMan[cell]"
-            draggable="true"
-            @dragstart="handleDragStart"
-            @dragend="handleDragEnd"
-          ></div>
-          <!-- Đánh dấu hàng ở cột 0 -->
-          <span
-            class="maker-row"
-            :class="{ 'maker-text-white': (indexRow + indexCol) % 2 !== 0 }"
-            v-if="indexCol === 0"
-            >{{ indexRow }}</span
-          >
-          <span
-            class="maker-col"
-            :class="{ 'maker-text-white': (indexRow + indexCol) % 2 !== 0 }"
-            v-if="indexRow === 7"
-            >{{ indexCol }}</span
-          >
+        <span
+          class="maker-col"
+          :class="{ 'maker-text-white': (indexRow + indexCol) % 2 !== 0 }"
+          v-if="indexRow === 7"
+          >{{ indexCol }}</span
+        >
 
-          <span class="maker-cell">{{ indexRow + " " + indexCol }}</span>
-        </td>
-      </tr>
-    </table>
-  </div>
+        <span class="maker-cell">{{ indexRow + " " + indexCol }}</span>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script>
