@@ -29,11 +29,13 @@
 
       <!-- Chess Board -->
       <div class="board-layout-chessboard flex flex-center">
-        <div class="overlay"></div>
+        <!-- <div class="overlay"></div> -->
         <!-- Chess Board -->
         <m-chess-board
           class="chess-board"
-          :colorPlayer="this.$enum.colorPlayer.white"
+          :colorPlayer="this.gameControl.colorPlayer"
+          :isEndGame="false"
+          @endGame="handleEndGameOnBoard"
           ref="chessBoard"
         ></m-chess-board>
       </div>
@@ -754,7 +756,7 @@ import { useLanguageStore } from "@/stores/languagestore.js";
 import { useUserStore } from "@/stores/userstore";
 
 export default {
-  name: "PlayOnline",
+  name: "Game",
 
   data() {
     return {
@@ -767,6 +769,17 @@ export default {
        * Đối tượng chứa store thông tin User.
        */
       userStore: useUserStore(),
+
+      /**
+       * Đối tượng chứa thông tin về điều khiển ván cờ
+       */
+      gameControl: {
+        /**
+         * Người chơi cầm quân màu ?
+         * Mặc định: quân trắng.
+         */
+        colorPlayer: this.$enum.colorPlayer.white,
+      },
 
       /**
        * Đối tượng đánh dấu section đang được chọn.
@@ -836,6 +849,17 @@ export default {
   },
 
   methods: {
+    /* =================== START GAME CHESSBOARD ==================== */
+    /**
+     * Hàm xử lý sự kiện kết thúc game trên bàn cờ.
+     * @author NVDUNG (05-05-2024)
+     */
+    handleEndGameOnBoard() {
+      console.log("handleEndGameOnBoard");
+    },
+    /* =================== END GAME CHESSBOARD ==================== */
+
+    /* =================== START SIDEBAR ==================== */
     /**
      * Hàm thực hiện chuyển hướng đến trang game/live
      * @param {string} gameId Định danh game
@@ -985,6 +1009,7 @@ export default {
     sectionSelectedChanged(newString) {
       this.sectionSelected = newString;
     },
+    /* =================== END SIDEBAR ==================== */
   },
 
   mounted() {
@@ -1011,5 +1036,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url(./play-online.scss);
+@import url(./game.scss);
 </style>

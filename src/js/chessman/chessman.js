@@ -327,10 +327,11 @@ class chessMan {
    *
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
+   * @param {Boolean} update True - Cập nhật vị trí quân cờ, False - Không cập nhật.
    * @return {Boolean} True - Di chuyển hợp lệ, False - Không di chuyển hợp lệ.
    * @author: NVDung (19-02-2024)
    */
-  moveTo(boardStateMatrix, targetChessMan) {
+  moveTo(boardStateMatrix, targetChessMan, update = true) {
     try {
       // Kiểm tra ăn quân cờ hợp lệ
       if (
@@ -347,13 +348,14 @@ class chessMan {
 
         if (
           // Nếu đang di chuyển quân TRẮNG -> Kiểm tra chiếu tướng Vua TRẮNG
-          (NVDEnum.chessMan.whiteKing <=
+          ((NVDEnum.chessMan.whiteKing <=
             this.id <=
             NVDEnum.chessMan.whitePawn &&
             !this.isWhiteKingCheck(boardStateMatrixClone)) ||
-          // Nếu di chuyển quân ĐEN -> Kiểm tra chiếu tướng Vua ĐEN
-          (NVDEnum.chessMan.blackKing <= this.id &&
-            !this.isBlackKingCheck(boardStateMatrixClone))
+            // Nếu di chuyển quân ĐEN -> Kiểm tra chiếu tướng Vua ĐEN
+            (NVDEnum.chessMan.blackKing <= this.id &&
+              !this.isBlackKingCheck(boardStateMatrixClone))) &&
+          update
         ) {
           // Hợp lệ
           // Cập nhật vị trí quân cờ trên bàn cờ THẬT
@@ -387,7 +389,7 @@ class chessMan {
           this.id <= NVDEnum.chessMan.whitePawn
         ) {
           // Kiểm tra chiếu tướng Vua TRẮNG
-          if (!this.isWhiteKingCheck(boardStateMatrixClone)) {
+          if (!this.isWhiteKingCheck(boardStateMatrixClone) && update) {
             // Không chiếu tướng Vua Trắng -> Hợp lệ.
             // Cập nhật vị trí quân cờ trên bàn cờ THẬT
             this.updateMatrix(boardStateMatrix, targetChessMan);
@@ -403,7 +405,7 @@ class chessMan {
         // Nếu di chuyển quân ĐEN
         else if (NVDEnum.chessMan.blackKing <= this.id) {
           // Kiểm tra chiếu tướng Vua ĐEN
-          if (!this.isBlackKingCheck(boardStateMatrixClone)) {
+          if (!this.isBlackKingCheck(boardStateMatrixClone) && update) {
             // Không chiếu tướng Vua ĐEN -> Hợp lệ.
             // Cập nhật vị trí quân cờ trên bàn cờ THẬT
             this.updateMatrix(boardStateMatrix, targetChessMan);

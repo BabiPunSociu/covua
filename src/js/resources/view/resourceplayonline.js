@@ -122,9 +122,54 @@ const resourcesPlayOnline = {
       },
     },
 
-    sectionGames: {},
+    sectionGames: {
+      tabNavigation: {
+        textArchive: {
+          "en-US": "Archive",
+          "vi-VN": "Lưu trữ",
+        },
+        textWatch: {
+          "en-US": "Watch",
+          "vi-VN": "Theo dõi",
+        },
+      },
+      inputSearch: {
+        textUsername: {
+          "en-US": "Username...",
+          "vi-VN": "Tên người dùng",
+        },
+      },
 
-    sectionPlayers: {},
+      textNoMatchFound: {
+        "en-US": "No matches found.",
+        "vi-VN": "Không có ván đấu nào được tìm thấy.",
+      },
+
+      textGoToFullArchive: {
+        "en-US": "Go to full archive",
+        "vi-VN": "Đi tới kho lưu trữ đầy đủ",
+      },
+    },
+
+    sectionPlayers: {
+      tabNavigation: {
+        textFriends: {
+          "en-US": "Friends",
+          "vi-VN": "Bạn bè",
+        },
+        textAllPlayers: {
+          "en-US": "All Players",
+          "vi-VN": "Mọi người",
+        },
+        textStreaming: "Streaming",
+      },
+      inputSearch: {
+        textUsername: {
+          "en-US": "Username...",
+          "vi-VN": "Tên người dùng",
+        },
+      },
+    },
   },
 };
 

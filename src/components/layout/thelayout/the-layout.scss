@@ -4,9 +4,14 @@
   gap: 0;
 
   .main {
-    flex-grow: 1;
-    width: 100%;
     height: 100vh;
     background-color: var(--main-background-color);
+
+    flex-grow: 1;
+    width: 100%; // Mobile
+    /* ========== Large Laptops ========== */
+    @media screen and (min-width: 1024px) {
+      width: 80%;
+    }
   }
 }

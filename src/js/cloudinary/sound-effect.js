@@ -10,7 +10,7 @@ function playSoundEffect(urlSoundFile) {
     const audio = new Audio(urlSoundFile);
     audio.play();
   } catch (error) {
-    console.log("Lỗi khi phát âm thanh", error);
+    console.error("Lỗi khi phát âm thanh", error);
   }
 }
 

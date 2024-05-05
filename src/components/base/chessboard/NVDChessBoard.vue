@@ -1,3 +1,7 @@
+<!--
+  Event: 
+    1. @endGame -> return number of result match.  
+-->
 <template>
   <!-- <video
       style="display: none"
@@ -101,15 +105,52 @@ export default {
        * Hàng đợi chứa các đối tượng targetChessMan.
        */
       targetChessManQueue: [],
-
-      /**
-       * Chơi quân cờ màu ?
-       */
-      colorPlayer: null,
     };
   },
 
+  props: {
+    /**
+     * Chơi quân cờ màu ?
+     */
+    colorPlayer: {
+      type: Number, // NVDEnum.colorPlayer;
+      required: true,
+    },
+
+    /**
+     * Game đã kết thúc chưa?
+     * true: Kết thúc.
+     * false: Chưa kết thúc.
+     * Để kiểm soát được có cho phép người chơi thực hiện thao tác không?
+     */
+    isEndGame: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+  },
+
+  created() {
+    // Thực hiện đảo ngược ma trận nếu người dùng chơi quân cờ ĐEN
+    if (this.colorPlayer === this.$enum.colorPlayer.black) {
+      // this.reverseMatrix();
+    }
+  },
+
   methods: {
+    /**
+     * Xoay 180deg ma trận, reverse matrix.
+     * @author: NVDung (04-05-2024)
+     */
+    reverseMatrix() {
+      // Thực hiện reverse các phần tử trong từng row của ma trận.
+      for (let row of this.theStartMatrix) {
+        row = row.reverse();
+      }
+      // Thực hiện reverse các hàng
+      this.theStartMatrix = this.theStartMatrix.reverse();
+    },
+
     /* ================== DRAG - DROP ================== */
     /**
      * Xử lý sự kiện khi BẮT ĐẦU Drag:
@@ -270,11 +311,40 @@ export default {
 
       event.preventDefault();
       try {
-        let isLegalMove = this.sourceChessMan.moveTo(
-          this.theStartMatrix,
-          this.targetChessManQueue[0]
-        );
-        console.log(isLegalMove);
+        // Kiểm tra ván đấu đã kết thúc chưa?
+        if (this.isEndGame) {
+          console.log("Ket thuc vong choi");
+          return;
+        }
+
+        if (
+          // Nếu chơi quân trắng và di chuyển quân trắng
+          (this.colorPlayer === this.$enum.colorPlayer.white &&
+            this.sourceChessMan.id >= this.$enum.chessMan.whiteKing &&
+            this.sourceChessMan.id <= this.$enum.chessMan.whitePawn) ||
+          // Nếu chơi quân đen và di chuyển quân đen
+          (this.colorPlayer === this.$enum.colorPlayer.black &&
+            this.sourceChessMan.id >= this.$enum.chessMan.blackKing &&
+            this.sourceChessMan.id <= this.$enum.chessMan.blackPawn)
+        ) {
+          let isLegalMove = this.sourceChessMan.moveTo(
+            this.theStartMatrix,
+            this.targetChessManQueue[0]
+          );
+
+          // Nếu di chuyển hợp lệ => Kiểm tra kết thúc ván cờ.
+          if (isLegalMove) {
+            /* ===== Kiểm tra kết thúc ván cờ ===== */
+            let resultMatch = this.gameOverCheck();
+            // Nếu giá trị resultMatch khác "đang diễn ra"
+            if (resultMatch != this.$enum.resultMatch.happenning) {
+              // Phát sự kiện kết thúc cho component cha.
+              this.$emit("endGame", resultMatch);
+            }
+          }
+        } else {
+          console.log("Thực hiện quân cờ không hợp lệ.");
+        }
       } catch (e) {
         console.error("handleDrop...");
         console.error(e);
@@ -320,17 +390,25 @@ export default {
     /* ================== GAME ================== */
     /**
      * Kiểm tra kết thúc ván cờ?
-     *
+     * @author: NVDung (13-03-2024)
      */
     gameOverCheck() {
       try {
         // Tạo biến lưu giá trị trả về
         let result = this.$enum.resultMatch.happenning;
 
+        /**
+         * Màu cờ của đối thủ
+         */
+        let colorOpponent =
+          this.colorPlayer === this.$enum.colorPlayer.white
+            ? this.$enum.colorPlayer.black
+            : this.$enum.colorPlayer.white;
+
         // Kiểm tra kết thúc trên bàn cờ.
         let checkEndGame = this.$checkEndGame(
           this.theStartMatrix,
-          this.colorPlayer
+          colorOpponent
         );
 
         switch (checkEndGame) {

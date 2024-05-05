@@ -1,20 +1,19 @@
 .menu-container {
-  width: 45%; // Mobile
+  width: 60%; // Mobile: 320px
   height: 100vh;
   background-color: var(--color-bg-sidebar);
   display: none; // Mobile
 
   /* ========== Tablets ========== */
   @media screen and (min-width: 481px) {
-    width: 30%;
+    width: 40%;
   }
   /* ========== Laptops ========== */
-  @media screen and (min-width: 769px) {
-    display: block;
-    width: 20%;
+  @media screen and (min-width: 768px) {
+    width: 25%;
   }
   /* ========== Large Laptops ========== */
-  @media screen and (min-width: 1025px) {
+  @media screen and (min-width: 1024px) {
     display: block;
     width: 20%;
   }

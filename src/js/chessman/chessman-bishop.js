@@ -91,13 +91,14 @@ class chessManBishop extends chessMan {
    *
    * @param {Number[][]} boardStateMatrix Ma trận bàn cờ hiện tại.
    * @param {targetChessMan} targetChessMan Đối tượng targetChessMan.
+   * @param {Boolean} update True - Cập nhật vị trí quân cờ, False - Không cập nhật.
    * @return {Boolean} True - Di chuyên hợp lệ, False - Không di chuyên hợp lệ.
    * @author: NVDung (19-02-2024)
    */
-  moveTo(boardStateMatrix, targetChessMan) {
+  moveTo(boardStateMatrix, targetChessMan, update = true) {
     try {
       // Gọi đến Class cha để thực hiện di chuyển
-      let isLegalMove = super.moveTo(boardStateMatrix, targetChessMan);
+      let isLegalMove = super.moveTo(boardStateMatrix, targetChessMan, update);
 
       return isLegalMove;
 

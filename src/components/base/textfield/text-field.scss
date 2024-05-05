@@ -83,12 +83,13 @@
 
     // Icon Actions
     a {
-      position: relative; /* zero */
+      position: absolute; /* zero */
       /* zero: 20px (icon) + 8px (pading-right-input) = 28px */
-      right: calc(28 / 14 * 1rem);
-
+      // right: calc(28 / 14 * 1rem); /* zero */
+      right: 0;
       /* Kích thước icon */
-      width: calc(20 / 14 * 1rem);
+      // width: calc(20 / 14 * 1rem); /* zero */
+      width: calc(25 / 14 * 1rem);
       height: calc(var(--btn-height-desktop) / 14 * 1rem);
 
       display: flex;

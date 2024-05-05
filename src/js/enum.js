@@ -99,9 +99,9 @@ const NVDEnum = {
     happenning: 0,
 
     /**
-     * Kết quả THUA
+     * Kết quả THẮNG
      */
-    lose: 1,
+    win: 1,
 
     /**
      * Kết quả HÒA

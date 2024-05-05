@@ -20,7 +20,11 @@
       <div class="board-layout-chessboard flex flex-center">
         <div class="overlay"></div>
         <!-- Chess Board -->
-        <m-chess-board class="chess-board" ref="chessBoard"></m-chess-board>
+        <m-chess-board
+          class="chess-board"
+          :colorPlayer="this.$enum.colorPlayer.white"
+          ref="chessBoard"
+        ></m-chess-board>
       </div>
       <div class="board-layout-player-bottom flex flex-center">
         <img
@@ -40,7 +44,7 @@
         </span>
       </div>
     </div>
-    
+
     <div class="board-layout-sidebar flex flex-column">
       <div class="direct-menu-header">
         <h1 class="direct-menu-header-title">

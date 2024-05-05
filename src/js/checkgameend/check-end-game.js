@@ -67,7 +67,8 @@ function findLegalMoves(boardStateMatrix, colorPlayer) {
                 );
                 const isLegalMove = sourceChessMan.moveTo(
                   boardStateMatrix,
-                  targetChessManObject
+                  targetChessManObject,
+                  false
                 );
 
                 if (isLegalMove) {
@@ -91,19 +92,19 @@ function findLegalMoves(boardStateMatrix, colorPlayer) {
 
 /* ============================== CÁC HÀM VỀ CỜ THẮNG - THUA ============================== */
 /**
- * Kiểm tra Checkmate:
+ * Kiểm tra Checkmate: (Đối thủ bị checkmate không? CÓ - Mình THẮNG)
  * - Chiếu tướng đối thủ.
  * - Đối thủ không có bất kì nước đi hợp lệ nào để thoát khỏi chiếu.
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
- * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện.
+ * @param {Number} colorPlayer Màu cờ người chơi đối thủ (người cần kiểm tra bị chiếu).
  *
  * @returns {Boolean} True - Checkmate, False - Không checkmate.
  * @author NVDung (16-03-2024)
  */
 function isCheckmate(boardStateMatrix, colorPlayer) {
   try {
-    // Kiểm tra màu cờ của người chơi đang thực hiện
+    // Kiểm tra màu cờ của người cần kiểm tra
     const isWhite = colorPlayer === NVDEnum.colorPlayer.white;
     const isBlack = colorPlayer === NVDEnum.colorPlayer.black;
 
@@ -115,7 +116,9 @@ function isCheckmate(boardStateMatrix, colorPlayer) {
     // Tìm danh sách nước đi hợp lệ
     let listLegalMoves = findLegalMoves(boardStateMatrix, colorPlayer);
 
-    // Tạo đối tượng chessMan bất kì, để dùng phương thức kiểm tra chiếu tướng
+    /**
+     * Tạo đối tượng chessMan bất kì, để dùng phương thức kiểm tra chiếu tướng
+     */
     const chessMan = createChessMan(NVDEnum.chessMan.whiteKing, 0, 0);
 
     // Kiểm tra chiếu tướng && không có nước đi hợp lệ để thoát khỏi.
@@ -258,7 +261,7 @@ function fiftyMoveRuleCheck(boardStateMatrix, colorPlayer) {}
  * Kiểm tra KẾT THÚC ván cờ theo trạng thái bàn cờ.
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
- * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện: 0 - TRẮNG, 1 - ĐEN.
+ * @param {Number} colorPlayer Màu cờ người chơi đối thủ: 0 - TRẮNG, 1 - ĐEN.
  *
  * @returns {Number} 0 - Đang diễn ra, 1 - THUA, 2 - HÒA.
  * @author NVDung (16-03-2024)
@@ -266,11 +269,11 @@ function fiftyMoveRuleCheck(boardStateMatrix, colorPlayer) {}
 function checkEndGame(boardStateMatrix, colorPlayer) {
   // Kiem tra checkmate
   if (isCheckmate(boardStateMatrix, colorPlayer)) {
-    return NVDEnum.resultMatch.lose;
+    return NVDEnum.resultMatch.win;
   }
 
   // Kiem tra draw
-  if (isDraw(boardStateMatrix)) {
+  if (isDraw(boardStateMatrix, colorPlayer)) {
     return NVDEnum.resultMatch.draw;
   }
 

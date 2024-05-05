@@ -28,7 +28,8 @@
       @click="iConActionClick"
       v-on:mouseover="isHover = true"
       v-on:mouseleave="isHover = false"
-      ><div class="mi mi-24 mi-search icon-resize"></div
+    >
+      <div class="mi mi-20 mi-search icon-resize" :class="classIcon"></div
     ></a>
     <span class="warning" v-if="isError"> <slot name="warning"></slot></span>
   </div>
@@ -46,6 +47,11 @@ export default {
     };
   },
   props: {
+    classIcon: {
+      type: String,
+      default: "",
+      required: false,
+    },
     /**
      * Set tooltip cho label
      */
