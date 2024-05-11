@@ -348,28 +348,29 @@ class chessMan {
 
         if (
           // Nếu đang di chuyển quân TRẮNG -> Kiểm tra chiếu tướng Vua TRẮNG
-          ((NVDEnum.chessMan.whiteKing <=
-            this.id <=
-            NVDEnum.chessMan.whitePawn &&
+          (NVDEnum.chessMan.whiteKing <= this.id &&
+            this.id <= NVDEnum.chessMan.whitePawn &&
             !this.isWhiteKingCheck(boardStateMatrixClone)) ||
-            // Nếu di chuyển quân ĐEN -> Kiểm tra chiếu tướng Vua ĐEN
-            (NVDEnum.chessMan.blackKing <= this.id &&
-              !this.isBlackKingCheck(boardStateMatrixClone))) &&
-          update
+          // Nếu di chuyển quân ĐEN -> Kiểm tra chiếu tướng Vua ĐEN
+          (NVDEnum.chessMan.blackKing <= this.id &&
+            !this.isBlackKingCheck(boardStateMatrixClone))
         ) {
-          // Hợp lệ
-          // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-          this.updateMatrix(boardStateMatrix, targetChessMan);
-          // Phát âm thanh ăn quân cờ
-          playSoundEffect(
-            "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438790/sound/capture.mp3"
-          );
+          if (update) {
+            // Hợp lệ
+            // Cập nhật vị trí quân cờ trên bàn cờ THẬT
+            this.updateMatrix(boardStateMatrix, targetChessMan);
+            // Phát âm thanh ăn quân cờ
+            playSoundEffect(
+              "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438790/sound/capture.mp3"
+            );
+          }
 
           return true;
         }
 
         return false;
       }
+
       // Kiểm tra di chuyển quân cờ hợp lệ
       else if (
         !targetChessMan.id &&
@@ -389,14 +390,17 @@ class chessMan {
           this.id <= NVDEnum.chessMan.whitePawn
         ) {
           // Kiểm tra chiếu tướng Vua TRẮNG
-          if (!this.isWhiteKingCheck(boardStateMatrixClone) && update) {
+          if (!this.isWhiteKingCheck(boardStateMatrixClone)) {
             // Không chiếu tướng Vua Trắng -> Hợp lệ.
-            // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-            this.updateMatrix(boardStateMatrix, targetChessMan);
-            // Phát âm thanh di chuyển quân cờ
-            playSoundEffect(
-              "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
-            );
+
+            if (update) {
+              // Cập nhật vị trí quân cờ trên bàn cờ THẬT
+              this.updateMatrix(boardStateMatrix, targetChessMan);
+              // Phát âm thanh di chuyển quân cờ
+              playSoundEffect(
+                "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
+              );
+            }
 
             return true;
           }
@@ -405,14 +409,17 @@ class chessMan {
         // Nếu di chuyển quân ĐEN
         else if (NVDEnum.chessMan.blackKing <= this.id) {
           // Kiểm tra chiếu tướng Vua ĐEN
-          if (!this.isBlackKingCheck(boardStateMatrixClone) && update) {
+          if (!this.isBlackKingCheck(boardStateMatrixClone)) {
             // Không chiếu tướng Vua ĐEN -> Hợp lệ.
-            // Cập nhật vị trí quân cờ trên bàn cờ THẬT
-            this.updateMatrix(boardStateMatrix, targetChessMan);
-            // Phát âm thanh di chuyển quân cờ
-            playSoundEffect(
-              "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
-            );
+
+            if (update) {
+              // Cập nhật vị trí quân cờ trên bàn cờ THẬT
+              this.updateMatrix(boardStateMatrix, targetChessMan);
+              // Phát âm thanh di chuyển quân cờ
+              playSoundEffect(
+                "https://res.cloudinary.com/nvdwebsitecovua/video/upload/v1708438793/sound/move-self.mp3"
+              );
+            }
 
             return true;
           }

@@ -1012,6 +1012,12 @@ export default {
     /* =================== END SIDEBAR ==================== */
   },
 
+  created() {
+    // Tạm thời lấy giá trị điều khiển màu cờ từ router code
+    this.gameControl.colorPlayer = Number(this.$route.params.gameCode);
+    // console.log(this.gameControl.colorPlayer);
+  },
+
   mounted() {
     // Thiết lập modegame mặc định.
     this.sectionNewGame.modeGameSelected.textModeGameSelected =

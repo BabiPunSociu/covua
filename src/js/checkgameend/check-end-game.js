@@ -143,14 +143,14 @@ function isCheckmate(boardStateMatrix, colorPlayer) {
  * Kiểm tra ván cờ HÒA
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
- * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện: 0 - TRẮNG, 1 - ĐEN.
+ * @param {Number} colorPlayer Màu cờ đối thủ: 0 - TRẮNG, 1 - ĐEN.
  *
  * @returns {Boolean} True - Hòa, False - Không hòa.
  * @author NVDung (16-03-2024)
  */
 function isDraw(boardStateMatrix, colorPlayer) {
   try {
-    // Kiểm tra màu cờ của người chơi đang thực hiện
+    // Kiểm tra màu cờ của đối thủ
     const isWhite = colorPlayer === NVDEnum.colorPlayer.white;
     const isBlack = colorPlayer === NVDEnum.colorPlayer.black;
 
@@ -170,6 +170,7 @@ function isDraw(boardStateMatrix, colorPlayer) {
 
     // Kiểm tra fivefold repetition
 
+    // Không hòa
     return false;
   } catch (error) {
     console.error("Lỗi khi kiểm tra hòa", error);
@@ -181,7 +182,7 @@ function isDraw(boardStateMatrix, colorPlayer) {
  * - Vua không bị chiếu, nhưng không có nước đi nào hợp lệ để di chuyển.
  *
  * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
- * @param {Number} colorPlayer Màu cờ người chơi đang thực hiện: 0 - TRẮNG, 1 - ĐEN.
+ * @param {Number} colorPlayer Màu cờ đối thủ: 0 - TRẮNG, 1 - ĐEN.
  *
  * @returns {Boolean} True - Hòa, False - Không hòa.
  * @author NVDung (17-03-2024)
@@ -205,15 +206,17 @@ function stalemateCheck(boardStateMatrix, colorPlayer) {
 
     // Kiểm tra chiếu tướng && không có nước đi hợp lệ để thoát khỏi.
     if (
-      // Chơi quân TRẮNG + Vua TRẮNG "KHÔNG" bị chiếu
+      // Đối thủ là quân TRẮNG + Vua TRẮNG "KHÔNG" bị chiếu
       ((isWhite && !chessMan.isWhiteKingCheck(boardStateMatrix)) ||
-        // Chơi quân ĐEN + Vua ĐEN "KHÔNG" bị chiếu
+        // Đối thủ là quân ĐEN + Vua ĐEN "KHÔNG" bị chiếu
         (isBlack && !chessMan.isBlackKingCheck(boardStateMatrix))) &&
       // Không có nước đi nào hợp lệ để di chuyển.
       listLegalMoves.length === 0
     ) {
       return true;
     }
+
+    // Không hòa
     return false;
   } catch (error) {
     console.error("Lỗi khi kiểm tra hòa trong stalemate", error);
@@ -260,7 +263,7 @@ function fiftyMoveRuleCheck(boardStateMatrix, colorPlayer) {}
 /**
  * Kiểm tra KẾT THÚC ván cờ theo trạng thái bàn cờ.
  *
- * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ.
+ * @param {Number[][]} boardStateMatrix Ma trận trạng thái bàn cờ đã xoay 180deg, vì đây là bàn cờ đối thủ.
  * @param {Number} colorPlayer Màu cờ người chơi đối thủ: 0 - TRẮNG, 1 - ĐEN.
  *
  * @returns {Number} 0 - Đang diễn ra, 1 - THUA, 2 - HÒA.

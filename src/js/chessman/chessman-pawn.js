@@ -41,23 +41,31 @@ class chessManPawn extends chessMan {
 
       // Đảm bảo quân tốt di chuyển thẳng
       if (this.colCurrent !== targetChessMan.col) {
-        console.log("Lỗi quân tốt PHẢI di chuyển thẳng.");
+        // console.error("Lỗi quân tốt PHẢI di chuyển thẳng.");
         return false;
       }
 
-      // TỐT ĐEN Ở Trên -> Xuống
+      // // TỐT ĐEN Ở Trên -> Xuống
+      // if (
+      //   this.id === NVDEnum.chessMan.blackPawn &&
+      //   (this.rowCurrent + 1 === targetChessMan.row ||
+      //     (this.rowCurrent === 1 && this.rowCurrent + 2 === targetChessMan.row))
+      // ) {
+      //   return true;
+      // }
+      // // TỐT TRẮNG Ở Dưới -> Lên
+      // if (
+      //   this.id === NVDEnum.chessMan.whitePawn &&
+      //   (this.rowCurrent - 1 === targetChessMan.row ||
+      //     (this.rowCurrent === 6 && this.rowCurrent - 2 === targetChessMan.row))
+      // ) {
+      //   return true;
+      // }
+
+      // Vì quân đen được xoay ma trận nên tự động nó cũng là từ dưới -> lên.
       if (
-        this.id === NVDEnum.chessMan.blackPawn &&
-        (this.rowCurrent + 1 === targetChessMan.row ||
-          (this.rowCurrent === 1 && this.rowCurrent + 2 === targetChessMan.row))
-      ) {
-        return true;
-      }
-      // TỐT TRẮNG Ở Dưới -> Lên
-      if (
-        this.id === NVDEnum.chessMan.whitePawn &&
-        (this.rowCurrent - 1 === targetChessMan.row ||
-          (this.rowCurrent === 6 && this.rowCurrent - 2 === targetChessMan.row))
+        this.rowCurrent - 1 === targetChessMan.row ||
+        (this.rowCurrent === 6 && this.rowCurrent - 2 === targetChessMan.row)
       ) {
         return true;
       }
@@ -83,23 +91,36 @@ class chessManPawn extends chessMan {
         return false;
       }
 
-      // TỐT trắng ăn quân đen
+      // // TỐT trắng ăn quân đen
+      // if (
+      //   this.id === NVDEnum.chessMan.whitePawn &&
+      //   targetChessMan.id >= NVDEnum.chessMan.blackKing &&
+      //   this.rowCurrent - 1 === targetChessMan.row
+      // ) {
+      //   return true;
+      // }
+
+      // // TỐT đen ăn quân trắng
+      // if (
+      //   this.id === NVDEnum.chessMan.blackPawn &&
+      //   0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn &&
+      //   this.rowCurrent + 1 === targetChessMan.row
+      // ) {
+      //   return true;
+      // }
+
       if (
-        this.id === NVDEnum.chessMan.whitePawn &&
-        targetChessMan.id >= NVDEnum.chessMan.blackKing &&
+        // TỐT trắng ăn quân đen
+        ((this.id === NVDEnum.chessMan.whitePawn &&
+          targetChessMan.id >= NVDEnum.chessMan.blackKing) ||
+          // TỐT đen ăn quân trắng
+          (this.id === NVDEnum.chessMan.blackPawn &&
+            targetChessMan.id <= NVDEnum.chessMan.whitePawn)) &&
         this.rowCurrent - 1 === targetChessMan.row
       ) {
         return true;
       }
 
-      // TỐT đen ăn quân trắng
-      if (
-        this.id === NVDEnum.chessMan.blackPawn &&
-        0 < targetChessMan.id <= NVDEnum.chessMan.whitePawn &&
-        this.rowCurrent + 1 === targetChessMan.row
-      ) {
-        return true;
-      }
       return false;
     } catch (e) {
       console.error("Lỗi khi kiểm tra di chuyên Pawn", e);

@@ -89,6 +89,16 @@ const router = createRouter({
     },
 
     /**
+     * Render component 'CallbackOAuth'.
+     */
+    {
+      path: "/callback",
+      name: "CallbackOAuthRouter",
+      // component: NotFound
+      component: () => import("../views/callbackoauth/CallbackOAuth.vue"),
+    },
+
+    /**
      * Render component 'NotFound'.
      */
     {

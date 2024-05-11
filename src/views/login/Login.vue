@@ -2,7 +2,6 @@
   <div class="background flex flex-center">
     <div class="login-container scroller">
       <!-- Username -->
-      <!--  -->
       <div class="username">
         <m-text-field
           ref="inputUsername"
@@ -145,6 +144,8 @@
 </template>
 
 <script>
+import googleOAuth2 from "@/js/oauth2/googleoauth2.js";
+
 export default {
   name: "Login",
   inject: [
@@ -202,21 +203,26 @@ export default {
       alert("Login on click");
     },
 
+    /* ========== START - Login with Google ========== */
     /**
      * Hàm xử lý button Login Google click
      * @author NVDung (17-04-2024)
      */
-    btnLoginGoogleOnClick() {
-      alert("Login with Google on click");
+    async btnLoginGoogleOnClick() {
+      await googleOAuth2.signIn();
     },
 
+    /* ========== END - Login with Google ========== */
+
+    /* ========== START - Login with Facebook ========== */
     /**
      * Hàm xử lý button Login Facebook click
      * @author NVDung (17-04-2024)
      */
-    btnLoginFacebookOnClick() {
+    async btnLoginFacebookOnClick() {
       alert("Login with Facebook on click");
     },
+    /* ========== END - Login with Google ========== */
   },
 };
 </script>

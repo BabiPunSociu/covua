@@ -13,6 +13,7 @@
     "pinia": "^2.1.7",
     "tiny-emitter": "^2.1.0",
     "vue": "^3.4.15",
+    "vue-auth3": "^1.0.10",
     "vue-identify-network": "^3.0.1",
     "vue-router": "^4.2.5"
   },

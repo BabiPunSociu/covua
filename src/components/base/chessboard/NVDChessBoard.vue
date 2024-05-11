@@ -78,6 +78,9 @@
 <script>
 export default {
   name: "NVDChessBoard",
+
+  emits: ["endGame"],
+
   data() {
     return {
       /**
@@ -131,24 +134,40 @@ export default {
   },
 
   created() {
+    // console.log("Chessboard created");
+    // console.log(`Prop: ${this.colorPlayer}`);
     // Thực hiện đảo ngược ma trận nếu người dùng chơi quân cờ ĐEN
     if (this.colorPlayer === this.$enum.colorPlayer.black) {
-      // this.reverseMatrix();
+      this.theStartMatrix = this.reverseMatrix(this.theStartMatrix);
     }
   },
 
   methods: {
     /**
      * Xoay 180deg ma trận, reverse matrix.
+     * @param {number[][]} matrix Matrix đầu vào để thực hiện xoay.
+     * @returns {number[][]} Matrix đã xoay 180deg.
      * @author: NVDung (04-05-2024)
      */
-    reverseMatrix() {
-      // Thực hiện reverse các phần tử trong từng row của ma trận.
-      for (let row of this.theStartMatrix) {
-        row = row.reverse();
+    reverseMatrix(matrix) {
+      try {
+        /**
+         * Tạo ma trận sao chép
+         */
+        let matrixResult = JSON.parse(JSON.stringify(matrix));
+
+        // Thực hiện reverse các phần tử trong từng row của ma trận.
+        for (let row of matrixResult) {
+          row = row.reverse();
+        }
+        // Thực hiện reverse các hàng
+        matrixResult = matrixResult.reverse();
+
+        return matrixResult;
+      } catch (error) {
+        console.error("Lỗi khi thực hiện reverse matrix...");
+        console.error(error);
       }
-      // Thực hiện reverse các hàng
-      this.theStartMatrix = this.theStartMatrix.reverse();
     },
 
     /* ================== DRAG - DROP ================== */
@@ -160,11 +179,11 @@ export default {
      * @author: NVDung (13-03-2024)
      */
     handleDragStart(event) {
-      console.log(
-        `============================================================================
-        ============================================================================`
-      );
-      console.log("handleDragStart");
+      // console.log(
+      //   `============================================================================
+      //   ============================================================================`
+      // );
+      // console.log("handleDragStart");
       event.dataTransfer.effectAllowed = "copyMove";
 
       // Lấy thông tin ChessMan Source
@@ -186,9 +205,9 @@ export default {
         dragData.indexCol
       );
       // console.table(this.sourceChessMan);
-      console.log(
-        `Chess Man Source: (${this.sourceChessMan.id},${this.sourceChessMan.name}, ${this.sourceChessMan.rowCurrent},${this.sourceChessMan.colCurrent})`
-      );
+      // console.log(
+      //   `Chess Man Source: (${this.sourceChessMan.id},${this.sourceChessMan.name}, ${this.sourceChessMan.rowCurrent},${this.sourceChessMan.colCurrent})`
+      // );
     },
 
     /**
@@ -204,8 +223,8 @@ export default {
      * @author: NVDung (13-03-2024)
      */
     handleDragEnter(event, chessValue, row, col) {
-      console.log("======================================");
-      console.log("handleDragEnter");
+      // console.log("======================================");
+      // console.log("handleDragEnter");
 
       event.preventDefault();
 
@@ -244,9 +263,9 @@ export default {
       // Tạo đối tượng targetChessMan
       let targetChessMan = new this.$targetChessMan(chessValue, row, col);
 
-      console.log(
-        `Chess Man Destination: (${targetChessMan.id}, ${targetChessMan.row},${targetChessMan.col})`
-      );
+      // console.log(
+      //   `Chess Man Destination: (${targetChessMan.id}, ${targetChessMan.row},${targetChessMan.col})`
+      // );
 
       // Thêm đối tượng targetChessMan vào cuối Hàng đợi targetChessManQueue
       this.targetChessManQueue.push(targetChessMan);
@@ -276,8 +295,8 @@ export default {
      * @author: NVDung (13-03-2024)
      */
     handleDragLeave() {
-      console.log("======================================");
-      console.log("handleDragLeave");
+      // console.log("======================================");
+      // console.log("handleDragLeave");
       try {
         // Lấy hàng & cột của đối tượng targetChessMan đầu tiên trong hàng đợi
         let row = this.targetChessManQueue[0].row;
@@ -287,8 +306,8 @@ export default {
 
         // Tắt tô sáng
         el.style.outline = "none";
-        console.log(`Row: ${row}, Col: ${col}`);
-        console.log(el);
+        // console.log(`Row: ${row}, Col: ${col}`);
+        // console.log(el);
 
         // Xóa đối tượng targetChessMan đã tắt Tô sáng khỏi Queue.
         this.targetChessManQueue.shift();
@@ -306,14 +325,14 @@ export default {
      * @author: NVDung (13-03-2024)
      */
     handleDrop(event) {
-      console.log("======================================");
-      console.log("handleDrop");
+      // console.log("======================================");
+      // console.log("handleDrop");
 
       event.preventDefault();
       try {
         // Kiểm tra ván đấu đã kết thúc chưa?
         if (this.isEndGame) {
-          console.log("Ket thuc vong choi");
+          // console.log("Ket thuc van dau");
           return;
         }
 
@@ -343,7 +362,7 @@ export default {
             }
           }
         } else {
-          console.log("Thực hiện quân cờ không hợp lệ.");
+          // console.log("Thực hiện quân cờ không hợp lệ.");
         }
       } catch (e) {
         console.error("handleDrop...");
@@ -359,8 +378,8 @@ export default {
      * @author: NVDung (13-03-2024)
      */
     handleDragEnd() {
-      console.log("======================================");
-      console.log("handleDragEnd: Xóa tô sáng ô đích.");
+      // console.log("======================================");
+      // console.log("handleDragEnd: Xóa tô sáng ô đích.");
 
       try {
         // Lấy hàng & cột của đối tượng targetChessMan đầu tiên trong hàng đợi
@@ -370,7 +389,7 @@ export default {
         // Xác định thẻ HTML đích từ đối tượng targetChessMan.
         let el = this.$refs["td" + row + col][0];
 
-        console.log(`Row: ${row}, Col: ${col}`);
+        // console.log(`Row: ${row}, Col: ${col}`);
         // Xóa tô sáng
         el.style.outline = "none";
       } catch (e) {
@@ -390,12 +409,20 @@ export default {
     /* ================== GAME ================== */
     /**
      * Kiểm tra kết thúc ván cờ?
+     * @returns {number}: Giá trị enum result match.
      * @author: NVDung (13-03-2024)
      */
     gameOverCheck() {
       try {
-        // Tạo biến lưu giá trị trả về
-        let result = this.$enum.resultMatch.happenning;
+        /**
+         * Tạo biến lưu giá trị trả về.
+         */
+        let result;
+
+        /**
+         * Bàn cờ đối thủ, xoay 180deg bàn cờ của mình.
+         */
+        let matrixOfOpponents = this.reverseMatrix(this.theStartMatrix);
 
         /**
          * Màu cờ của đối thủ
@@ -406,23 +433,20 @@ export default {
             : this.$enum.colorPlayer.white;
 
         // Kiểm tra kết thúc trên bàn cờ.
-        let checkEndGame = this.$checkEndGame(
-          this.theStartMatrix,
-          colorOpponent
-        );
+        result = this.$checkEndGame(matrixOfOpponents, colorOpponent);
 
-        switch (checkEndGame) {
+        switch (result) {
           // Thua Checkmate
-          case this.$enum.resultMatch.lose:
-            console.log("Bạn đã thua.");
+          case this.$enum.resultMatch.win:
+            // console.log("Bạn đã thắng.");
             break;
           // Hòa
           case this.$enum.resultMatch.draw:
-            console.log("Bạn đã HÒA.");
+            // console.log("Bạn đã HÒA.");
             break;
           // Vẫn đang diễn ra.
           default:
-            console.log("Vẫn đang diễn ra.");
+            // console.log("Vẫn đang diễn ra.");
             break;
         }
 
