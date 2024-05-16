@@ -1,5 +1,8 @@
 <template>
-  <div ref="oauth" class="oauth2"></div>
+  <div class="container">
+    <div ref="oauth" class="oauth2"></div>
+    <div class="loading"></div>
+  </div>
 </template>
 
 <script>
@@ -7,12 +10,18 @@ import axios from "axios";
 
 export default {
   name: "CallbackOAuth",
-  async mounted() {
-    await this.getInfoTokenFromOAuth2();
+  mounted() {
+    this.getInfoTokenFromOAuth2();
+    alert("Da gui du lieu OAuth2");
+    window.close();
   },
 
   methods: {
-    async getInfoTokenFromOAuth2() {
+    /**
+     * Hàm lấy thông tin trả về trong URL.
+     * @author NVDUNG (07-05-2024)
+     */
+    getInfoTokenFromOAuth2() {
       /**
        * Lấy mảng tham số cần thực hiện phân tích
        * Tách từ route.hash được: ["state=abc", "access_token=xyz", ...]
@@ -36,33 +45,45 @@ export default {
       console.log("State1: ", window.datastate);
       console.log("State2: ", objOAuth.state);
 
+      // Luu access token vao localStorage
+      localStorage.setItem("tokenGoogle", objOAuth.access_token);
+      localStorage.setItem("stateGoogle", objOAuth.state);
+
+      // Thực hiện gửi dữ liệu OAuth2 đến cửa sổ "localhost:5173"
+      window.postMessage("dataMessage", "http://localhost:5173");
+
       // Thực hiện so sánh state
-      if (objOAuth.state !== window.datastate) return;
+      // if (objOAuth.state !== window.datastate) return;
 
-      try {
-        // Thực hiện gửi token đến backend để backend lấy thông tin từ google.
-        const response = await axios.post(
-          "https://localhost:7011/api/v1/Authentication/login/google-callback",
-          // Request Body
-          {
-            accessToken: objOAuth.access_token,
-          }
-        );
+      // try {
+      //   // Thực hiện gửi token đến backend để backend lấy thông tin từ google.
+      //   const response = await axios.post(
+      //     "https://localhost:7011/api/v1/Authentication/login/google-callback",
+      //     // Request Body
+      //     {
+      //       accessToken: objOAuth.access_token,
+      //     }
+      //   );
 
-        console.log("response: ", response);
-      } catch (error) {
-        console.log("Loi khi goi toi backend... ");
-        console.log(error);
-      }
-
-      // Lấy token từ backend -> Lưu vào localStorage và store
+      //   console.log("response: ", response);
+      // } catch (error) {
+      //   console.log("Loi khi goi toi backend... ");
+      //   console.log(error);
+      // }
 
       this.$refs.oauth.textContent =
         "Da gui du lieu OAuth2: " +
-        objOAuth.access_token.length +
+        "POST MESSAGE " +
         "   " +
         objOAuth.access_token;
+
+      // Đóng cửa sổ.
+      // window.close();
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+@import url(./callback-oauth.scss);
+</style>

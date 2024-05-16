@@ -14,6 +14,8 @@ import axios from "axios";
 import NVDEnum from "./js/enum.js";
 // Đối tượng NVDResource
 import NVDResource from "./js/resources/resource.js";
+// Đối tượng NVDHelper
+import NVDHelper from "./js/helper/helper.js";
 // function playSoundEffect()
 import playSoundEffect from "./js/cloudinary/sound-effect.js";
 // function createChessMan()
@@ -61,6 +63,7 @@ app.component("m-chess-board", NVDChessBoard);
 /* ==================== CREATE GLOBAL VARIABLE ==================== */
 app.config.globalProperties.$enum = NVDEnum;
 app.config.globalProperties.$resource = NVDResource;
+app.config.globalProperties.$helper = NVDHelper;
 app.config.globalProperties.$validator = NVDValidator;
 app.config.globalProperties.$playSoundEffect = playSoundEffect;
 app.config.globalProperties.$createChessMan = createChessMan;

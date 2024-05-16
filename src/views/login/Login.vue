@@ -22,11 +22,19 @@
         >
           <!-- Text hiển thị tiêu đề -->
           <template v-slot:lbl-content>
-            {{ this.$resource.resourcesLogin.textUsername["vi-VN"] }}
+            {{
+              this.$resource.resourcesLogin.textUsername[
+                languageStore.getLanguage
+              ]
+            }}
           </template>
           <!-- Text hiển thị khi validate -->
           <template v-slot:warning>
-            {{ this.$resource.resourcesLogin.textWarningUsername["vi-VN"] }}
+            {{
+              this.$resource.resourcesLogin.textWarningUsername[
+                languageStore.getLanguage
+              ]
+            }}
           </template>
         </m-text-field>
       </div>
@@ -50,11 +58,19 @@
         >
           <!-- Text hiển thị tiêu đề -->
           <template v-slot:lbl-content>
-            {{ this.$resource.resourcesLogin.textPassword["vi-VN"] }}
+            {{
+              this.$resource.resourcesLogin.textPassword[
+                languageStore.getLanguage
+              ]
+            }}
           </template>
           <!-- Text hiển thị khi validate -->
           <template v-slot:warning>
-            {{ this.$resource.resourcesLogin.textWarningPassword["vi-VN"] }}
+            {{
+              this.$resource.resourcesLogin.textWarningPassword[
+                languageStore.getLanguage
+              ]
+            }}
           </template>
         </m-text-field>
       </div>
@@ -66,7 +82,9 @@
           :tabIndex="4"
           @checkboxChangeValue="checkboxChangeValue"
           >{{
-            this.$resource.resourcesLogin.textRememberMe["vi-VN"]
+            this.$resource.resourcesLogin.textRememberMe[
+              languageStore.getLanguage
+            ]
           }}</m-checkbox
         >
         <router-link
@@ -74,7 +92,9 @@
           class="forgot-password"
           tabindex="5"
           >{{
-            this.$resource.resourcesLogin.textForgotPassword["vi-VN"]
+            this.$resource.resourcesLogin.textForgotPassword[
+              languageStore.getLanguage
+            ]
           }}</router-link
         >
       </div>
@@ -88,14 +108,16 @@
           :textAlignCenter="true"
           :functionHandlePessEnter="btnLoginOnClick"
           @click="btnLoginOnClick"
-          >{{ this.$resource.resourcesLogin.textLogin["vi-VN"] }}</m-button
+          >{{
+            this.$resource.resourcesLogin.textLogin[languageStore.getLanguage]
+          }}</m-button
         >
       </div>
 
       <div class="seperate-area flex">
         <hr />
         <span class="block-user-select">{{
-          this.$resource.resourcesLogin.textOr["vi-VN"]
+          this.$resource.resourcesLogin.textOr[languageStore.getLanguage]
         }}</span>
         <hr />
       </div>
@@ -112,7 +134,9 @@
           :functionHandlePessEnter="btnLoginGoogleOnClick"
           @click="btnLoginGoogleOnClick"
           >{{
-            this.$resource.resourcesLogin.textLoginGoogle["vi-VN"]
+            this.$resource.resourcesLogin.textLoginGoogle[
+              languageStore.getLanguage
+            ]
           }}</m-button
         >
 
@@ -127,7 +151,9 @@
           :functionHandlePessEnter="btnLoginFacebookOnClick"
           @click="btnLoginFacebookOnClick"
           >{{
-            this.$resource.resourcesLogin.textLoginFacebook["vi-VN"]
+            this.$resource.resourcesLogin.textLoginFacebook[
+              languageStore.getLanguage
+            ]
           }}</m-button
         >
       </div>
@@ -137,14 +163,18 @@
         class="register"
         tabindex="8"
         @keydown="tabFocusAround"
-        >{{ this.$resource.resourcesLogin.textRegister["vi-VN"] }}</router-link
+        >{{
+          this.$resource.resourcesLogin.textRegister[languageStore.getLanguage]
+        }}</router-link
       >
     </div>
   </div>
 </template>
 
 <script>
-import googleOAuth2 from "@/js/oauth2/googleoauth2.js";
+import { useLanguageStore } from "@/stores/languagestore";
+import { authenUsernamePasswordApiAsync } from "@/api/authentication";
+import googleOAuth2 from "@/js/oauth2/googleoauth2";
 
 export default {
   name: "Login",
@@ -160,16 +190,54 @@ export default {
 
   data() {
     return {
-      username: "",
-      password: "",
+      /**
+       * Đối tượng chứa store giá trị ngôn ngữ.
+       */
+      languageStore: useLanguageStore(),
+
+      /**
+       * Dữ liệu về form login.
+       */
+      formLogin: {
+        username: "",
+        password: "",
+      },
+
+      /**
+       * Nhớ mật khẩu.
+       */
       isRememberPassword: false,
     };
   },
 
-  methods: {
-    usernameChanged() {},
+  created() {
+    // Hiện loading
+    this.$emitter.emit("showLoading", true);
+  },
 
-    passwordChanged() {},
+  mounted() {
+    // Ẩn loading
+    this.$emitter.emit("showLoading", false);
+  },
+
+  methods: {
+    /**
+     * Cập nhật giá trị username
+     * @param newVal Giá trị username mới
+     * @author NVDung (15-05-2024)
+     */
+    usernameChanged(newVal) {
+      this.formLogin.username = newVal;
+    },
+
+    /**
+     * Cập nhật giá trị password
+     * @param newVal Giá trị password mới
+     * @author NVDung (15-05-2024)
+     */
+    passwordChanged(newVal) {
+      this.formLogin.password = newVal;
+    },
 
     /**
      * Hàm cập nhật giá trị checkbox Remember me.
@@ -199,8 +267,23 @@ export default {
      * Hàm xử lý button Login click
      * @author NVDung (17-04-2024)
      */
-    btnLoginOnClick() {
-      alert("Login on click");
+    async btnLoginOnClick() {
+      try {
+        // Hiện loading
+        this.$emitter.emit("showLoading", true);
+
+        // Validate input
+
+        // Call api
+        let reponse = await authenUsernamePasswordApiAsync(
+          this.formLogin.username,
+          this.formLogin.password
+        );
+
+        console.log("reponse: ", reponse);
+
+        this.$emitter.emit("showLoading", false);
+      } catch (error) {}
     },
 
     /* ========== START - Login with Google ========== */

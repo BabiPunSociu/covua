@@ -46,6 +46,8 @@ const googleOAuth2 = {
 
   /**
    * Phương thức thực hiện xác thực + ủy quyền.
+   * @returns Thêm token backend vào local storage nếu hợp lệ.
+   * @author NVDung (12-05-2024)
    */
   signIn: async function () {
     // Gọi API đến google để thực hiện xác thực +  ủy quyền
@@ -69,10 +71,33 @@ const googleOAuth2 = {
         `width=600,height=400,scrollbars=yes,status=yes,resizable=yes,location=center,menubar=no`
       );
 
-      // Đảm bảo popup đã mở, thêm thuộc tính datastate cho popup để gửi state sang popup.
-      if (popup) {
-        popup.datastate = this.state;
-      }
+      /* ========== START - THUC HIEN XU LY SU KIEN MESSAGE TU POPUP ========== */
+
+      /**
+       * Hàm xử lý sự kiện message
+       * @param {Event} e Đối tượng Event
+       * @author NVDUNG (12-05-2024)
+       */
+      let functionHandlerMessage = async function (e) {
+        console.log("e: ", e);
+        if (e.origin != "http://localhost:5173") return;
+
+        console.log("Nhan su kien tu popup");
+        // Lay du lieu duoc luu trong localStorage
+        let token = await localStorage.getItem("tokenGoogle");
+        let state = await localStorage.getItem("stateGoogle");
+
+        console.log(`state: ${state}, token: ${token}`);
+
+        // Thực hiện gọi API đến backend để lấy token backend
+
+        window.removeEventListener("message", await functionHandlerMessage);
+      };
+
+      // Bat su kien message duoc gui tu popup
+      window.addEventListener("message", await functionHandlerMessage);
+
+      /* ========== END - THUC HIEN XU LY SU KIEN MESSAGE TU POPUP ========== */
     } catch (e) {
       console.error("Loi khi thuc hien yeu cau uy quyen truy cap google");
       console.error(e);

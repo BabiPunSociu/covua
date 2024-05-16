@@ -57,6 +57,8 @@ import dialog from "./js/classconstructor/dialog.js";
 import { VueIdentifyNetwork } from "vue-identify-network";
 
 import { useLanguageStore } from "@/stores/languagestore.js";
+import languageLocalStorage from "@/js/localstorage/localstorage.js";
+
 export default {
   name: "App",
 
@@ -154,6 +156,14 @@ export default {
       // Tạo đối tượng truyền dữ liệu cho toast
       this.addToast(toastObject);
     });
+  },
+  mounted() {
+    /* ============= Thực hiện đặt ngôn ngữ ============= */
+    // Lấy ngôn ngữ từ localStorage.
+    let { langCode, langName } = languageLocalStorage.getLangCode();
+
+    // Set ngôn ngữ cho Store.
+    this.languageStore.setLanguage(langCode);
   },
   beforeUnmount() {
     // Hủy lắng nghe sự kiện showLoading

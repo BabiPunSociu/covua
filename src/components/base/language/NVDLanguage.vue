@@ -36,6 +36,7 @@
 
 <script>
 import { useLanguageStore } from "@/stores/languagestore.js";
+import languageLocalStorage from "@/js/localstorage/localstorage.js";
 
 export default {
   name: "NVDLanguage",
@@ -99,6 +100,11 @@ export default {
         if (this.languageCodeList.includes(languageCode)) {
           // Thực hiện thay đổi giá trị ngôn ngữ cho store
           this.languageStore.setLanguage(languageCode);
+          // Thực hiện thay đổi ngôn ngữ lưu trữ trong localStorage
+          languageLocalStorage.setLangCode({
+            langCode: languageCode,
+            langName: value,
+          });
 
           // Hiển thị toast message thông báo thay đổi ngôn ngữ thành công.
           this.toastSuccessNoButtonUndo(
