@@ -170,7 +170,9 @@ export default {
   },
 
   mounted() {
-    this.autoFocusInput();
+    if (this.isAutoFocused) {
+      this.autoFocusInput();
+    }
   },
 
   methods: {
@@ -251,10 +253,8 @@ export default {
      * @author NVDung (19-04-2024)
      */
     autoFocusInput() {
-      if (this.isAutoFocused) {
-        // console.log("focus in NVD Text Field");
-        this.$refs.inputTextField.focus();
-      }
+      // console.log("focus in NVD Text Field");
+      this.$refs.inputTextField.focus();
     },
   },
   watch: {

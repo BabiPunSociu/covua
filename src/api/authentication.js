@@ -8,8 +8,12 @@ import { api } from "@/api/api";
  * @author NVDung (16-05-2024)
  */
 export const authenUsernamePasswordApiAsync = (username, password) => {
-  api.post("/Authentication/login", {
-    username: username,
-    password: password,
-  });
+  try {
+    return api.post("/Authentication/login", {
+      username: username,
+      password: password,
+    });
+  } catch (error) {
+    console.log("authentication.js", error);
+  }
 };

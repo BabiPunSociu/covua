@@ -57,7 +57,7 @@ import dialog from "./js/classconstructor/dialog.js";
 import { VueIdentifyNetwork } from "vue-identify-network";
 
 import { useLanguageStore } from "@/stores/languagestore.js";
-import languageLocalStorage from "@/js/localstorage/localstorage.js";
+import languageLocalStorage from "@/js/localstorage/languageLocalStorage.js";
 
 export default {
   name: "App",
@@ -311,12 +311,13 @@ export default {
     /* ============= PHƯƠNG THỨC HIỆN DIALOG ĐẶC TRƯNG ============= */
     /**
      * Hàm thực hiện hiển thị dialog thông báo LỖI 1 nút bấm [đóng]
+     * @param {string} key Key để xác định dialog, sẽ là data gửi về khi bắt sự kiện click button.
      * @param {string} message nội dung thông báo
      * @returns {void}
      * @author NVDUNG (18-04-2024)
      */
-    dialogError(message) {
-      // Tạo biến chứa thông tin để tạo đối tượng toast.
+    dialogError(key, message) {
+      // Tạo biến chứa thông tin để tạo đối tượng dialog.
       const title =
         this.$resource.resourcesDialog.title.error[
           this.languageStore.getLanguage
@@ -328,6 +329,7 @@ export default {
 
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
+        key,
         title,
         message,
         iconClass,
@@ -343,12 +345,13 @@ export default {
 
     /**
      * Hàm thực hiện hiển thị dialog thông báo CẢNH BÁO 1 nút bấm [Đồng ý]
+     * @param {string} key Key để xác định dialog, sẽ là data gửi về khi bắt sự kiện click button.
      * @param {string} message nội dung thông báo
      * @returns {void}
      * @author NVDUNG (18-04-2024)
      */
-    dialogWarningOneButton(message) {
-      // Tạo biến chứa thông tin để tạo đối tượng toast.
+    dialogWarningOneButton(key, message) {
+      // Tạo biến chứa thông tin để tạo đối tượng dialog.
       const title =
         this.$resource.resourcesDialog.title.warning[
           this.languageStore.getLanguage
@@ -360,6 +363,7 @@ export default {
 
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
+        key,
         title,
         message,
         iconClass,
@@ -374,11 +378,12 @@ export default {
 
     /**
      * Hàm thực hiện hiển thị dialog thông báo cảnh báo 2 nút bấm [có]|[không]
+     * @param {string} key Key để xác định dialog, sẽ là data gửi về khi bắt sự kiện click button.
      * @param {string} message nội dung thông báo
      * @returns {void}
      * @author NVDUNG (18-04-2024)
      */
-    dialogWarningTwoButtons(message) {
+    dialogWarningTwoButtons(key, message) {
       // Tạo biến chứa thông tin để tạo đối tượng toast.
       const title =
         this.$resource.resourcesDialog.title.warning[
@@ -392,6 +397,7 @@ export default {
         this.$resource.resourceButton.no[this.languageStore.getLanguage]; // Không.
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
+        key,
         title,
         message,
         iconClass,
@@ -406,6 +412,7 @@ export default {
 
     /**
      * Hàm thực hiện hiển thị dialog thông báo infomation 3 nút bấm [có]|[không]|[Hủy]
+     * @param {string} key Key để xác định dialog, sẽ là data gửi về khi bắt sự kiện click button.
      * @param {string} message nội dung thông báo
      * @returns {void}
      * @author NVDUNG (18-04-2024)
@@ -426,6 +433,7 @@ export default {
         this.$resource.resourceButton.cancel[this.languageStore.getLanguage]; // Hủy.
       // Tạo đối tượng dialog.
       const dialogData = new dialog(
+        key,
         title,
         message,
         iconClass,

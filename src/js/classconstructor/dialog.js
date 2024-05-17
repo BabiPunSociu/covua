@@ -5,6 +5,7 @@
 class dialog {
   /**
    * Hàm tạo đối tượng Dialog.
+   * @param {String} keyDialog Key để phân biệt chính xác các dialog.
    * @param {String} title Tiêu đề dialog message.
    * @param {String} content Nội dung dialog message.
    * @param {String} iconClass Class icon: 'mi-success', 'mi-warning', 'mi-info', 'mi-error'.
@@ -14,6 +15,7 @@ class dialog {
    * @param {String} buttonSecondary2Text Text của nút phụ 2.
    */
   constructor(
+    keyDialog,
     title,
     content,
     iconClass,
@@ -22,6 +24,7 @@ class dialog {
     buttonSecondary1Text = "",
     buttonSecondary2Text = ""
   ) {
+    this.keyDialog = keyDialog;
     this.title = title;
     this.content = content;
     this.iconClass = iconClass;

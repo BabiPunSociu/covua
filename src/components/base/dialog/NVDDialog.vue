@@ -86,6 +86,7 @@ export default {
     inputDialog: {
       type: dialog,
       default: new dialog(
+        "",
         "title",
         "content",
         "iconClass",
@@ -121,7 +122,11 @@ export default {
      */
     btnPrimaryClick() {
       // Phát sự kiện xác nhận tiếp tục hành động
-      this.$emitter.emit("dialogButton1Click");
+      // Gửi đi key dialog để xác nhận dialog nào thực hiện.
+      this.$emitter.emit(
+        "dialogButton1Click",
+        this.inputDialog.keyDialog || ""
+      );
       console.log("dialogButton1Click");
       // Đóng dialog
       this.closeDialog();
@@ -133,7 +138,10 @@ export default {
      * @author NVDung (18-04-2024)
      */
     btnSecond1Click() {
-      this.$emitter.emit("dialogButton2Click");
+      this.$emitter.emit(
+        "dialogButton2Click",
+        this.inputDialog.keyDialog || ""
+      );
       console.log("dialogButton2Click");
       // Đóng dialog
       this.closeDialog();
@@ -145,7 +153,10 @@ export default {
      * @author NVDung (18-04-2024)
      */
     btnSecond2Click() {
-      this.$emitter.emit("dialogButton3Click");
+      this.$emitter.emit(
+        "dialogButton3Click",
+        this.inputDialog.keyDialog || ""
+      );
       console.log("dialogButton3Click");
       // Đóng dialog
       this.closeDialog();

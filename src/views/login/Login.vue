@@ -41,6 +41,7 @@
       <!-- Password -->
       <div class="password">
         <m-text-field
+          ref="inputPassword"
           lblTooltip="Password"
           :haveLabel="true"
           :isTextWhite="true"
@@ -175,6 +176,8 @@
 import { useLanguageStore } from "@/stores/languagestore";
 import { authenUsernamePasswordApiAsync } from "@/api/authentication";
 import googleOAuth2 from "@/js/oauth2/googleoauth2";
+import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
+import lastURLLocalStorage from "@/js/localstorage/lastUrlLocalStorage";
 
 export default {
   name: "Login",
@@ -199,8 +202,14 @@ export default {
        * Dữ liệu về form login.
        */
       formLogin: {
-        username: "",
-        password: "",
+        username: {
+          value: "",
+          isValid: true,
+        },
+        password: {
+          value: "",
+          isValid: true,
+        },
       },
 
       /**
@@ -227,7 +236,7 @@ export default {
      * @author NVDung (15-05-2024)
      */
     usernameChanged(newVal) {
-      this.formLogin.username = newVal;
+      this.formLogin.username.value = newVal;
     },
 
     /**
@@ -236,7 +245,7 @@ export default {
      * @author NVDung (15-05-2024)
      */
     passwordChanged(newVal) {
-      this.formLogin.password = newVal;
+      this.formLogin.password.value = newVal;
     },
 
     /**
@@ -264,6 +273,69 @@ export default {
     },
 
     /**
+     * Hàm kiểm tra validate input.
+     * @returns {String} errorMessage - Nội dung thông báo lỗi.
+     * @author NVDung (18-04-2024)
+     */
+    checkValidateInput() {
+      try {
+        /**
+         * Nội dung thông điệp lỗi (Nếu có).
+         */
+        let errorMessage = ``;
+
+        // ========== KIỂM TRA VALIDATE INPUT USERNAME ========== //
+        if (
+          // Kiểm tra Required
+          !this.$validator.required(this.formLogin.username.value) ||
+          // Kiểm tra min-length
+          !this.$validator.minLength(this.formLogin.username.value, 5) ||
+          // Kiểm tra max-length
+          !this.$validator.maxLength(this.formLogin.username.value, 255)
+        ) {
+          // Đánh dấu invalid
+          this.formLogin.username.isValid = false;
+
+          // Thêm thông điệp lỗi để hiển thị thông báo
+          errorMessage +=
+            this.$resource.resourcesLogin.textWarningUsername[
+              this.languageStore.getLanguage
+            ] + `<br/>`;
+        }
+
+        // ========== KIỂM TRA VALIDATE INPUT PASSWORD ========== //
+        if (
+          // Kiểm tra Required
+          !this.$validator.required(this.formLogin.password.value) ||
+          // Kiểm tra min-length
+          !this.$validator.minLength(this.formLogin.password.value, 6) ||
+          // Kiểm tra max-length
+          !this.$validator.maxLength(this.formLogin.password.value, 255)
+        ) {
+          // Đánh dấu invalid
+          this.formLogin.password.isValid = false;
+
+          // Thêm thông điệp lỗi để hiển thị thông báo
+          errorMessage +=
+            this.$resource.resourcesLogin.textWarningPassword[
+              this.languageStore.getLanguage
+            ] + `<br/>`;
+        }
+
+        // Xóa '<br/>' ở cuối cùng
+        if (errorMessage.length > 0) {
+          errorMessage = errorMessage.slice(0, -5);
+        }
+
+        console.log(errorMessage);
+
+        return errorMessage;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    /**
      * Hàm xử lý button Login click
      * @author NVDung (17-04-2024)
      */
@@ -273,17 +345,41 @@ export default {
         this.$emitter.emit("showLoading", true);
 
         // Validate input
+        let errorMessage = this.checkValidateInput();
+        if (errorMessage) {
+          // Focus first input error
+          if (this.formLogin.username.isValid == false) {
+            this.$refs.inputUsername.autoFocusInput();
+          } else {
+            this.$refs.inputPassword.autoFocusInput();
+          }
+          // Hiện thông báo
+          this.showDialogWarningOneButton("dialogErrorLogin", errorMessage);
+          return;
+        }
 
         // Call api
-        let reponse = await authenUsernamePasswordApiAsync(
-          this.formLogin.username,
-          this.formLogin.password
+        let response = await authenUsernamePasswordApiAsync(
+          this.formLogin.username.value,
+          this.formLogin.password.value
         );
 
-        console.log("reponse: ", reponse);
+        console.log("reponse: ", response);
+        // Lấy token.
+        let token = response.data.token;
 
+        // Lưu token vào local storage
+        tokenLocalStorage.setToken(token);
+
+        // ===== Chuyển hướng đến trang trước đó hoặc HOME ===== //
+        let { name, params } = lastURLLocalStorage.getLastUrl();
+
+        this.$router.push({ name: name, params: params });
+      } catch (error) {
+        console.log(error);
+      } finally {
         this.$emitter.emit("showLoading", false);
-      } catch (error) {}
+      }
     },
 
     /* ========== START - Login with Google ========== */

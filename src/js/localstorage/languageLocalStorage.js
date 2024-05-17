@@ -1,3 +1,6 @@
+/**
+ * Đối tượng cung cấp các hàm thực hiện tương tác local storage về ngôn ngữ.
+ */
 const languageLocalStorage = {
   /**
    * Set mã ngôn ngữ vào local storage.
@@ -35,7 +38,7 @@ const languageLocalStorage = {
       // Thực hiện thêm ngôn ngữ mặc định Tiếng việt.
       this.setLangCode();
       // Thực hiện lại get language
-      this.getLangCode();
+      return this.getLangCode();
     } catch (e) {
       console.error("Loi khi get langCode from local storage", e);
     }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import helper from "@/js/helper/helper";
-import languageLocalStorage from "@/js/localstorage/localstorage";
+import languageLocalStorage from "@/js/localstorage/languageLocalStorage";
 import errorMessage from "@/js/resources/errormessage/errormessage";
 /**
  * Khởi tạo cách truyền và xử lí Rest-API.
@@ -49,14 +49,21 @@ export const createApiInstance = (config, { auth = true, silent } = {}) => {
      */
     (error) => {
       if (!silent) {
-        console.log(error);
+        // console.log(error);
       }
 
       // Mã ngôn ngữ
       const { langCode, langName } = languageLocalStorage.getLangCode();
+      /**
+       * Lỗi do người dùng.
+       * - true: Dialog.
+       * - false: Toast.
+       */
+      let userError = true;
 
       if (!error.response) {
         return Promise.reject({
+          useDialog: (userError = false), // Hiển thị lỗi bằng dialog || toast.
           message: errorMessage.ErrorText(langCode), // Có lỗi xảy ra, vui lòng liên hệ NVDChess để được hỗ trợ.
           data: null,
         });
@@ -121,12 +128,14 @@ export const createApiInstance = (config, { auth = true, silent } = {}) => {
           if (!userMessage) {
             userMessage = errorMessage.ErrorText(langCode);
           }
+          userError = false;
           break;
         }
         default:
           userMessage = errorMessage.ErrorText(langCode);
       }
       return Promise.reject({
+        useDialog: userError, // Hiển thị lỗi bằng dialog || toast.
         message: userMessage,
         data: camelCaseResData.errors,
       });

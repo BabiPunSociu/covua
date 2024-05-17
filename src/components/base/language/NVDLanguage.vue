@@ -36,7 +36,7 @@
 
 <script>
 import { useLanguageStore } from "@/stores/languagestore.js";
-import languageLocalStorage from "@/js/localstorage/localstorage.js";
+import languageLocalStorage from "@/js/localstorage/languageLocalStorage.js";
 
 export default {
   name: "NVDLanguage",
