@@ -15,8 +15,8 @@
         </div>
         <div class="dialog-description flex-align-center">
           <slot name="dialog-description">
-            <p v-html="inputDialog.content"></p
-          ></slot>
+            <p v-html="inputDialog.content"></p>
+          </slot>
         </div>
       </main>
       <footer
@@ -28,7 +28,7 @@
           tabindex="1002"
           class="m-btn-secondary"
           v-if="inputDialog.totalButtons >= 3"
-          :functionHandlePessEnter="btnSecond2Click"
+          :functionHandlePressEnter="btnSecond2Click"
           :textAlignCenter="true"
           @click="btnSecond2Click"
           @keydown="tabFocusAround($event, 3)"
@@ -42,7 +42,7 @@
           tabindex="1001"
           class="m-btn-secondary"
           v-if="inputDialog.totalButtons >= 2"
-          :functionHandlePessEnter="btnSecond1Click"
+          :functionHandlePressEnter="btnSecond1Click"
           :textAlignCenter="true"
           @click="btnSecond1Click"
           @keydown="tabFocusAround($event, 2)"
@@ -56,7 +56,7 @@
           ref="primaryButton"
           tabindex="1000"
           @click="btnPrimaryClick"
-          :functionHandlePessEnter="btnPrimaryClick"
+          :functionHandlePressEnter="btnPrimaryClick"
           :textAlignCenter="true"
           ><slot name="btn-continue-text">{{
             this.inputDialog.buttonPrimaryText
@@ -121,13 +121,14 @@ export default {
      * @author NVDung (18-04-2024)
      */
     btnPrimaryClick() {
+      console.log("dialogButton1Click");
       // Phát sự kiện xác nhận tiếp tục hành động
       // Gửi đi key dialog để xác nhận dialog nào thực hiện.
       this.$emitter.emit(
         "dialogButton1Click",
         this.inputDialog.keyDialog || ""
       );
-      console.log("dialogButton1Click");
+
       // Đóng dialog
       this.closeDialog();
     },
@@ -138,11 +139,13 @@ export default {
      * @author NVDung (18-04-2024)
      */
     btnSecond1Click() {
+      console.log("dialogButton2Click");
+
       this.$emitter.emit(
         "dialogButton2Click",
         this.inputDialog.keyDialog || ""
       );
-      console.log("dialogButton2Click");
+
       // Đóng dialog
       this.closeDialog();
     },
@@ -153,11 +156,13 @@ export default {
      * @author NVDung (18-04-2024)
      */
     btnSecond2Click() {
+      console.log("dialogButton3Click");
+
       this.$emitter.emit(
         "dialogButton3Click",
         this.inputDialog.keyDialog || ""
       );
-      console.log("dialogButton3Click");
+
       // Đóng dialog
       this.closeDialog();
     },

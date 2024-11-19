@@ -164,6 +164,38 @@ const errorMessage = {
         return `Duplicate code: <${code}>`;
     }
   },
+
+  /**
+   * Trả về message: 'Không thể kết nối đến máy chủ.'
+   * @param {string} langCode Mã ngôn ngữ.
+   * @returns {string}
+   * @author NVDung (18-09-2024)
+   */
+  errorConnectToServer: (langCode) => {
+    switch (langCode) {
+      case "vi-VN":
+        return "Không thể kết nối đến máy chủ.";
+      case "en-US":
+      default:
+        return "Can not connect to server.";
+    }
+  },
+
+  /**
+   * Trả về message: 'Không thể kết nối đến máy chủ.'
+   * @param {string} langCode Mã ngôn ngữ.
+   * @returns {string}
+   * @author NVDung (18-09-2024)
+   */
+  errorCheckClientNetwork: (langCode) => {
+    switch (langCode) {
+      case "vi-VN":
+        return "Hãy kiểm tra kết nối mạng của bạn. Vui lòng thử lại sau.";
+      case "en-US":
+      default:
+        return "Please check your network connection. Please try again later.";
+    }
+  },
 };
 
 export default errorMessage;

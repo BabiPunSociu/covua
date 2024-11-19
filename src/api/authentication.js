@@ -1,4 +1,4 @@
-import { api } from "@/api/api";
+import { apiWithOutAuth } from "@/api/base/api";
 
 /**
  * Thực hiện đăng nhập bằng username, password
@@ -7,13 +7,25 @@ import { api } from "@/api/api";
  * @returns {Promise} Kết quả login.
  * @author NVDung (16-05-2024)
  */
-export const authenUsernamePasswordApiAsync = (username, password) => {
+export const authenUsernamePasswordApiAsync = async (username, password) => {
   try {
-    return api.post("/Authentication/login", {
+    return apiWithOutAuth.post("/Authentication/login", {
       username: username,
       password: password,
     });
   } catch (error) {
-    console.log("authentication.js", error);
+    console.log("authenUsernamePasswordApiAsync() in authentication.js", error);
+  }
+};
+
+
+
+/**
+ * Thực hiện đăng kí tài khoản mới
+ */
+export const registerAccountAsync = async () => {
+  try {
+  } catch (error) {
+    console.log("registerAccountAsync() in authentication.js", error);
   }
 };

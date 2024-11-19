@@ -1,6 +1,7 @@
 /**
  * Đối tượng cung cấp các hàm thực hiện tương tác local storage về ngôn ngữ.
  */
+const key = "langCode";
 const languageLocalStorage = {
   /**
    * Set mã ngôn ngữ vào local storage.
@@ -12,9 +13,9 @@ const languageLocalStorage = {
       // Chuyển Obj -> JSON
       const langCodeJSON = JSON.stringify(options);
       // Thêm vào localStorage
-      localStorage.setItem("langCode", langCodeJSON);
+      localStorage.setItem(key, langCodeJSON);
     } catch (error) {
-      console.error("Loi khi set langCode to local storage", error);
+      console.error("Error while set langCode to local storage", error);
     }
   },
 
@@ -25,7 +26,7 @@ const languageLocalStorage = {
    */
   getLangCode: function () {
     try {
-      const langCodeJSON = localStorage.getItem("langCode");
+      const langCodeJSON = localStorage.getItem(key);
 
       /* ========== Nếu có langCode trong localStorage ========== */
       if (langCodeJSON) {
@@ -40,7 +41,7 @@ const languageLocalStorage = {
       // Thực hiện lại get language
       return this.getLangCode();
     } catch (e) {
-      console.error("Loi khi get langCode from local storage", e);
+      console.error("Error while get langCode from local storage", e);
     }
   },
 };

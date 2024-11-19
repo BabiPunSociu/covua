@@ -1,6 +1,7 @@
 import axios from "axios";
 import helper from "@/js/helper/helper";
 import languageLocalStorage from "@/js/localstorage/languageLocalStorage";
+import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
 import errorMessage from "@/js/resources/errormessage/errormessage";
 /**
  * Khởi tạo cách truyền và xử lí Rest-API.
@@ -9,13 +10,24 @@ import errorMessage from "@/js/resources/errormessage/errormessage";
  * @param {{auth: boolean, silent: boolean}} param2
  * @returns {import('axios').AxiosInstance}
  */
-export const createApiInstance = (config, { auth = true, silent } = {}) => {
+export const createApiInstance = (config, { auth = true, silent = false }) => {
   const api = axios.create(config);
 
   api.interceptors.request.use(
     (config) => {
       if (auth && config?.headers) {
-        //     config.headers['Authorization'] = 'Bearer ' + getAccessToken();
+        try {
+          // Lấy giá trị Token trong local storage
+          let jwt = tokenLocalStorage.getToken();
+
+          let { accessToken, refreshToken } = jwt;
+
+          // Thiết lập Header request
+          config.headers["AccessToken"] = "Bearer " + accessToken;
+          config.headers["RefreshToken"] = "Bearer " + refreshToken;
+        } catch (error) {
+          console.error(`Lỗi khi thiết lập Token vào Header`, error);
+        }
       }
       return config;
     },
@@ -49,7 +61,7 @@ export const createApiInstance = (config, { auth = true, silent } = {}) => {
      */
     (error) => {
       if (!silent) {
-        // console.log(error);
+        console.log(error);
       }
 
       // Mã ngôn ngữ
@@ -137,6 +149,7 @@ export const createApiInstance = (config, { auth = true, silent } = {}) => {
       return Promise.reject({
         useDialog: userError, // Hiển thị lỗi bằng dialog || toast.
         message: userMessage,
+        // Array errors validate input backend.
         data: camelCaseResData.errors,
       });
     }
@@ -146,10 +159,27 @@ export const createApiInstance = (config, { auth = true, silent } = {}) => {
 };
 
 /**
- * Tạo một apiInstance với content là json
+ * Tạo một apiInstance với content là json.
+ * - Đã Authentication JWT.
  * @author NVDung (15-05-2024)
  */
-export const api = createApiInstance(
+export const apiWithAuth = createApiInstance(
+  {
+    baseURL: `https://localhost:7011/api/v1`,
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "*/*",
+    },
+  },
+  { auth: true, silent: false }
+);
+
+/**
+ * Tạo một apiInstance với content là json.
+ * Không Authentication JWT.
+ * @author NVDung (15-05-2024)
+ */
+export const apiWithOutAuth = createApiInstance(
   {
     baseURL: `https://localhost:7011/api/v1`,
     headers: {

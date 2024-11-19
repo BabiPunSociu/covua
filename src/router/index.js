@@ -99,6 +99,16 @@ const router = createRouter({
     },
 
     /**
+     * Render component 'SignalRConnection'.
+     */
+    {
+      path: "/signalRConnection",
+      name: "SignalRConnectionRouter",
+      // component: SignalRConnection
+      component: () => import("../views/signalR/SignalRConnection.vue"),
+    },
+
+    /**
      * Render component 'NotFound'.
      */
     {

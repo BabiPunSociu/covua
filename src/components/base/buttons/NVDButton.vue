@@ -14,7 +14,7 @@
       'flex-center': textAlignCenter && !hasIcon,
     }"
     :tabindex="tabIndex"
-    @keydown.enter="buttonPressEnter($event, functionHandlePessEnter)"
+    @keydown.enter="buttonPressEnter($event, functionHandlePressEnter)"
     ref="myButton"
   >
     <!-- Hiển thị icon (nếu có) -->
@@ -88,7 +88,7 @@ export default {
     /**
      * Hàm được thực thi khi nhấn Enter, thường là hàm xử lý onClick.
      */
-    functionHandlePessEnter: {
+    functionHandlePressEnter: {
       type: Function,
       default: () => {},
       required: false,

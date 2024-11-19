@@ -31,17 +31,20 @@
       <!-- Light mode / Dark mode -->
       <m-switch-light-dark></m-switch-light-dark>
 
-      <a class="account-info">
+      <a class="account-info" @click="btnAccountInfoClick">
         <!-- Hiện thị avatar -->
         <div class="user-ava mi mi-32 mi-user-avatar avatar icon-resize">
           <img src="" alt="" />
         </div>
         <!-- Tên người dùng -->
-        <div class="user-name">
-          <div class="pr-6 display-user">Vũ Thu Hiền</div>
+        <div class="user-name" v-if="infoUser.isLogined">
+          <div class="pr-6 display-user">Nguyễn Văn Dũng</div>
         </div>
         <!-- Icon dropdown -->
-        <div class="mi mi-14 mi-chev-ron-down header-branch-icon"></div>
+        <div
+          v-if="infoUser.isLogined"
+          class="mi mi-14 mi-chev-ron-down header-branch-icon"
+        ></div>
       </a>
     </div>
   </header>
@@ -53,6 +56,9 @@ import { useLanguageStore } from "@/stores/languagestore.js";
 import NVDNotification from "@/components/base/notification/NVDNotification.vue";
 import NVDLanguage from "@/components/base/language/NVDLanguage.vue";
 import NVDSwitchLightDark from "@/components/base/switchlightdark/NVDSwitchLightDark.vue";
+import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
+
+import { getUserByIdAsync } from "@/api/user";
 
 export default {
   name: "TheHeader",
@@ -77,10 +83,65 @@ export default {
          */
         value: "",
       },
+
+      /**
+       * Thông tin người dùng.
+       */
+      infoUser: {
+        /**
+         * Đã đăng nhập chưa?
+         */
+        isLogined: false,
+
+        /**
+         * Tên người dùng.
+         */
+        userName: null,
+      },
     };
   },
 
+  mounted() {
+    // Load thông tin người dùng
+    this.loadInfoUser();
+  },
+
   methods: {
+    btnAccountInfoClick() {
+      if (this.infoUser.isLogined) {
+        // Chuyển hướng đến trang tài khoản người dùng
+        this.$router.push({ name: "ProfileRouter" });
+      } else {
+        // Chuyển hướng đến trang đăng nhập
+        this.$router.push({ name: "LoginRouter" });
+      }
+    },
+
+    async loadInfoUser() {
+      // Lấy giá trị Token trong local storage
+      let jwt = tokenLocalStorage.getToken();
+
+      if (!jwt) return;
+
+      try {
+        // Hiện loading
+        this.$emitter.emit("showLoading", true);
+
+        // Thực hiện gọi API để lấy thông tin User
+        let response = await getUserByIdAsync();
+
+        // Lưu thông tin User vào UserStore Pinia
+
+        console.log("response: ", response);
+      } catch (error) {
+        console.error("Lỗi khi lấy thông tin người dùng");
+        console.error(error);
+      } finally {
+        // Tắt loading
+        this.$emitter.emit("showLoading", false);
+      }
+    },
+
     /**
      * Hàm thực hiện ẩn / hiện component sidebar.
      * @returns {void}

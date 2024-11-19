@@ -144,10 +144,77 @@
         </p>
       </header>
       <main class="flex flex-column">
+        <!-- First name -->
+        <div class="first-name">
+          <m-text-field
+            ref="inputFirstName"
+            :lblTooltip="
+              this.$resource.resourcesRegister.step3.textUsername['vi-VN']
+            "
+            :haveLabel="true"
+            :isTextWhite="true"
+            inputType="text"
+            :tabIndex="1"
+            :validateFunctions="[
+              this.$validator.minLength,
+              this.$validator.maxLength,
+            ]"
+            :minLength="0"
+            :maxLength="255"
+            :isAutoFocused="true"
+            @inputOnChange="firstNameChanged"
+          >
+            <!-- Text hiển thị tiêu đề -->
+            <template v-slot:lbl-content>
+              {{ this.$resource.resourcesRegister.step3.textUsername["vi-VN"] }}
+            </template>
+            <!-- Text hiển thị khi validate -->
+            <template v-slot:warning>
+              {{
+                this.$resource.resourcesRegister.step3["vi-VN"]
+                  .textWarningUsername
+              }}
+            </template>
+          </m-text-field>
+        </div>
+
+        <!-- Last name -->
+        <div class="last-name">
+          <m-text-field
+            :lblTooltip="
+              this.$resource.resourcesRegister.step3.textUsername['vi-VN']
+            "
+            :haveLabel="true"
+            :isTextWhite="true"
+            inputType="text"
+            :tabIndex="1"
+            :validateFunctions="[
+              this.$validator.required,
+              this.$validator.minLength,
+              this.$validator.maxLength,
+            ]"
+            :minLength="1"
+            :maxLength="255"
+            :isAutoFocused="true"
+            @inputOnChange="lastNameChanged"
+          >
+            <!-- Text hiển thị tiêu đề -->
+            <template v-slot:lbl-content>
+              {{ this.$resource.resourcesRegister.step3.textUsername["vi-VN"] }}
+            </template>
+            <!-- Text hiển thị khi validate -->
+            <template v-slot:warning>
+              {{
+                this.$resource.resourcesRegister.step3["vi-VN"]
+                  .textWarningUsername
+              }}
+            </template>
+          </m-text-field>
+        </div>
+
         <!-- Username -->
         <div class="username">
           <m-text-field
-            ref="inputUsername"
             :lblTooltip="
               this.$resource.resourcesRegister.step3.textUsername['vi-VN']
             "
@@ -318,6 +385,7 @@
 </template>
 
 <script>
+import getLevelsAsync from "@/api/level";
 export default {
   name: "Register",
   inject: [
@@ -332,6 +400,11 @@ export default {
   data() {
     return {
       /**
+       * List LevelId
+       */
+      levelIds: [],
+
+      /**
        * Bước thực hiện: 1 -> 3.
        */
       step: 1,
@@ -345,6 +418,26 @@ export default {
        * Dữ liệu trong form.
        */
       formData: {
+        firstName: {
+          /**
+           * Giá trị FirstName.
+           */
+          value: "",
+          /**
+           * Giá trị FirstName có hợp lệ không?
+           */
+          isValid: true,
+        },
+        lastName: {
+          /**
+           * Giá trị LastName.
+           */
+          value: "",
+          /**
+           * Giá trị LastName có hợp lệ không?
+           */
+          isValid: true,
+        },
         /**
          * Dữ liệu Username.
          */
@@ -421,9 +514,9 @@ export default {
           else if (newStep == 2) {
             this.focusFirstSkillLevel();
           }
-          // Nếu ở bước 3 => Focus Input Username
+          // Nếu ở bước 3 => Focus Input FirstName
           else if (newStep == 3) {
-            this.focusInputUsername();
+            this.focusInputFirstName();
           }
         }, 300);
       } catch (error) {
@@ -435,8 +528,30 @@ export default {
   mounted() {
     // Focus button sign up
     this.focusButtonSignUp();
+
+    // Load API LevelId
+    this.loadAPILevelId();
   },
   methods: {
+    /**
+     * Load API Get LevelIds to list levelIds
+     * @author NVDung (23-10-2024)
+     */
+    async loadAPILevelId() {
+      // Hiện loading
+      this.$emitter.emit("showLoading", true);
+      try {
+        let levels = await getLevelsAsync();
+
+        this.levelIds = levels.map((level) => level.levelId);
+        console.log(this.levelIds);
+      } catch (error) {
+      } finally {
+        // Tắt loading
+        this.$emitter.emit("showLoading", false);
+      }
+    },
+
     /* ========== CÁC HÀM XỬ LÝ Ở BƯỚC 1 ========== */
     /**
      * Hàm xử lý sự kiện click button Sign up
@@ -510,6 +625,17 @@ export default {
       this.$refs.skillLevel0[0].focus();
     },
     /* ========== CÁC HÀM XỬ LÝ Ở BƯỚC 3 ========== */
+
+    /**
+     * Hàm xử lý thay đổi firstName.
+     * @author NVDung (04-11-2024)
+     */
+    firstNameChanged() {},
+    /**
+     * Hàm xử lý thay đổi lastName.
+     * @author NVDung (04-11-2024)
+     */
+    lastNameChanged() {},
     /**
      * Hàm xử lý thay đổi username.
      * @author NVDung (16-04-2024)
@@ -538,8 +664,8 @@ export default {
      * Hàm thực hiện focus Input Username.
      * @author NVDung (16-04-2024)
      */
-    focusInputUsername() {
-      this.$refs.inputUsername.autoFocusInput();
+    focusInputFirstName() {
+      this.$refs.inputFirstName.autoFocusInput();
     },
 
     /**
@@ -689,8 +815,8 @@ export default {
           }
           // Nếu đang ở bước 3
           else if (this.step == 3) {
-            // Thực hiện focus Input password.
-            this.focusInputUsername();
+            // Thực hiện focus First name.
+            this.focusInputFirstName();
           }
           break;
         /**

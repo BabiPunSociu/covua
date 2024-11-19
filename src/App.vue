@@ -22,12 +22,12 @@
     <m-dialog
       v-if="dataDialog.showDialog"
       :inputDialog="dataDialog.inputDialog"
-    ></m-dialog>
+    >
+    </m-dialog>
+
     <!-- Loading -->
-    <m-loading
-      v-if="dataLoading.showLoading"
-      :isLoadingControl="false"
-    ></m-loading>
+    <m-loading v-if="dataLoading.showLoading" :isLoadingControl="false">
+    </m-loading>
 
     <vue-identify-network @network-speed="networlSpeedChanged">
       <span slot="unknown"> REEE! Unable to identify your network type. </span>
@@ -40,11 +40,12 @@
       <span slot="fast">
         <video width="400" controls>
           <source src="../../assets/videos/bear.mp4" type="video/mp4" />
-
           Your browser does not support HTML5 video.
         </video>
       </span>
     </vue-identify-network>
+
+    <notification-hub></notification-hub>
   </div>
 </template>
 
@@ -56,6 +57,8 @@ import dialog from "./js/classconstructor/dialog.js";
 
 import { VueIdentifyNetwork } from "vue-identify-network";
 
+import notificationHub from "@/views/signalR/NotificationHub.vue";
+
 import { useLanguageStore } from "@/stores/languagestore.js";
 import languageLocalStorage from "@/js/localstorage/languageLocalStorage.js";
 
@@ -64,6 +67,7 @@ export default {
 
   components: {
     "vue-identify-network": VueIdentifyNetwork,
+    "notification-hub": notificationHub,
   },
 
   data() {
@@ -178,12 +182,39 @@ export default {
 
   provide() {
     return {
+      /**
+       * Thực hiện Toast success không có button HOÀN TÁC.
+       */
       toastSuccessNoButtonUndo: this.toastSuccess,
+
+      /**
+       * Thực hiện Toast warning không có button HOÀN TÁC.
+       */
       toastWarningNoButtonUndo: this.toastWarning,
+
+      /**
+       * Hàm thực hiện hiển thị dialog thông báo LỖI 1 nút bấm [đóng]
+       */
       showDialogError: this.dialogError,
+
+      /**
+       * Hàm thực hiện hiển thị dialog thông báo CẢNH BÁO 1 nút bấm [Đồng ý]
+       */
       showDialogWarningOneButton: this.dialogWarningOneButton,
+
+      /**
+       * Hàm thực hiện hiển thị dialog thông báo cảnh báo 2 nút bấm [có]|[không]
+       */
       showDialogWarningTwoButtons: this.dialogWarningTwoButtons,
+
+      /**
+       * Hàm thực hiện hiển thị dialog thông báo infomation 3 nút bấm [có]|[không]|[Hủy]
+       */
       showDialogInfoThreeButtons: this.dialogInfoThreeButtons,
+
+      /**
+       * Hàm xử lý lỗi API chung
+       */
       handleAPIError: this.handleAPIError,
     };
   },
@@ -454,22 +485,29 @@ export default {
      * @param {object} response Đối tượng chứa thông tin trả về lỗi từ API
      * Created by: NVDung (05/10/2023)
      */
-    handleAPIError(response) {
-      // Danh sách đối tượng errors
-      var errors = response.dataError.Errors;
+    handleAPIError(error) {
+      /**
+       * Truy cập dữ liệu trong lỗi API
+       * - message: Thông báo lỗi người dùng (UserMessage)
+       * - data: Danh sách lỗi validate input.
+       */
+      var { message, data } = error;
+
       // Tạo chuỗi html nội dung thông báo
-      var message = ``;
-      for (var error of errors) {
-        console.log("error: ", error);
-        var errorMessage = error.ErrorMessage;
-        message += `- ${errorMessage}<br>`;
-        console.log("message: ", message);
+      var messageResult = message + "<br>";
+
+      if (data) {
+        for (var d of data) {
+          let errorMes = d.errorMessage;
+          messageResult += `- ${errorMes}<br>`;
+        }
       }
-      message = message.slice(0, -4);
-      console.log("message: ", message);
+
+      messageResult = messageResult.slice(0, -4);
+      // console.log("message: ", messageResult);
 
       // Tạo dialog thông báo lỗi
-      this.dialogError(message);
+      this.dialogError("CallApiError", messageResult);
     },
 
     /* ========================== Network ========================== */

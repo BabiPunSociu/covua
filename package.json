@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.7",
     "axios": "^1.6.8",
     "pinia": "^2.1.7",
     "tiny-emitter": "^2.1.0",

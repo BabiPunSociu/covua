@@ -47,7 +47,7 @@
             width="20"
             height="20"
             :src="this.$resource.resourcesImage.logo.avatarWhite"
-            alt="Ảnh đại diện đối thủ"
+            alt="Ảnh đại diện bản thân"
           />
           <span>
             {{
@@ -402,6 +402,7 @@
               :tabIndex="1"
               :isOutlineWhite="false"
               :textAlignCenter="true"
+              @click="btnPlayClick"
             >
               {{
                 this.$resource.resourcesPlayOnline.sidebarContent.sectionNewGame
@@ -836,6 +837,21 @@ export default {
   },
 
   methods: {
+    /**
+     * Hàm thực hiện xử lý tạo new game
+     * @author NVDUNG (23-08-2024)
+     */
+    btnPlayClick() {},
+
+    /**
+     * Hàm thực hiện tìm kiếm đối thủ.
+     * 
+     */
+    searchOpponent()
+    {
+
+    },
+
     /**
      * Hàm thực hiện chuyển hướng đến trang game/live
      * @param {string} gameId Định danh game

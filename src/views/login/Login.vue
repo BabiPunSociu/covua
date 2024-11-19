@@ -107,7 +107,7 @@
           :tabIndex="3"
           :isOutlineWhite="true"
           :textAlignCenter="true"
-          :functionHandlePessEnter="btnLoginOnClick"
+          :functionHandlePressEnter="btnLoginOnClick"
           @click="btnLoginOnClick"
           >{{
             this.$resource.resourcesLogin.textLogin[languageStore.getLanguage]
@@ -132,7 +132,7 @@
           style="width: 100%"
           :tabIndex="6"
           :isOutlineWhite="true"
-          :functionHandlePessEnter="btnLoginGoogleOnClick"
+          :functionHandlePressEnter="btnLoginGoogleOnClick"
           @click="btnLoginGoogleOnClick"
           >{{
             this.$resource.resourcesLogin.textLoginGoogle[
@@ -149,7 +149,7 @@
           style="width: 100%"
           :tabIndex="7"
           :isOutlineWhite="true"
-          :functionHandlePessEnter="btnLoginFacebookOnClick"
+          :functionHandlePressEnter="btnLoginFacebookOnClick"
           @click="btnLoginFacebookOnClick"
           >{{
             this.$resource.resourcesLogin.textLoginFacebook[
@@ -222,11 +222,21 @@ export default {
   created() {
     // Hiện loading
     this.$emitter.emit("showLoading", true);
+
+    /* ============= START - Event listener dialog ============= */
+    this.$emitter.on("dialogButton1Click", this.dialogButton1Click);
+    /* =============  END  - Event listener dialog ============= */
   },
 
   mounted() {
     // Ẩn loading
     this.$emitter.emit("showLoading", false);
+  },
+
+  beforeUnmount() {
+    /* ============= START - HỦY Event listener dialog ============= */
+    this.$emitter.on("dialogButton1Click", this.dialogButton1Click);
+    /* =============  END  - HỦY Event listener dialog ============= */
   },
 
   methods: {
@@ -285,6 +295,7 @@ export default {
         let errorMessage = ``;
 
         // ========== KIỂM TRA VALIDATE INPUT USERNAME ========== //
+        this.formLogin.username.isValid = true;
         if (
           // Kiểm tra Required
           !this.$validator.required(this.formLogin.username.value) ||
@@ -304,6 +315,7 @@ export default {
         }
 
         // ========== KIỂM TRA VALIDATE INPUT PASSWORD ========== //
+        this.formLogin.password.isValid = true;
         if (
           // Kiểm tra Required
           !this.$validator.required(this.formLogin.password.value) ||
@@ -327,7 +339,7 @@ export default {
           errorMessage = errorMessage.slice(0, -5);
         }
 
-        console.log(errorMessage);
+        // console.log(errorMessage);
 
         return errorMessage;
       } catch (error) {
@@ -347,13 +359,7 @@ export default {
         // Validate input
         let errorMessage = this.checkValidateInput();
         if (errorMessage) {
-          // Focus first input error
-          if (this.formLogin.username.isValid == false) {
-            this.$refs.inputUsername.autoFocusInput();
-          } else {
-            this.$refs.inputPassword.autoFocusInput();
-          }
-          // Hiện thông báo
+          // Hiện thông báo với key = "dialogErrorLogin"
           this.showDialogWarningOneButton("dialogErrorLogin", errorMessage);
           return;
         }
@@ -377,6 +383,13 @@ export default {
         this.$router.push({ name: name, params: params });
       } catch (error) {
         console.log(error);
+        // Nếu cần dùng dialog để hiện thông báo.
+        if (error.useDialog) {
+          this.handleAPIError(error);
+        } else {
+          // Hiện toast để thông báo.
+          this.toastWarningNoButtonUndo(error.message);
+        }
       } finally {
         this.$emitter.emit("showLoading", false);
       }
@@ -402,6 +415,37 @@ export default {
       alert("Login with Facebook on click");
     },
     /* ========== END - Login with Google ========== */
+
+    /* ============= START - Event listener dialog ============= */
+    /**
+     * Xử lý sự kiện button 1 của dialog click
+     * @param keyDialog Key dialog được gửi về từ sự kiện click.
+     * @author NVDung (17-05-2024)
+     */
+    dialogButton1Click(keyDialog) {
+      console.log("dialogButton1Click: ", keyDialog);
+      switch (keyDialog) {
+        // Thông báo được tạo từ validate input.
+        case "dialogErrorLogin":
+          // Thực hiện focus first input error
+          if (this.formLogin.username.isValid == false) {
+            this.$refs.inputUsername.autoFocusInput();
+          } else {
+            this.$refs.inputPassword.autoFocusInput();
+          }
+          break;
+
+        // Thông báo do call API lỗi
+        case "CallApiError":
+          // Thực hiện focus input Username
+          this.$refs.inputUsername.autoFocusInput();
+          break;
+
+        default:
+          break;
+      }
+    },
+    /* =============  END  - Event listener dialog ============= */
   },
 };
 </script>

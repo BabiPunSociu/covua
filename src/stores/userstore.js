@@ -8,8 +8,7 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     user: {
       userId: null,
-      userCode: null,
-      userName: null,
+      name: null,
     },
   }),
 
@@ -22,6 +21,25 @@ export const useUserStore = defineStore("user", {
     getUserId() {
       return this.user.userId;
     },
+
+    /**
+     * Hàm get giá trị name trong store.
+     * @returns {string} Giá trị name trong store.
+     * @author NVDUNG (01-05-2024)
+     */
+    getName() {
+      return this.user.name;
+    },
   },
-  actions: {},
+  actions: {
+    /**
+     * Hàm thực hiện thiết lập thông tin người dùng.
+     * @param {{userId: string, name: string}} info Thông tin người dùng.
+     * @author NVDUNG (01-05-2024)
+     */
+    setUserInfo(info) {
+      this.user.userId = info.userId;
+      this.user.name = info.name;
+    },
+  },
 });
