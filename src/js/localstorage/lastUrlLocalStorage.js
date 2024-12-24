@@ -1,3 +1,5 @@
+const key = "NVDChessLastURL";
+
 /**
  * Đối tượng cung cấp các hàm thực hiện tương tác local storage về url cuối cùng.
  * - Nhằm lưu trữ trang trước khi chuyển đến đăng nhập / đăng kí.
@@ -14,7 +16,7 @@ const lastURLLocalStorage = {
       let lastUrlJSON = JSON.stringify(options);
 
       // Lưu vào local storage.
-      localStorage.setItem("last_url", lastUrlJSON);
+      localStorage.setItem(key, lastUrlJSON);
     } catch (error) {
       console.error("Loi khi set last_url vao local storage", error);
     }
@@ -28,7 +30,7 @@ const lastURLLocalStorage = {
   getLastUrl: function () {
     try {
       // Lấy thông tin từ local storage.
-      const lastUrlJSON = localStorage.getItem("last_url");
+      const lastUrlJSON = localStorage.getItem(key);
 
       if (lastUrlJSON) {
         // Chuyển JSON -> Obj

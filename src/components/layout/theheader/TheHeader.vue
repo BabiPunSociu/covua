@@ -37,12 +37,12 @@
           <img src="" alt="" />
         </div>
         <!-- Tên người dùng -->
-        <div class="user-name" v-if="infoUser.isLogined">
-          <div class="pr-6 display-user">Nguyễn Văn Dũng</div>
+        <div class="user-name" v-if="userStore.getName">
+          <div class="pr-6 display-user">{{ userStore.getName }}</div>
         </div>
         <!-- Icon dropdown -->
         <div
-          v-if="infoUser.isLogined"
+          v-if="userStore.getName"
           class="mi mi-14 mi-chev-ron-down header-branch-icon"
         ></div>
       </a>
@@ -51,14 +51,23 @@
 </template>
 
 <script>
+// Store pinia
 import { useLanguageStore } from "@/stores/languagestore.js";
+import { useUserStore } from "@/stores/userstore.js";
 
+// Local storage
+import userIdLocalStorage from "@/js/localstorage/userIdLocalStorage";
+import lastURLLocalStorage from "@/js/localstorage/lastUrlLocalStorage";
+import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
+
+// Components
 import NVDNotification from "@/components/base/notification/NVDNotification.vue";
 import NVDLanguage from "@/components/base/language/NVDLanguage.vue";
 import NVDSwitchLightDark from "@/components/base/switchlightdark/NVDSwitchLightDark.vue";
-import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
 
+// APIs
 import { getUserByIdAsync } from "@/api/user";
+
 
 export default {
   name: "TheHeader",
@@ -75,6 +84,11 @@ export default {
       languageStore: useLanguageStore(),
 
       /**
+       * Đối tượng chứa store thông tin User.
+       */
+      userStore: useUserStore(),
+
+      /**
        * Đối tượng chứa thông tin về textFieldSearch.
        */
       textFieldSearch: {
@@ -82,21 +96,6 @@ export default {
          * Giá trị value của input.
          */
         value: "",
-      },
-
-      /**
-       * Thông tin người dùng.
-       */
-      infoUser: {
-        /**
-         * Đã đăng nhập chưa?
-         */
-        isLogined: false,
-
-        /**
-         * Tên người dùng.
-         */
-        userName: null,
       },
     };
   },
@@ -108,7 +107,8 @@ export default {
 
   methods: {
     btnAccountInfoClick() {
-      if (this.infoUser.isLogined) {
+      // Kiểm tra người dùng đã đăng nhập chưa?
+      if (this.userStore.getName) {
         // Chuyển hướng đến trang tài khoản người dùng
         this.$router.push({ name: "ProfileRouter" });
       } else {
@@ -121,25 +121,52 @@ export default {
       // Lấy giá trị Token trong local storage
       let jwt = tokenLocalStorage.getToken();
 
-      if (!jwt) return;
-
-      try {
-        // Hiện loading
-        this.$emitter.emit("showLoading", true);
-
-        // Thực hiện gọi API để lấy thông tin User
-        let response = await getUserByIdAsync();
-
-        // Lưu thông tin User vào UserStore Pinia
-
-        console.log("response: ", response);
-      } catch (error) {
-        console.error("Lỗi khi lấy thông tin người dùng");
-        console.error(error);
-      } finally {
-        // Tắt loading
-        this.$emitter.emit("showLoading", false);
+      if (!jwt?.accessToken) {
+        // Lưu URL hiện tại vào local storage
+        lastURLLocalStorage.setLastUrl({
+          name: this.$route.name,
+          params: this.$route.params,
+        });
+        // Điều hướng đến trang login.
+        this.$router.push({ name: "LoginRouter" });
+        return;
       }
+
+      let callAPIAgain = false;
+      do {
+        try {
+          // Hiện loading
+          this.$emitter.emit("showLoading", true);
+
+          let userId = userIdLocalStorage.getUserId();
+
+          // Thực hiện gọi API để lấy thông tin User
+          let response = await getUserByIdAsync(userId);
+
+          // Lưu thông tin User vào UserStore Pinia
+
+          // console.log("response: ", response);
+
+          // Cập nhật thông tin user vào user store
+          let username =
+            response.data.fullName.trim() ||
+            `${response.data.firstName} ${response.data.lastName}`.trim();
+
+          this.userStore.setUserInfo({ userId: null, name: username });
+
+          // Dừng vòng lặp nếu gọi API thành công.
+          callAPIAgain = false;
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin người dùng");
+          console.error(error);
+
+          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+          callAPIAgain = error.message === "CallApiAgain";
+        } finally {
+          // Tắt loading
+          this.$emitter.emit("showLoading", false);
+        }
+      } while (callAPIAgain);
     },
 
     /**

@@ -18,6 +18,15 @@
               ]
             }}
           </span>
+
+          <div>
+            <!-- Loading search đối thủ -->
+            <m-loading
+              v-if="showLoadingSearchOpponent"
+              :isLoadingControl="true"
+            >
+            </m-loading>
+          </div>
         </div>
         <div class="time flex">
           <div class="mi mi-24 mi-clock icon-resize"></div>
@@ -51,6 +60,7 @@
           />
           <span>
             {{
+              userStore.getName ||
               this.$resource.resourcesPlay.players.player[
                 languageStore.getLanguage
               ]
@@ -175,12 +185,12 @@
                       class="option-mode-game-item block-user-select"
                       @click="
                         setModeGame(
+                          0,
                           this.$resource.resourcesPlayOnline.sidebarContent
                             .sectionNewGame.groupOptionsBullet.options.text1min[
                             languageStore.getLanguage
                           ],
                           'mi-ammo',
-                          1,
                           '01:00'
                         )
                       "
@@ -197,10 +207,10 @@
                       class="option-mode-game-item block-user-select"
                       @click="
                         setModeGame(
+                          1,
                           this.$resource.resourcesPlayOnline.sidebarContent
                             .sectionNewGame.groupOptionsBullet.options.text1vs1,
                           'mi-ammo',
-                          1,
                           '01:00'
                         )
                       "
@@ -215,10 +225,10 @@
                       class="option-mode-game-item block-user-select"
                       @click="
                         setModeGame(
+                          2,
                           this.$resource.resourcesPlayOnline.sidebarContent
                             .sectionNewGame.groupOptionsBullet.options.text2vs1,
                           'mi-ammo',
-                          1,
                           '02:00'
                         )
                       "
@@ -251,12 +261,12 @@
                       class="option-mode-game-item block-user-select"
                       @click="
                         setModeGame(
+                          3,
                           this.$resource.resourcesPlayOnline.sidebarContent
                             .sectionNewGame.groupOptionsBlitz.options.text3min[
                             languageStore.getLanguage
                           ],
                           'mi-lightning',
-                          1,
                           '03:00'
                         )
                       "
@@ -273,10 +283,10 @@
                       class="option-mode-game-item block-user-select"
                       @click="
                         setModeGame(
+                          4,
                           this.$resource.resourcesPlayOnline.sidebarContent
                             .sectionNewGame.groupOptionsBlitz.options.text3vs2,
                           'mi-lightning',
-                          1,
                           '03:00'
                         )
                       "
@@ -291,12 +301,12 @@
                       class="option-mode-game-item block-user-select"
                       @click="
                         setModeGame(
+                          5,
                           this.$resource.resourcesPlayOnline.sidebarContent
                             .sectionNewGame.groupOptionsBlitz.options.text5min[
                             languageStore.getLanguage
                           ],
                           'mi-lightning',
-                          1,
                           '05:00'
                         )
                       "
@@ -331,12 +341,12 @@
                       class="option-mode-game-item block-user-select"
                       @click="
                         setModeGame(
+                          6,
                           this.$resource.resourcesPlayOnline.sidebarContent
                             .sectionNewGame.groupOptionsRapid.options.text10min[
                             languageStore.getLanguage
                           ],
                           'mi-clock',
-                          1,
                           '10:00'
                         )
                       "
@@ -353,11 +363,11 @@
                       class="option-mode-game-item block-user-select"
                       @click="
                         setModeGame(
+                          7,
                           this.$resource.resourcesPlayOnline.sidebarContent
                             .sectionNewGame.groupOptionsRapid.options
                             .text15vs10,
                           'mi-clock',
-                          1,
                           '15:00'
                         )
                       "
@@ -372,12 +382,12 @@
                       class="option-mode-game-item block-user-select"
                       @click="
                         setModeGame(
+                          8,
                           this.$resource.resourcesPlayOnline.sidebarContent
                             .sectionNewGame.groupOptionsRapid.options.text30min[
                             languageStore.getLanguage
                           ],
                           'mi-clock',
-                          1,
                           '30:00'
                         )
                       "
@@ -751,9 +761,18 @@
 </template>
 
 <script>
+// Store pinia
 import { useLanguageStore } from "@/stores/languagestore.js";
 import { useUserStore } from "@/stores/userstore";
 
+// Local storage
+import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
+import lastURLLocalStorage from "@/js/localstorage/lastUrlLocalStorage";
+import signalRHubLocalStorage from "@/js/localstorage/signalRHubLocalStorage";
+
+// APIs
+import { getModeGamesAsync } from "@/api/modegame";
+import { findGameAsync } from "@/api/game";
 export default {
   name: "PlayOnline",
 
@@ -770,6 +789,11 @@ export default {
       userStore: useUserStore(),
 
       /**
+       * Điều khiển hiển thị loading tìm kiếm đối thủ.
+       */
+      showLoadingSearchOpponent: false,
+
+      /**
        * Đối tượng đánh dấu section đang được chọn.
        */
       sectionSelected: "newGame", // ["newGame", "games", "players"]
@@ -781,9 +805,19 @@ export default {
         isShowModeGame: false,
 
         /**
+         * Danh sách Ids chế độ chơi.
+         */
+        modeGameIds: [],
+
+        /**
          * Thông tin về chế độ chơi đã chọn.
          */
         modeGameSelected: {
+          /**
+           * Index chế độ chơi đã chọn, để xác định ModeGameId.
+           */
+          indexModeGameSelected: null,
+
           /**
            * Text modegame để đưa vào button selected.
            */
@@ -793,7 +827,10 @@ export default {
            * class icon để đưa vào class selected.
            */
           iconModeGameSelected: "mi-clock",
-          valueModeGameSelected: "",
+
+          /**
+           * Thời gian của mỗi người.
+           */
           textTime: "10:00",
         },
       },
@@ -841,15 +878,65 @@ export default {
      * Hàm thực hiện xử lý tạo new game
      * @author NVDUNG (23-08-2024)
      */
-    btnPlayClick() {},
+    async btnPlayClick() {
+      // Lấy ConnectionId NotificationHub
+      let connectionIdNotificationHub =
+        signalRHubLocalStorage.notificationHub.getNotificationHub();
 
-    /**
-     * Hàm thực hiện tìm kiếm đối thủ.
-     * 
-     */
-    searchOpponent()
-    {
+      // Xác định ModeGameId đã chọn
+      let modeGameId =
+        this.sectionNewGame.modeGameIds[
+          this.sectionNewGame.modeGameSelected.indexModeGameSelected
+        ];
 
+      // Lấy giá trị Token trong local storage
+      let jwt = tokenLocalStorage.getToken();
+
+      if (!jwt?.accessToken) {
+        // Lưu URL hiện tại vào local storage
+        lastURLLocalStorage.setLastUrl({
+          name: this.$route.name,
+          params: this.$route.params,
+        });
+        // Điều hướng đến trang login.
+        this.$router.push({ name: "LoginRouter" });
+        return;
+      }
+
+      let callAPIAgain = false;
+      do {
+        try {
+          // Hiện loading tìm đối thủ
+          this.showLoadingSearchOpponent = true;
+
+          // Thực hiện gọi API để tìm trận đấu
+          let response = await findGameAsync(
+            connectionIdNotificationHub,
+            modeGameId
+          );
+
+          console.log("response: ", response);
+
+          // Không có đối thủ... => Chờ.
+          if (response.data != "Searching") {
+            // Tắt loading tìm đối thủ
+            this.showLoadingSearchOpponent = false;
+          }
+
+          // Hiển thị tên và ảnh đối thủ
+
+          // Chuyển hướng đến trang game/live
+
+          // Dừng vòng lặp nếu gọi API thành công.
+          callAPIAgain = false;
+        } catch (error) {
+          console.error("Lỗi khi tìm trận đấu");
+          console.error(error);
+
+          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+          callAPIAgain = error.message === "CallApiAgain";
+        }
+      } while (callAPIAgain);
     },
 
     /**
@@ -876,26 +963,25 @@ export default {
 
     /**
      * Hàm thực hiện thiết lập chế độ chơi.
-     *
+     *@param {int} indexModeGameSelected Giá trị index chế độ chơi đã chọn.
      * @param {string} textModeGameSelected Giá trị text chế độ chơi đã chọn.
      * @param {string} iconModeGameSelected Class icon hiển thị chế độ chơi đã chọn.
-     * @param {string} valueModeGameSelected Giá trị value chế độ chơi đã chọn.
      * @param {string} textTime Giá trị text thời gian của chế độ chơi đã chọn.
      * @author NVDUNG (01-05-2024)
      */
     setModeGame(
+      indexModeGameSelected,
       textModeGameSelected,
       iconModeGameSelected,
-      valueModeGameSelected,
       textTime
     ) {
       // Cập nhật giá trị chế độ chơi
+      this.sectionNewGame.modeGameSelected.indexModeGameSelected =
+        indexModeGameSelected;
       this.sectionNewGame.modeGameSelected.textModeGameSelected =
         textModeGameSelected;
       this.sectionNewGame.modeGameSelected.iconModeGameSelected =
         iconModeGameSelected;
-      this.sectionNewGame.modeGameSelected.valueModeGameSelected =
-        valueModeGameSelected;
       this.sectionNewGame.modeGameSelected.textTime = textTime;
 
       // Ẩn danh sách chế độ chơi
@@ -1001,17 +1087,74 @@ export default {
     sectionSelectedChanged(newString) {
       this.sectionSelected = newString;
     },
+
+    /**
+     * Thực hiện load data ModeGame.
+     * @author NVDung (06-12-2024)
+     */
+    async loadModeGame() {
+      // Lấy giá trị Token trong local storage
+      let jwt = tokenLocalStorage.getToken();
+
+      if (!jwt?.accessToken) {
+        // Lưu URL hiện tại vào local storage
+        lastURLLocalStorage.setLastUrl({
+          name: this.$route.name,
+          params: this.$route.params,
+        });
+        // Điều hướng đến trang login.
+        this.$router.push({ name: "LoginRouter" });
+        return;
+      }
+
+      let callAPIAgain = false;
+      do {
+        try {
+          // Hiện loading
+          this.$emitter.emit("showLoading", true);
+
+          // Thực hiện gọi API để lấy thông tin ModeGame
+          let response = await getModeGamesAsync();
+
+          // console.log(response);
+          let { data } = response;
+
+          if (data && data.length > 0) {
+            this.sectionNewGame.modeGameIds = data.map((m) => m.modeGameId);
+            // console.log(this.sectionNewGame.modeGameIds);
+          }
+
+          // Dừng vòng lặp nếu gọi API thành công.
+          callAPIAgain = false;
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin người dùng");
+          console.error(error);
+
+          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+          callAPIAgain = error.message === "CallApiAgain";
+        } finally {
+          // Tắt loading
+          this.$emitter.emit("showLoading", false);
+        }
+      } while (callAPIAgain);
+    },
   },
 
   mounted() {
     // Thiết lập modegame mặc định.
-    this.sectionNewGame.modeGameSelected.textModeGameSelected =
-      this.$resource.resourcesPlayOnline.sidebarContent.sectionNewGame.groupOptionsRapid.options.text10min[
-        this.languageStore.getLanguage
-      ];
+    this.setModeGame(
+      6,
+      this.$resource.resourcesPlayOnline.sidebarContent.sectionNewGame
+        .groupOptionsRapid.options.text10min[this.languageStore.getLanguage],
+      "mi-clock",
+      "10:00"
+    );
 
     // Focus button play
     this.focusButtonPlay();
+
+    // Load data ModeGame
+    this.loadModeGame();
 
     // Điều chỉnh kích thước bàn cờ
     this.adjustTableSize();

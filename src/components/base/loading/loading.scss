@@ -1,0 +1,96 @@
+.container-loading {
+  transition: all 0.2s;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 13;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+
+  /* Background - Bức phủ */
+  .m-loading-background {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: all 0.25s ease;
+  }
+}
+
+.loading {
+  z-index: 13;
+  position: relative;
+  min-width: 40px;
+  width: 40px;
+  max-width: 40px;
+  min-height: 40px;
+  height: 40px;
+  max-height: 40px;
+  animation: rotate 1.5s linear infinite;
+
+  &.loading-control {
+    /* position: relative; */
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    height: 20px;
+    min-height: 20px;
+    max-height: 20px;
+    /* animation: rotate 1.5s linear infinite; */
+
+    .background {
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      border: solid 1px #33b437;
+    }
+
+    .corner {
+      position: absolute;
+      top: 0;
+      border-top-style: solid;
+      border-left-style: solid;
+      border-top-left-radius: 100%;
+      border-color: #fff;
+      width: 50%;
+      height: 50%;
+      border-top-width: 1px;
+      border-left-width: 1px;
+    }
+  }
+
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .background {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    border: solid 3px #33b437;
+  }
+
+  .corner {
+    position: absolute;
+    top: 0;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-top-left-radius: 100%;
+    border-color: #fff;
+    width: 50%;
+    height: 50%;
+    border-top-width: 3px;
+    border-left-width: 3px;
+  }
+}

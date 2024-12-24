@@ -16,9 +16,9 @@
     <div>
       <h3>Received Data:</h3>
       <div v-for="mes of dataResponse" :key="mes">
-        <i
-          ><strong>{{ mes.user }}:</strong></i
-        >
+        <i>
+          <strong>{{ mes.user }}:</strong>
+        </i>
         {{ mes.data }}
       </div>
     </div>
@@ -33,11 +33,10 @@ export default {
   data() {
     return {
       connection: null,
-      connection2: null,
       message: "",
       user: "",
       groupName: "",
-      dataResponse: [],
+      dataResponse: [], // { user, data }
     };
   },
   mounted() {
@@ -45,7 +44,7 @@ export default {
       /// ============================ Thiết lập connection ============================ //
       // Initialize SignalR connection
       this.connection = new HubConnectionBuilder()
-        .withUrl("https://localhost:7011/basehub") // Replace with your actual URL
+        .withUrl("https://localhost:7011/notificationhub") // Replace with your actual URL
         .build();
 
       this.connection
@@ -59,91 +58,32 @@ export default {
         })
         .catch((err) => console.error("SignalR connection error:", err));
 
-      // Lắng nghe sự kiện "ReceiveMessage" từ server
-      this.connection.on("ReceiveMessage", (message) => {
+      // Lắng nghe sự kiện "NotificationReceiveMessageFromAll" từ server
+      this.connection.on("NotificationReceiveMessageFromAll", (message) => {
         console.log("Received message:", message);
 
         this.dataResponse.push(message);
       });
 
-      // Lắng nghe sự kiện "GameShowMessageAddToGroup" từ server
-      this.connection.on("GameShowMessageAddToGroup", (message) => {
+      // Lắng nghe sự kiện "NotificationShowMessageAddToGroup" từ server
+      this.connection.on("NotificationShowMessageAddToGroup", (message) => {
         console.log("Received message:", message);
 
         this.dataResponse.push(message);
       });
 
-      // Lắng nghe sự kiện "GameShowMessageRemoveFromGroup" từ server
-      this.connection.on("GameShowMessageRemoveFromGroup", (message) => {
-        console.log("Received message:", message);
+      // Lắng nghe sự kiện "NotificationShowMessageRemoveFromGroup" từ server
+      this.connection.on(
+        "NotificationShowMessageRemoveFromGroup",
+        (message) => {
+          console.log("Received message:", message);
 
-        this.dataResponse.push(message);
-      });
+          this.dataResponse.push(message);
+        }
+      );
 
-      // Lắng nghe sự kiện "GameReceiveMessageFromAll" từ server
-      this.connection.on("GameReceiveMessageFromAll", (message) => {
-        console.log("Received message:", message);
-
-        this.dataResponse.push(message);
-      });
-
-      // Lắng nghe sự kiện "GameReceiveMessageFromGroup" từ server
-      this.connection.on("GameReceiveMessageFromGroup", (message) => {
-        console.log("Received message:", message);
-
-        this.dataResponse.push(message);
-      });
-    } catch (error) {
-      console.error(error);
-    }
-
-    try {
-      // Initialize SignalR connection
-      this.connection2 = new HubConnectionBuilder()
-        .withUrl("https://localhost:7011/gamehub") // Replace with your actual URL
-        .build();
-
-      this.connection2
-        .start()
-        .then(() => {
-          console.log("Connection 2 established");
-          console.log(this.connection2);
-        })
-        .then(() => {
-          this.getConnectionId(this.connection2);
-        })
-        .catch((err) => console.error("SignalR connection 2 error:", err));
-
-      // Lắng nghe sự kiện "ReceiveMessage" từ server
-      this.connection2.on("ReceiveMessage", (message) => {
-        console.log("Received message:", message);
-
-        this.dataResponse.push(message);
-      });
-
-      // Lắng nghe sự kiện "GameShowMessageAddToGroup" từ server
-      this.connection2.on("GameShowMessageAddToGroup", (message) => {
-        console.log("Received message:", message);
-
-        this.dataResponse.push(message);
-      });
-
-      // Lắng nghe sự kiện "GameShowMessageRemoveFromGroup" từ server
-      this.connection2.on("GameShowMessageRemoveFromGroup", (message) => {
-        console.log("Received message:", message);
-
-        this.dataResponse.push(message);
-      });
-
-      // Lắng nghe sự kiện "GameReceiveMessageFromAll" từ server
-      this.connection2.on("GameReceiveMessageFromAll", (message) => {
-        console.log("Received message:", message);
-
-        this.dataResponse.push(message);
-      });
-
-      // Lắng nghe sự kiện "GameReceiveMessageFromGroup" từ server
-      this.connection2.on("GameReceiveMessageFromGroup", (message) => {
+      // Lắng nghe sự kiện "NotificationReceiveMessageFromGroup" từ server
+      this.connection.on("NotificationReceiveMessageFromGroup", (message) => {
         console.log("Received message:", message);
 
         this.dataResponse.push(message);
@@ -172,7 +112,7 @@ export default {
         try {
           let result = await this.connection.invoke(
             // Invoke the "AddToGroup" method on the server
-            "AddToGroup",
+            "AddToGroupAsync",
             this.groupName
           );
 
@@ -194,7 +134,7 @@ export default {
         try {
           await this.connection.invoke(
             // Invoke the "RemoveFromGroup" method on the server
-            "RemoveFromGroup",
+            "RemoveFromGroupAsync",
             this.groupName
           );
         } catch (error) {
@@ -214,7 +154,7 @@ export default {
       try {
         await this.connection.invoke(
           // Invoke the "SendMessage" method on the server
-          "SendMessage",
+          "SendMessageAsync",
           { user: this.user, data }
         );
 
@@ -242,7 +182,7 @@ export default {
       try {
         let result = await this.connection.invoke(
           // Invoke the "SendMessageToGroup" method on the server
-          "SendMessageToGroup",
+          "SendMessageToGroupAsync",
 
           /**
            * Các tham số sử dụng trong phương thức SendMessageToGroup

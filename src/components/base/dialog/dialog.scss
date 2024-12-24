@@ -42,6 +42,18 @@
         font-size: 20px;
         font-weight: 700;
       }
+
+      &.dialog-otp {
+        /* Căn giữa title */
+        justify-content: center;
+
+        /* Cố định góc phải trên */
+        .mi.mi-close {
+          position: absolute;
+          top: calc(24 / 14 * 1rem); // 24px ~ font 14px
+          right: calc(24 / 14 * 1rem);
+        }
+      }
     }
 
     /* MAIN */
@@ -54,6 +66,10 @@
         font-size: 14px; /* zero */
         font-weight: 400; /* zero */
         padding-left: 10px;
+
+        &.dialog-otp {
+          padding: 0;
+        }
       }
     }
 

@@ -1,7 +1,8 @@
+const key = "NVDChessLangguageCode";
+
 /**
  * Đối tượng cung cấp các hàm thực hiện tương tác local storage về ngôn ngữ.
  */
-const key = "langCode";
 const languageLocalStorage = {
   /**
    * Set mã ngôn ngữ vào local storage.

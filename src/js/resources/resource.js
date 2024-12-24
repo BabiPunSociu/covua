@@ -8,6 +8,7 @@ import resourcesIcon from "./resourceimageicon/resourceicons.js";
 // import resources của các base component.
 import resourcesToast from "./basecomponent/resourcetoast.js";
 import resourcesDialog from "./basecomponent/resourcedialog.js";
+import resourcesDialogOtp from "./basecomponent/resourcedialogotp.js";
 import resourceButton from "./basecomponent/resourcebutton.js";
 import resourcesNotification from "./basecomponent/resourcenotification.js";
 import resourcesSideBar from "./basecomponent/resourcessidebar.js";
@@ -17,11 +18,12 @@ import resourcesTextField from "./basecomponent/resourcestextfield.js";
 import resourcesFooter from "./layoutcomponent/resourcefooter.js";
 
 // import resources của các view component.
-import resourcesLogin from "./view/resourceslogin.js";
-import resourcesRegister from "./view/resourcesregister.js";
-import resourcesHome from "./view/resourceshome.js";
+import resourcesLogin from "./view/resourcelogin.js";
+import resourcesRegister from "./view/resourceregister.js";
+import resourcesHome from "./view/resourcehome.js";
 import resourcesPlay from "./view/resourceplay.js";
 import resourcesPlayOnline from "./view/resourceplayonline.js";
+import resourcesGame from "./view/resourcegame.js";
 
 /**
  * Đối tượng cung cấp resources cho ứng dụng.
@@ -75,6 +77,11 @@ const NVDResource = {
   resourcesDialog,
 
   /**
+   * Đối tượng cung cấp resources cho Dialog OTP.
+   */
+  resourcesDialogOtp,
+
+  /**
    * Đối tượng chứa thông tin về Button.
    */
   resourceButton,
@@ -123,6 +130,11 @@ const NVDResource = {
    * Đối tượng cung cấp resources cho PlayOnline view-component.
    */
   resourcesPlayOnline,
+
+  /**
+   * Đối tượng cung cấp resources cho Game view-component.
+   */
+  resourcesGame,
 };
 
 export default NVDResource;

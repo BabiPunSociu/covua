@@ -1,0 +1,27 @@
+.otp-container {
+  // border: 1px solid red;
+  .input-code {
+    height: calc(var(--btn-height-desktop) / 14 * 1rem);
+    width: calc(var(--btn-height-desktop) / 14 * 1rem);
+
+    font-weight: 400; /* zero */
+    border-radius: var(--border-radius-default); /* zero */
+    background-color: #fff; /* zero */
+    border: solid 1px #ebebeb; /* zero */
+    padding: 0 calc(12 / 14 * 1rem); // 12px ~ font 14px
+    margin: 0 calc(12 / 14 * 1rem);
+
+    // Hover
+    &:hover {
+      background-color: #f6f6f6; /* zero */
+      cursor: pointer;
+    }
+
+    // Active
+    &:active,
+    &:focus,
+    &:focus-visible {
+      border-color: #50b83c; /* zero */
+    }
+  }
+}

@@ -5,9 +5,9 @@ import { apiWithAuth, apiWithOutAuth } from "@/api/base/api";
  * @returns {Promise} List of levels
  * @author NVDung (23-10-2024)
  */
-const getLevelsAsync = async () => {
+export const getLevelsAsync = async () => {
   try {
-    return apiWithOutAuth.get("/levels");
+    return apiWithOutAuth.get("/Level");
   } catch (error) {
     console.error("getLevelsAsync() in level.js", error);
   }
@@ -19,12 +19,10 @@ const getLevelsAsync = async () => {
  * @returns {Promise} Chi tiết Level
  * @author NVDung (23-10-2024)
  */
-const getLevelByIdAsync = async (levelId) => {
+export const getLevelByIdAsync = async (levelId) => {
   try {
-    return apiWithAuth.get("/levels/" + levelId);
+    return apiWithAuth.get("/Level/" + levelId);
   } catch (error) {
     console.error("getLevelByIdAsync() in level.js", error);
   }
 };
-
-export default { getLevelsAsync, getLevelByIdAsync };

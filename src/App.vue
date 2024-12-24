@@ -145,7 +145,7 @@ export default {
      * Tạo lắng nghe sự kiện hủy dialog
      * @author NVDung (18-04-2024)
      */
-    this.$emitter.on("closeDialog", () => {
+    this.$emitter.on("closeDialog", (keyDialog) => {
       this.dataDialog.showDialog = false;
     });
 

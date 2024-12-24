@@ -38,11 +38,12 @@ import NVDTextField from "./components/base/textfield/NVDTextField.vue";
 import NVDCombobox from "./components/base/combobox/NVDCombobox.vue";
 import NVDCheckbox from "./components/base/checkbox/NVDCheckbox.vue";
 import NVDRadioButton from "./components/base/radiobutton/NVDRadioButton.vue";
-import NVDDialogVue from "./components/base/dialog/NVDDialog.vue";
+import NVDDialog from "./components/base/dialog/NVDDialog.vue";
 import NVDLoading from "./components/base/loading/NVDLoading.vue";
 import NVDToast from "./components/base/toast/NVDToast.vue";
 import NVDForm from "./components/base/form/NVDForm.vue";
 import NVDChessBoard from "./components/base/chessboard/NVDChessBoard.vue";
+import NVDDialogOtp from "./components/base/dialogotp/NVDDialogOtp.vue";
 
 /* ==================== CREATE APP (Instance) ==================== */
 const app = createApp(App);
@@ -54,7 +55,8 @@ app.component("m-text-field", NVDTextField);
 app.component("m-combobox", NVDCombobox);
 app.component("m-checkbox", NVDCheckbox);
 app.component("m-radio", NVDRadioButton);
-app.component("m-dialog", NVDDialogVue);
+app.component("m-dialog", NVDDialog);
+app.component("m-dialog-otp", NVDDialogOtp);
 app.component("m-loading", NVDLoading);
 app.component("m-toast", NVDToast);
 app.component("m-form", NVDForm);

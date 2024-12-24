@@ -8,11 +8,15 @@
             loading="lazy"
             width="20"
             height="20"
-            :src="this.$resource.resourcesImage.logo.avatarBlack"
+            :src="
+              gameControl.opponentInfomation.avatar ??
+              this.$resource.resourcesImage.logo.avatarBlack
+            "
             alt="Ảnh đại diện đối thủ"
           />
           <span>
             {{
+              gameControl.opponentInfomation.fullName ??
               this.$resource.resourcesPlay.players.opponent[
                 languageStore.getLanguage
               ]
@@ -29,15 +33,20 @@
 
       <!-- Chess Board -->
       <div class="board-layout-chessboard flex flex-center">
-        <!-- <div class="overlay"></div> -->
+        <!-- Ngăn chặn hành động khi game chưa bắt đầu -->
+        <div
+          class="overlay"
+          v-if="gameControl.matchInfomation.isMatchStartedState != true"
+        ></div>
         <!-- Chess Board -->
         <m-chess-board
           class="chess-board"
-          :colorPlayer="this.gameControl.colorPlayer"
+          :colorPlayer="this.colorPlayer"
           :isEndGame="false"
           @endGame="handleEndGameOnBoard"
           ref="chessBoard"
-        ></m-chess-board>
+        >
+        </m-chess-board>
       </div>
 
       <!-- Bottom -->
@@ -48,17 +57,34 @@
             loading="lazy"
             width="20"
             height="20"
-            :src="this.$resource.resourcesImage.logo.avatarWhite"
-            alt="Ảnh đại diện đối thủ"
+            :src="
+              gameControl.playerInformation.avatar ??
+              this.$resource.resourcesImage.logo.avatarWhite
+            "
+            alt="Ảnh đại diện người chơi"
           />
           <span>
             {{
+              gameControl.playerInformation.fullName ??
               this.$resource.resourcesPlay.players.player[
                 languageStore.getLanguage
               ]
             }}
           </span>
         </div>
+
+        <!-- Hiển thị khi chưa sẵn sàng -->
+        <m-button
+          v-if="gameControl.playersState.player1Ready == false"
+          @click="btnReadyOnClick"
+        >
+          {{
+            this.$resource.resourcesGame.statePlayerReady[
+              languageStore.getLanguage
+            ]
+          }}
+        </m-button>
+
         <div class="time flex">
           <div class="mi mi-24 mi-clock icon-resize"></div>
           <span class="time-text block-user-select">
@@ -752,8 +778,18 @@
 </template>
 
 <script>
+// Store pinia
 import { useLanguageStore } from "@/stores/languagestore.js";
 import { useUserStore } from "@/stores/userstore";
+
+// Local storage
+import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
+import userIdLocalStorage from "@/js/localstorage/userIdLocalStorage";
+
+// APIs
+import { getGameByIdASync } from "@/api/game";
+import { getUserByIdAsync } from "@/api/user";
+import { getImageByIdAsync } from "@/api/image";
 
 export default {
   name: "Game",
@@ -769,17 +805,6 @@ export default {
        * Đối tượng chứa store thông tin User.
        */
       userStore: useUserStore(),
-
-      /**
-       * Đối tượng chứa thông tin về điều khiển ván cờ
-       */
-      gameControl: {
-        /**
-         * Người chơi cầm quân màu ?
-         * Mặc định: quân trắng.
-         */
-        colorPlayer: this.$enum.colorPlayer.white,
-      },
 
       /**
        * Đối tượng đánh dấu section đang được chọn.
@@ -845,10 +870,350 @@ export default {
          */
         listResult: [],
       },
+
+      /**
+       * Quản lý các trạng thái trong trận đấu.
+       */
+      gameControl: {
+        /**
+         * Trạng thái của 2 người chơi
+         */
+        playersState: {
+          /**
+           * Trạng thái "người chơi 1" đã sẵn sàng?
+           */
+          player1Ready: false,
+
+          /**
+           * Trạng thái "người chơi 2 - Đối thủ" đã sẵn sàng?
+           */
+          player2Ready: false,
+
+          /**
+           * Hiển thị trạng thái người chơi
+           */
+          isShowState: true,
+        },
+
+        /**
+         * Thông tin về game đấu
+         */
+        gameInfomation: {
+          /**
+           * Tỷ số trận đấu.
+           */
+          score: null,
+
+          /**
+           * Người gửi yêu cầu - Cầm quân trắng.
+           */
+          sender: null,
+
+          /**
+           * Người nhận yêu cầu - Cầm quân đen.
+           */
+          receiver: null,
+
+          /**
+           * Số người đang xem trận đấu.
+           */
+          viewerCount: 0,
+        },
+
+        /**
+         * Thông tin về ván đấu hiện tại.
+         */
+        matchInfomation: {
+          /**
+           * Định danh ván đấu, để lưu trữ thông tin kết quả.
+           */
+          matchId: null,
+
+          /**
+           * Ván đấu thứ x. Nếu x chẵn => Quân trắng đi trước.
+           */
+          numberOfMatch: 0,
+
+          /**
+           * Trạng thái VÁN ĐẤU bắt đầu, khi cả 2 người chơi đã sẵn sàng.
+           */
+          isMatchStartedState: false,
+        },
+
+        /**
+         * Thông tin người chơi 1
+         */
+        playerInformation: {
+          /**
+           * URL avatar đổi thủ.
+           */
+          avatar: null,
+
+          /**
+           * Tên đối thủ.
+           */
+          fullName: null,
+        },
+
+        /**
+         * Thông tin đối thủ
+         */
+        opponentInfomation: {
+          /**
+           * URL avatar đổi thủ.
+           */
+          avatar: null,
+
+          /**
+           * Tên đối thủ.
+           */
+          fullName: null,
+        },
+
+        /**
+         * Kiểm soát thời gian còn lại.
+         */
+        timeControl: {
+          /**
+           * Người chơi
+           */
+          timePlayer1: null,
+
+          /**
+           * Đối thủ
+           */
+          timePlayer2: null,
+        },
+      },
     };
   },
 
+  computed: {
+    /**
+     * Người chơi cầm quân cờ màu?
+     * @returns {int} 0 - white || 1 - black
+     */
+    colorPlayer() {
+      // Lấy UserId từ Local Storage
+      let userId = userIdLocalStorage.getUserId();
+
+      let result =
+        this.gameControl.gameInfomation.sender == userId
+          ? this.$enum.colorPlayer.white
+          : this.$enum.colorPlayer.black;
+
+      console.log(`ColorPlayer: ${result}`);
+
+      return result;
+    },
+  },
+
   methods: {
+    /* =================== START - STATE PLAYER ==================== */
+    /**
+     * Cập nhật trạng thái sẵn sàng để bắt đầu ván đấu.
+     * @author NVDung (19-12-2024)
+     */
+    btnReadyOnClick() {
+      // Thực hiện phát sự kiện đến NotificationHub để gửi trạng thái sẵn sàng cho Server
+      this.$emitter.emit("sendReadyState");
+    },
+
+    /* =================== END - STATE STATE PLAYER ==================== */
+
+    /* =================== START GAME CHESSBOARD ==================== */
+    /**
+     * Lấy thông tin về game đấu.
+     * @author NVDung (19-12-2024)
+     */
+    async getInfomationGame() {
+      // Lấy giá trị Token trong local storage
+      let jwt = tokenLocalStorage.getToken();
+
+      if (!jwt?.accessToken) {
+        // Lưu URL hiện tại vào local storage
+        lastURLLocalStorage.setLastUrl({
+          name: this.$route.name,
+          params: this.$route.params,
+        });
+        // Điều hướng đến trang login.
+        this.$router.push({ name: "LoginRouter" });
+        return;
+      }
+
+      let callAPIAgain = false;
+      do {
+        try {
+          // Hiện loading
+          this.$emitter.emit("showLoading", true);
+
+          // Lấy GameId từ router code
+          let gameId = this.$route.params.gameCode;
+
+          // Thực hiện gọi API để lấy thông tin Game
+          let response = await getGameByIdASync(gameId);
+
+          console.log("response: ", response);
+
+          // Cập nhật thông tin vào data.
+          this.gameControl.gameInfomation.score = response.data.score;
+          this.gameControl.gameInfomation.sender = response.data.sender;
+          this.gameControl.gameInfomation.receiver = response.data.receiver;
+          this.gameControl.gameInfomation.viewerCount =
+            response.data.viewerCount;
+
+          // Load dữ liệu về đối thủ.
+          this.getOpponentInfomation();
+
+          // Dừng vòng lặp nếu gọi API thành công.
+          callAPIAgain = false;
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin trận đấu");
+          console.error(error);
+
+          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+          callAPIAgain = error.message === "CallApiAgain";
+        } finally {
+          this.$emitter.emit("showLoading", false);
+        }
+      } while (callAPIAgain);
+    },
+
+    /**
+     * Lấy thông tin về người chơi (Player 1).
+     * @author NVDung (19-12-2024)
+     */
+    async getPlayer1Infomation() {
+      // Lấy giá trị Token trong local storage
+      let jwt = tokenLocalStorage.getToken();
+
+      if (!jwt?.accessToken) {
+        // Lưu URL hiện tại vào local storage
+        lastURLLocalStorage.setLastUrl({
+          name: this.$route.name,
+          params: this.$route.params,
+        });
+        // Điều hướng đến trang login.
+        this.$router.push({ name: "LoginRouter" });
+        return;
+      }
+
+      let callAPIAgain = false;
+      do {
+        try {
+          // Hiện loading
+          this.$emitter.emit("showLoading", true);
+
+          // Lấy UserId từ Local storage
+          let userId = userIdLocalStorage.getUserId();
+
+          // Thực hiện gọi API để lấy thông tin User
+          let response = await getUserByIdAsync(userId);
+
+          console.log("response user player 1: ", response);
+
+          // Cập nhật thông tin vào data.
+          this.gameControl.playerInformation.fullName =
+            response.data.fullName.trim();
+
+          // Được set avatar mặc định nên NOT NULL.
+          let avatarId = response.data.avatar;
+
+          // Thực hiện gọi API để lấy thông tin Image
+          response = await getImageByIdAsync(avatarId);
+
+          console.log("response image player 1: ", response);
+
+          // Cập nhật thông tin vào data.
+          this.gameControl.playerInformation.avatar = response.data.url.trim();
+
+          // Dừng vòng lặp nếu gọi API thành công.
+          callAPIAgain = false;
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin người chơi 1");
+          console.error(error);
+
+          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+          callAPIAgain = error.message === "CallApiAgain";
+        } finally {
+          // Tắt loading
+          this.$emitter.emit("showLoading", false);
+        }
+      } while (callAPIAgain);
+    },
+
+    /**
+     * Lấy thông tin về đối thủ.
+     * @author NVDung (19-12-2024)
+     */
+    async getOpponentInfomation() {
+      // Lấy giá trị Token trong local storage
+      let jwt = tokenLocalStorage.getToken();
+
+      if (!jwt?.accessToken) {
+        // Lưu URL hiện tại vào local storage
+        lastURLLocalStorage.setLastUrl({
+          name: this.$route.name,
+          params: this.$route.params,
+        });
+        // Điều hướng đến trang login.
+        this.$router.push({ name: "LoginRouter" });
+        return;
+      }
+
+      let callAPIAgain = false;
+      do {
+        try {
+          // Hiện loading
+          this.$emitter.emit("showLoading", true);
+
+          // Lấy UserId từ Local storage
+          let userId = userIdLocalStorage.getUserId();
+
+          /**
+           * Xác định UserId đối thủ
+           */
+          let opponentId =
+            userId == this.gameControl.gameInfomation.sender
+              ? this.gameControl.gameInfomation.receiver
+              : this.gameControl.gameInfomation.sender;
+
+          // Thực hiện gọi API để lấy thông tin User
+          let response = await getUserByIdAsync(opponentId);
+
+          console.log("response user opponent: ", response);
+
+          // Cập nhật thông tin vào data.
+          this.gameControl.opponentInfomation.fullName =
+            response.data.fullName.trim();
+
+          // Được set avatar mặc định nên NOT NULL.
+          let avatarId = response.data.avatar;
+
+          // Thực hiện gọi API để lấy thông tin Image
+          response = await getImageByIdAsync(avatarId);
+
+          console.log("response image opponent: ", response);
+
+          // Cập nhật thông tin vào data.
+          this.gameControl.opponentInfomation.avatar = response.data.url.trim();
+
+          // Dừng vòng lặp nếu gọi API thành công.
+          callAPIAgain = false;
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin đối thủ");
+          console.error(error);
+
+          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+          callAPIAgain = error.message === "CallApiAgain";
+        } finally {
+          // Tắt loading
+          this.$emitter.emit("showLoading", false);
+        }
+      } while (callAPIAgain);
+    },
+    /* =================== END GAME CHESSBOARD ==================== */
+
     /* =================== START GAME CHESSBOARD ==================== */
     /**
      * Hàm xử lý sự kiện kết thúc game trên bàn cờ.
@@ -1012,13 +1377,18 @@ export default {
     /* =================== END SIDEBAR ==================== */
   },
 
-  created() {
-    // Tạm thời lấy giá trị điều khiển màu cờ từ router code
-    this.gameControl.colorPlayer = Number(this.$route.params.gameCode);
-    // console.log(this.gameControl.colorPlayer);
-  },
-
   mounted() {
+    /* =================== START SETUP GAME ==================== */
+    // Lấy thông tin Game.
+    this.getInfomationGame();
+
+    // Load thông tin người chơi 1
+    this.getPlayer1Infomation();
+
+    // Load thông tin về
+    /* =================== END SETUP GAME ==================== */
+
+    /* =================== START SETUP SIDEBAR ==================== */
     // Thiết lập modegame mặc định.
     this.sectionNewGame.modeGameSelected.textModeGameSelected =
       this.$resource.resourcesPlayOnline.sidebarContent.sectionNewGame.groupOptionsRapid.options.text10min[
@@ -1032,6 +1402,7 @@ export default {
     this.adjustTableSize();
 
     window.addEventListener("resize", this.adjustTableSize);
+    /* =================== END SETUP SIDEBAR ==================== */
   },
 
   beforeUnmount() {

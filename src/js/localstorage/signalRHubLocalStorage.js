@@ -1,12 +1,12 @@
 /**
  * Giá trị key local storage để lưu trữ ConnectionId kết nối với Notification Hub.
  */
-const keyNotificationHub = "notificationHub";
+const keyNotificationHub = "NVDChessNotificationHub";
 
 /**
  * Giá trị key local storage để lưu trữ ConnectionId kết nối với Game Hub.
  */
-const keyGameHub = "gameHub";
+const keyGameHub = "NVDChessGameHub";
 
 const signalRHubLocalStorage = {
   /**

@@ -170,12 +170,21 @@
       >
     </div>
   </div>
+
+  <m-dialog-otp
+    v-if="dialogOtpData.isShowDialogOTP"
+    :keyDialogOtp="dialogOtpData.keyDialog"
+    @dialogOtpButtonConfirmClick="handleDialogOtpButtonConfirmClick"
+    @dialogOtpButtonResendOTPClick="handleDialogOtpButtonResendOTPClick"
+    @closeDialogOtp="handleCloseDialog"
+  ></m-dialog-otp>
 </template>
 
 <script>
 import { useLanguageStore } from "@/stores/languagestore";
 import { authenUsernamePasswordApiAsync } from "@/api/authentication";
 import googleOAuth2 from "@/js/oauth2/googleoauth2";
+import userIdLocalStorage from "@/js/localstorage/userIdLocalStorage";
 import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
 import lastURLLocalStorage from "@/js/localstorage/lastUrlLocalStorage";
 
@@ -216,6 +225,26 @@ export default {
        * Nhớ mật khẩu.
        */
       isRememberPassword: false,
+
+      /**
+       * Dữ liệu về dialog OTP
+       */
+      dialogOtpData: {
+        /**
+         * Toggle hiển thị dialog OTP
+         */
+        isShowDialogOTP: false,
+
+        /**
+         * Key để phân biệt các Dialog khác nhau.
+         */
+        keyDialog: "dialogOtpConfirmEmail",
+
+        /**
+         * Giá trị OTP
+         */
+        otp: "",
+      },
     };
   },
 
@@ -371,16 +400,29 @@ export default {
         );
 
         console.log("reponse: ", response);
-        // Lấy token.
-        let token = response.data.token;
 
-        // Lưu token vào local storage
-        tokenLocalStorage.setToken(token);
+        // Lấy UserId
+        let { userId } = response.data;
 
-        // ===== Chuyển hướng đến trang trước đó hoặc HOME ===== //
-        let { name, params } = lastURLLocalStorage.getLastUrl();
+        // Lưu UserId vào local storage
+        userIdLocalStorage.setUserId(userId);
 
-        this.$router.push({ name: name, params: params });
+        // Nếu Enable 2FA -> Bật Dialog OTP
+        if (response.data.twoFactor) {
+          // Hiển thị dialog OTP để xác nhận email.
+          this.dialogOtpData.isShowDialogOTP = true;
+        } else {
+          // Lấy token.
+          let token = response.data.token;
+
+          // Lưu token vào local storage
+          tokenLocalStorage.setToken(token);
+
+          // ===== Chuyển hướng đến trang trước đó hoặc HOME ===== //
+          let { name, params } = lastURLLocalStorage.getLastUrl();
+
+          this.$router.push({ name: name, params: params });
+        }
       } catch (error) {
         console.log(error);
         // Nếu cần dùng dialog để hiện thông báo.
@@ -442,10 +484,97 @@ export default {
           break;
 
         default:
+          // Không thực hiện gì cả, vì không đúng keyDialog.
           break;
       }
     },
     /* =============  END  - Event listener dialog ============= */
+
+    /* ============= START - Event listener dialog OTP ============= */
+
+    /**
+     * Thực hiện đóng dialog otp.
+     * @param keyDialog Giá trị keyDialog
+     * @author NVDung (23-11-2024)
+     */
+    handleCloseDialog(keyDialog) {
+      this.dialogOtpData.isShowDialogOTP = false;
+    },
+
+    /**
+     * Thực hiện gọi API xác thực OTP để xác thực email
+     * @param otp Mã OTP
+     * @author NVDung (23-11-2024)
+     */
+    async handleDialogOtpButtonConfirmClick(otp) {
+      console.log(`otp: ${otp}`);
+
+      try {
+        // Hiển thị loading
+        this.$emitter.emit("showLoading", true);
+
+        // Thực hiện validate input OTP
+        let errorMessage = this.validateOtp(otp);
+
+        if (errorMessage) {
+          // Hiển thị thông báo lỗi.
+          this.showDialogError("form register otp", errorMessage);
+          return;
+        }
+
+        let userId = userIdLocalStorage.getUserId();
+
+        // Thực hiện gọi API
+        let response = await confirmRegisterAcconuntAsync(userId, otp);
+
+        console.log(`Response confirm register:`, response);
+
+        // Lấy thông tin JWT
+        let { accessToken, refreshToken } = response.data;
+
+        // Lưu JWT vào local storage
+        tokenLocalStorage.setToken({ accessToken, refreshToken });
+
+        // Chuyển đến trang chủ.
+        this.$router.push({ name: "HomeRouter", params: {} });
+      } catch (error) {
+        console.log(error);
+        // Hiển thị thông báo.
+        if (error.useDialog) {
+          this.showDialogError("DialogErrorAPI", error.data ?? error.message);
+        } else {
+          this.toastWarningNoButtonUndo(error.message);
+        }
+
+        // Tắt & bật DialogOtp để reset data.
+        this.dialogOtpData.isShowDialogOTP = false;
+        this.dialogOtpData.isShowDialogOTP = true;
+      } finally {
+        this.$emitter.emit("showLoading", false);
+      }
+    },
+
+    /**
+     * Thực hiện validate input OTP
+     * @param otp Mã OTP
+     * @author NVDung (23-11-2024)
+     * @return {string} errorMessage - Nội dung thông báo lỗi.
+     */
+    validateOtp(otp) {
+      let errorMessage = "";
+
+      return errorMessage;
+    },
+
+    /**
+     * Thực hiện gọi API gửi lại OTP mới đến mail cho người dùng
+     * @param keyDialogOtp Key dialog OTP
+     * @author NVDung (23-11-2024)
+     */
+    handleDialogOtpButtonResendOTPClick(keyDialogOtp) {
+      console.log("Resend OTP");
+    },
+    /* =============  END  - Event listener dialog OTP ============= */
   },
 };
 </script>

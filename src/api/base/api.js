@@ -10,7 +10,7 @@ import errorMessage from "@/js/resources/errormessage/errormessage";
  * @param {{auth: boolean, silent: boolean}} param2
  * @returns {import('axios').AxiosInstance}
  */
-export const createApiInstance = (config, { auth = true, silent = false }) => {
+const createApiInstance = (config, { auth = true, silent = false }) => {
   const api = axios.create(config);
 
   api.interceptors.request.use(
@@ -44,6 +44,8 @@ export const createApiInstance = (config, { auth = true, silent = false }) => {
      * @returns {import('axios').AxiosResponse}
      */
     (response) => {
+      console.log(response);
+
       const contentType = response.headers["content-type"] || "";
 
       if (contentType.includes("application/json")) {
@@ -61,7 +63,7 @@ export const createApiInstance = (config, { auth = true, silent = false }) => {
      */
     (error) => {
       if (!silent) {
-        console.log(error);
+        console.log(`Lỗi API`, error);
       }
 
       // Mã ngôn ngữ
@@ -90,7 +92,7 @@ export const createApiInstance = (config, { auth = true, silent = false }) => {
         error.response.data
       );
 
-      let { userMessage } = camelCaseResData;
+      let { userMessage, devMessage } = camelCaseResData;
 
       switch (status) {
         case 400: {
@@ -101,6 +103,23 @@ export const createApiInstance = (config, { auth = true, silent = false }) => {
         }
 
         case 401: {
+          // Lấy thông tin DevMessage
+          if (devMessage) {
+            // Chuyển JSON -> Object
+            devMessage = JSON.parse(devMessage);
+            let { message, accessToken, refreshToken } = devMessage;
+            // Refresh token
+            if (message == "REFRESH_TOKEN") {
+              // Cập nhật local storage
+              tokenLocalStorage.setToken({ accessToken, refreshToken });
+            }
+
+            return Promise.reject({ message: "CallApiAgain" });
+          }
+
+          // Xóa token trong local storage
+          tokenLocalStorage.removeToken();
+
           if (!userMessage) {
             userMessage = errorMessage.Unauthorized(langCode);
           }
@@ -148,7 +167,7 @@ export const createApiInstance = (config, { auth = true, silent = false }) => {
       }
       return Promise.reject({
         useDialog: userError, // Hiển thị lỗi bằng dialog || toast.
-        message: userMessage,
+        message: `${userMessage}: ${devMessage}` || userMessage,
         // Array errors validate input backend.
         data: camelCaseResData.errors,
       });

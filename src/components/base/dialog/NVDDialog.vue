@@ -2,7 +2,7 @@
   <div class="container-dialog">
     <div class="dialog-background"></div>
     <div class="dialog-container">
-      <header class="dialog-header">
+      <header class="dialog-header" :class="{ 'dialog-otp': isDialogOTP }">
         <div class="dialog-title">
           <slot name="title">{{ this.inputDialog.title }}</slot>
         </div>
@@ -10,10 +10,13 @@
         <div class="mi mi-24 mi-close" @click="closeDialog"></div>
       </header>
       <main class="dialog-content flex flex-space-between">
-        <div class="dialog-icon">
+        <div class="dialog-icon" v-if="!isDialogOTP">
           <div class="mi mi-24" :class="inputDialog.iconClass"></div>
         </div>
-        <div class="dialog-description flex-align-center">
+        <div
+          class="dialog-description flex-align-center"
+          :class="{ 'dialog-otp': isDialogOTP }"
+        >
           <slot name="dialog-description">
             <p v-html="inputDialog.content"></p>
           </slot>
@@ -27,29 +30,31 @@
         <m-button
           tabindex="1002"
           class="m-btn-secondary"
-          v-if="inputDialog.totalButtons >= 3"
+          v-if="inputDialog.totalButton >= 3"
           :functionHandlePressEnter="btnSecond2Click"
           :textAlignCenter="true"
           @click="btnSecond2Click"
           @keydown="tabFocusAround($event, 3)"
-          ><slot name="btn-second-text_2">{{
-            this.inputDialog.buttonSecondary2Text
-          }}</slot></m-button
         >
+          <slot name="btn-second-text_2">
+            {{ this.inputDialog.buttonSecondary2Text }}
+          </slot>
+        </m-button>
 
         <!-- button 2 -->
         <m-button
           tabindex="1001"
           class="m-btn-secondary"
-          v-if="inputDialog.totalButtons >= 2"
+          v-if="inputDialog.totalButton >= 2"
           :functionHandlePressEnter="btnSecond1Click"
           :textAlignCenter="true"
           @click="btnSecond1Click"
           @keydown="tabFocusAround($event, 2)"
-          ><slot name="btn-second-text_1">{{
-            this.inputDialog.buttonSecondary1Text
-          }}</slot></m-button
         >
+          <slot name="btn-second-text_1">
+            {{ this.inputDialog.buttonSecondary1Text }}
+          </slot>
+        </m-button>
 
         <!-- button 1 -->
         <m-button
@@ -58,10 +63,11 @@
           @click="btnPrimaryClick"
           :functionHandlePressEnter="btnPrimaryClick"
           :textAlignCenter="true"
-          ><slot name="btn-continue-text">{{
-            this.inputDialog.buttonPrimaryText
-          }}</slot></m-button
         >
+          <slot name="btn-continue-text">
+            {{ this.inputDialog.buttonPrimaryText }}
+          </slot>
+        </m-button>
       </footer>
     </div>
   </div>
@@ -95,7 +101,18 @@ export default {
         "buttonSecondary1Text",
         "buttonSecondary2Text"
       ),
-      required: true,
+      required: false,
+    },
+
+    /**
+     * Đánh dấu Dialog OTP
+     * - Title căn giữa.
+     * - Không có icons.
+     */
+    isDialogOTP: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
   mounted() {
@@ -106,17 +123,19 @@ export default {
     /* ========== Đóng dialog ======== */
     /**
      * Phát sự kiện đóng dialog
+     * - Gửi kèm keyDialog.
      * @returns {void}
      * @author NVDung (18-04-2024)
      */
     closeDialog() {
       // Phát sự kiện đóng dialog
-      this.$emitter.emit("closeDialog");
+      this.$emitter.emit("closeDialog", this.inputDialog.keyDialog || "");
     },
 
     /* ========== Button Primary click ======== */
     /**
      * Phát sự kiện xác nhận tiếp tục hành động
+     * - Gửi kèm keyDialog.
      * @returns {void}
      * @author NVDung (18-04-2024)
      */
@@ -129,8 +148,10 @@ export default {
         this.inputDialog.keyDialog || ""
       );
 
-      // Đóng dialog
-      this.closeDialog();
+      if (!this.isDialogOTP) {
+        // Đóng dialog
+        this.closeDialog();
+      }
     },
 
     /**
@@ -146,8 +167,10 @@ export default {
         this.inputDialog.keyDialog || ""
       );
 
-      // Đóng dialog
-      this.closeDialog();
+      if (!this.isDialogOTP) {
+        // Đóng dialog
+        this.closeDialog();
+      }
     },
 
     /**
@@ -163,8 +186,9 @@ export default {
         this.inputDialog.keyDialog || ""
       );
 
-      // Đóng dialog
-      this.closeDialog();
+      if (!this.isDialogOTP)
+        // Đóng dialog
+        this.closeDialog();
     },
     /* ========== Focus primary button ======== */
 
@@ -185,9 +209,9 @@ export default {
       if (event.key == "Tab") {
         if (
           // Nút 2 và tổng 2 nút bấm => focus lại nút 1
-          (index === 2 && this.inputDialog.totalButtons === 2) ||
+          (index === 2 && this.inputDialog.totalButton === 2) ||
           // Nút 3 và tổng 3 nút bấm => focus lại nút 1
-          (index === 3 && this.inputDialog.totalButtons >= 3)
+          (index === 3 && this.inputDialog.totalButton >= 3)
         ) {
           // focus nút primary
           this.focusPrimaryButton();

@@ -1,12 +1,17 @@
 <template>
   <div class="container flex flex-center">
+    <!-- Chọn phương thức đăng kí tài khoản người dùng -->
     <section
       class="content content-1 flex flex-column scroller"
       v-if="step === 1"
     >
       <header class="flex flex-column">
         <h1 class="block-user-select">
-          {{ this.$resource.resourcesRegister.step1.textLable["vi-VN"] }}
+          {{
+            this.$resource.resourcesRegister.step1.textLable[
+              languageStore.getLanguage
+            ]
+          }}
         </h1>
         <img
           loading="lazy"
@@ -28,7 +33,9 @@
           :functionHandlePessEnter="nextStep"
           @click="nextStep"
           >{{
-            this.$resource.resourcesRegister.step1.textSignUp["vi-VN"]
+            this.$resource.resourcesRegister.step1.textSignUp[
+              languageStore.getLanguage
+            ]
           }}</m-button
         >
 
@@ -36,7 +43,9 @@
         <div class="seperate-area flex">
           <hr />
           <span class="block-user-select">{{
-            this.$resource.resourcesRegister.step1.textOr["vi-VN"]
+            this.$resource.resourcesRegister.step1.textOr[
+              languageStore.getLanguage
+            ]
           }}</span>
           <hr />
         </div>
@@ -53,7 +62,9 @@
             :functionHandlePessEnter="btnGoogleClick"
             @click="btnGoogleClick"
             >{{
-              this.$resource.resourcesRegister.step1.textGoogle["vi-VN"]
+              this.$resource.resourcesRegister.step1.textGoogle[
+                languageStore.getLanguage
+              ]
             }}</m-button
           >
           <!-- Button login facebook -->
@@ -67,7 +78,9 @@
             :functionHandlePessEnter="btnFacebookClick"
             @click="btnFacebookClick"
             >{{
-              this.$resource.resourcesRegister.step1.textFacebook["vi-VN"]
+              this.$resource.resourcesRegister.step1.textFacebook[
+                languageStore.getLanguage
+              ]
             }}</m-button
           >
         </div>
@@ -79,19 +92,29 @@
           tabindex="4"
           @keydown="step1TabIndexAround"
           >{{
-            this.$resource.resourcesRegister.step1.textLogin["vi-VN"]
+            this.$resource.resourcesRegister.step1.textLogin[
+              languageStore.getLanguage
+            ]
           }}</router-link
         >
       </footer>
     </section>
+
+    <!-- Chọn trình độ hiện tại -->
     <section class="content content-2 flex flex-column" v-if="step === 2">
       <header class="flex flex-column">
         <h1 class="block-user-select">
-          {{ this.$resource.resourcesRegister.step2.textLable["vi-VN"] }}
+          {{
+            this.$resource.resourcesRegister.step2.textLable[
+              languageStore.getLanguage
+            ]
+          }}
         </h1>
         <p class="block-user-select">
           {{
-            this.$resource.resourcesRegister.step2.textLableDescription["vi-VN"]
+            this.$resource.resourcesRegister.step2.textLableDescription[
+              languageStore.getLanguage
+            ]
           }}
         </p>
       </header>
@@ -109,7 +132,7 @@
           @keydown.enter="skillLevelSelectedChanged(item.value)"
         >
           <div class="flex">
-            <span class="text">{{ item.text["vi-VN"] }}</span>
+            <span class="text">{{ item.text[languageStore.getLanguage] }}</span>
             <!-- Icon selected -->
             <span
               class="mi mi-tick icon-selected"
@@ -129,17 +152,29 @@
           :functionHandlePessEnter="nextStep"
           @click="nextStep"
           >{{
-            this.$resource.resourcesRegister.step2.textContinue["vi-VN"]
+            this.$resource.resourcesRegister.step2.textContinue[
+              languageStore.getLanguage
+            ]
           }}</m-button
         >
       </footer>
     </section>
+
+    <!-- Nhập thống tin để đăng kí -->
     <section class="content content-3" v-if="step === 3">
       <header class="flex flex-column">
-        <h1>{{ this.$resource.resourcesRegister.step3.textLable["vi-VN"] }}</h1>
+        <h1>
+          {{
+            this.$resource.resourcesRegister.step3.textLable[
+              languageStore.getLanguage
+            ]
+          }}
+        </h1>
         <p>
           {{
-            this.$resource.resourcesRegister.step3.textLableDescription["vi-VN"]
+            this.$resource.resourcesRegister.step3.textLableDescription[
+              languageStore.getLanguage
+            ]
           }}
         </p>
       </header>
@@ -149,30 +184,31 @@
           <m-text-field
             ref="inputFirstName"
             :lblTooltip="
-              this.$resource.resourcesRegister.step3.textUsername['vi-VN']
+              this.$resource.resourcesRegister.step3.textFirstname['vi-VN']
             "
             :haveLabel="true"
             :isTextWhite="true"
             inputType="text"
             :tabIndex="1"
-            :validateFunctions="[
-              this.$validator.minLength,
-              this.$validator.maxLength,
-            ]"
-            :minLength="0"
+            :validateFunctions="[this.$validator.maxLength]"
             :maxLength="255"
             :isAutoFocused="true"
             @inputOnChange="firstNameChanged"
           >
             <!-- Text hiển thị tiêu đề -->
             <template v-slot:lbl-content>
-              {{ this.$resource.resourcesRegister.step3.textUsername["vi-VN"] }}
+              {{
+                this.$resource.resourcesRegister.step3.textFirstname[
+                  languageStore.getLanguage
+                ]
+              }}
             </template>
             <!-- Text hiển thị khi validate -->
             <template v-slot:warning>
               {{
-                this.$resource.resourcesRegister.step3["vi-VN"]
-                  .textWarningUsername
+                this.$resource.resourcesRegister.step3.textWarningFirstname[
+                  languageStore.getLanguage
+                ]
               }}
             </template>
           </m-text-field>
@@ -182,7 +218,7 @@
         <div class="last-name">
           <m-text-field
             :lblTooltip="
-              this.$resource.resourcesRegister.step3.textUsername['vi-VN']
+              this.$resource.resourcesRegister.step3.textLastname['vi-VN']
             "
             :haveLabel="true"
             :isTextWhite="true"
@@ -200,13 +236,18 @@
           >
             <!-- Text hiển thị tiêu đề -->
             <template v-slot:lbl-content>
-              {{ this.$resource.resourcesRegister.step3.textUsername["vi-VN"] }}
+              {{
+                this.$resource.resourcesRegister.step3.textLastname[
+                  languageStore.getLanguage
+                ]
+              }}
             </template>
             <!-- Text hiển thị khi validate -->
             <template v-slot:warning>
               {{
-                this.$resource.resourcesRegister.step3["vi-VN"]
-                  .textWarningUsername
+                this.$resource.resourcesRegister.step3.textWarningLastname[
+                  languageStore.getLanguage
+                ]
               }}
             </template>
           </m-text-field>
@@ -234,13 +275,18 @@
           >
             <!-- Text hiển thị tiêu đề -->
             <template v-slot:lbl-content>
-              {{ this.$resource.resourcesRegister.step3.textUsername["vi-VN"] }}
+              {{
+                this.$resource.resourcesRegister.step3.textUsername[
+                  languageStore.getLanguage
+                ]
+              }}
             </template>
             <!-- Text hiển thị khi validate -->
             <template v-slot:warning>
               {{
-                this.$resource.resourcesRegister.step3["vi-VN"]
-                  .textWarningUsername
+                this.$resource.resourcesRegister.step3.textWarningUsername[
+                  languageStore.getLanguage
+                ]
               }}
             </template>
           </m-text-field>
@@ -268,13 +314,17 @@
           >
             <!-- Text hiển thị tiêu đề -->
             <template v-slot:lbl-content>
-              {{ this.$resource.resourcesRegister.step3.textPassword["vi-VN"] }}
+              {{
+                this.$resource.resourcesRegister.step3.textPassword[
+                  languageStore.getLanguage
+                ]
+              }}
             </template>
             <!-- Text hiển thị khi validate -->
             <template v-slot:warning>
               {{
                 this.$resource.resourcesRegister.step3.textWarningPassword[
-                  "vi-VN"
+                  languageStore.getLanguage
                 ]
               }}
             </template>
@@ -307,7 +357,7 @@
             <template v-slot:lbl-content>
               {{
                 this.$resource.resourcesRegister.step3.textConfirmPassword[
-                  "vi-VN"
+                  languageStore.getLanguage
                 ]
               }}
             </template>
@@ -315,7 +365,7 @@
             <template v-slot:warning>
               {{
                 this.$resource.resourcesRegister.step3
-                  .textWarningConfirmPassword["vi-VN"]
+                  .textWarningConfirmPassword[languageStore.getLanguage]
               }}
             </template>
           </m-text-field>
@@ -344,12 +394,18 @@
           >
             <!-- Text hiển thị tiêu đề -->
             <template v-slot:lbl-content>
-              {{ this.$resource.resourcesRegister.step3.textEmail["vi-VN"] }}
+              {{
+                this.$resource.resourcesRegister.step3.textEmail[
+                  languageStore.getLanguage
+                ]
+              }}
             </template>
             <!-- Text hiển thị khi validate -->
             <template v-slot:warning>
               {{
-                this.$resource.resourcesRegister.step3.textWarningEmail["vi-VN"]
+                this.$resource.resourcesRegister.step3.textWarningEmail[
+                  languageStore.getLanguage
+                ]
               }}
             </template>
           </m-text-field>
@@ -362,11 +418,14 @@
           :isOutlineWhite="true"
           :textAlignCenter="true"
           :functionHandlePessEnter="submitOnClick"
+          @keydown.enter="submitOnClick"
           @click="submitOnClick"
           >{{
-            this.$resource.resourcesRegister.step3.textContinue["vi-VN"]
-          }}</m-button
-        >
+            this.$resource.resourcesRegister.step3.textContinue[
+              languageStore.getLanguage
+            ]
+          }}
+        </m-button>
       </footer>
     </section>
 
@@ -382,10 +441,28 @@
       <div class="mi mi-16 mi-arrow-left icon-resize" title="Back"></div>
     </a>
   </div>
+
+  <m-dialog-otp
+    v-if="dialogOtpData.isShowDialogOTP"
+    :keyDialogOtp="dialogOtpData.keyDialog"
+    :email="formData.email.value"
+    @dialogOtpButtonConfirmClick="handleDialogOtpButtonConfirmClick"
+    @dialogOtpButtonResendOTPClick="handleDialogOtpButtonResendOTPClick"
+    @closeDialogOtp="handleCloseDialog"
+  >
+  </m-dialog-otp>
 </template>
 
 <script>
-import getLevelsAsync from "@/api/level";
+import { useLanguageStore } from "@/stores/languagestore";
+import { getLevelsAsync } from "@/api/level";
+import {
+  registerAccountAsync,
+  confirmRegisterAcconuntAsync,
+} from "@/api/authentication";
+import userIdLocalStorage from "@/js/localstorage/userIdLocalStorage";
+import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
+
 export default {
   name: "Register",
   inject: [
@@ -400,7 +477,12 @@ export default {
   data() {
     return {
       /**
-       * List LevelId
+       * Đối tượng chứa store giá trị ngôn ngữ.
+       */
+      languageStore: useLanguageStore(),
+
+      /**
+       * Danh sách LevelId
        */
       levelIds: [],
 
@@ -491,6 +573,26 @@ export default {
           isValid: true,
         },
       },
+
+      /**
+       * Dữ liệu về dialog OTP
+       */
+      dialogOtpData: {
+        /**
+         * Toggle hiển thị dialog OTP
+         */
+        isShowDialogOTP: false,
+
+        /**
+         * Key để phân biệt các Dialog khác nhau.
+         */
+        keyDialog: "dialogOtpConfirmEmail",
+
+        /**
+         * Giá trị OTP
+         */
+        otp: "",
+      },
     };
   },
   watch: {
@@ -525,14 +627,97 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
     // Focus button sign up
     this.focusButtonSignUp();
 
     // Load API LevelId
-    this.loadAPILevelId();
+    await this.loadAPILevelId();
   },
   methods: {
+    /**
+     * Thực hiện đóng dialog otp.
+     * @param keyDialog Giá trị keyDialog
+     * @author NVDung (23-11-2024)
+     */
+    handleCloseDialog(keyDialog) {
+      this.dialogOtpData.isShowDialogOTP = false;
+    },
+    
+    /**
+     * Thực hiện gọi API xác thực OTP để xác thực email
+     * @param otp Mã OTP
+     * @author NVDung (23-11-2024)
+     */
+    async handleDialogOtpButtonConfirmClick(otp) {
+      console.log(`otp: ${otp}`);
+
+      try {
+        // Hiển thị loading
+        this.$emitter.emit("showLoading", true);
+
+        // Thực hiện validate input OTP
+        let errorMessage = this.validateOtp(otp);
+
+        if (errorMessage) {
+          // Hiển thị thông báo lỗi.
+          this.showDialogError("form register otp", errorMessage);
+          return;
+        }
+
+        let userId = userIdLocalStorage.getUserId();
+
+        // Thực hiện gọi API
+        let response = await confirmRegisterAcconuntAsync(userId, otp);
+
+        console.log(`Response confirm register:`, response);
+
+        // Lấy thông tin JWT
+        let { accessToken, refreshToken } = response.data;
+
+        // Lưu JWT vào local storage
+        tokenLocalStorage.setToken({ accessToken, refreshToken });
+
+        // Chuyển đến trang chủ.
+        this.$router.push({ name: "HomeRouter", params: {} });
+      } catch (error) {
+        console.log(error);
+        // Hiển thị thông báo.
+        if (error.useDialog) {
+          this.showDialogError("DialogErrorAPI", error.data ?? error.message);
+        } else {
+          this.toastWarningNoButtonUndo(error.message);
+        }
+
+        // Tắt & bật DialogOtp để reset data.
+        this.dialogOtpData.isShowDialogOTP = false;
+        this.dialogOtpData.isShowDialogOTP = true;
+      } finally {
+        this.$emitter.emit("showLoading", false);
+      }
+    },
+
+    /**
+     * Thực hiện validate input OTP
+     * @param otp Mã OTP
+     * @author NVDung (23-11-2024)
+     * @return {string} errorMessage - Nội dung thông báo lỗi.
+     */
+    validateOtp(otp) {
+      let errorMessage = "";
+
+      return errorMessage;
+    },
+
+    /**
+     * Thực hiện gọi API gửi lại OTP mới đến mail cho người dùng
+     * @param keyDialogOtp Key dialog OTP
+     * @author NVDung (23-11-2024)
+     */
+    handleDialogOtpButtonResendOTPClick(keyDialogOtp) {
+      console.log("Resend OTP");
+    },
+
     /**
      * Load API Get LevelIds to list levelIds
      * @author NVDung (23-10-2024)
@@ -541,11 +726,12 @@ export default {
       // Hiện loading
       this.$emitter.emit("showLoading", true);
       try {
-        let levels = await getLevelsAsync();
+        let response = await getLevelsAsync();
 
-        this.levelIds = levels.map((level) => level.levelId);
-        console.log(this.levelIds);
+        this.levelIds = response.data.map((level) => level.levelId);
+        console.table(`Danh sách LevelId`, this.levelIds);
       } catch (error) {
+        console.error("loadAPILevelId() in register.js", error);
       } finally {
         // Tắt loading
         this.$emitter.emit("showLoading", false);
@@ -630,35 +816,47 @@ export default {
      * Hàm xử lý thay đổi firstName.
      * @author NVDung (04-11-2024)
      */
-    firstNameChanged() {},
+    firstNameChanged(newValue) {
+      this.formData.firstName.value = newValue;
+    },
     /**
      * Hàm xử lý thay đổi lastName.
      * @author NVDung (04-11-2024)
      */
-    lastNameChanged() {},
+    lastNameChanged(newValue) {
+      this.formData.lastName.value = newValue;
+    },
     /**
      * Hàm xử lý thay đổi username.
      * @author NVDung (16-04-2024)
      */
-    usernameChanged() {},
+    usernameChanged(newValue) {
+      this.formData.username.value = newValue;
+    },
 
     /**
      * Hàm xử lý thay đổi password.
      * @author NVDung (16-04-2024)
      */
-    passwordChanged() {},
+    passwordChanged(newValue) {
+      this.formData.password.value = newValue;
+    },
 
     /**
      * Hàm xử lý thay đổi confirm password.
      * @author NVDung (16-04-2024)
      */
-    confirmPasswordChanged() {},
+    confirmPasswordChanged(newValue) {
+      this.formData.confirmPassword.value = newValue;
+    },
 
     /**
      * Hàm xử lý thay đổi email.
      * @author NVDung (16-04-2024)
      */
-    emailChanged() {},
+    emailChanged(newValue) {
+      this.formData.email.value = newValue;
+    },
 
     /**
      * Hàm thực hiện focus Input Username.
@@ -672,27 +870,72 @@ export default {
      * Hàm thực hiện submit đăng kí.
      * @author NVDung (16-04-2024)
      */
-    submitOnClick() {
-      alert("Submit onClick");
+    async submitOnClick() {
+      // Hiện loading
+      this.$emitter.emit("showLoading", true);
 
       // ========== Kiểm tra validate input ========== //
       let errorMessage = this.checkValidateInput();
 
       // Nếu errorMessage không rỗng => Thực hiện hiển thị thông báo lỗi.
       if (errorMessage) {
-        alert(errorMessage);
+        // Hiện thông báo lỗi
+        this.showDialogError("form register", errorMessage);
+        return;
       }
       // ======== Kiểm tra validate nghiệp vụ ======== //
       // Kiểm tra password và confirm password không trùng khớp.
-      if (this.password != this.confirmPassword) {
-        alert("Password and Confirm Password not match");
+      if (this.formData.password.value != this.formData.confirmPassword.value) {
+        let msg =
+          this.$resource.resourcesRegister.step3.textWarningPasswordNotMatch[
+            this.languageStore.getLanguage
+          ];
+        // Hiện thông báo lỗi
+        this.showDialogError("form register", msg);
+        return;
       }
 
+      let levelId = this.levelIds[this.skillLevelSelected];
+      console.log(`LevelId: ${levelId}`);
+
       // Thực hiện gọi API đăng kí
+      try {
+        let response = await registerAccountAsync(
+          this.formData.firstName.value,
+          this.formData.lastName.value,
+          this.formData.username.value,
+          this.formData.password.value,
+          this.formData.email.value,
+          levelId
+        );
+
+        console.log(`Response register:`, response);
+
+        let userId = response.data;
+
+        if (userId) {
+          // Hiển thị dialog OTP để xác nhận email.
+          this.dialogOtpData.isShowDialogOTP = true;
+
+          // Lưu userId vào localStorage
+          userIdLocalStorage.setUserId(userId);
+        }
+      } catch (error) {
+        console.log(error);
+        // Hiển thị thông báo.
+        if (error.useDialog) {
+          this.showDialogError("DialogErrorAPI", error.data ?? error.message);
+        } else {
+          this.toastWarningNoButtonUndo(error.message);
+        }
+      } finally {
+        this.$emitter.emit("showLoading", false);
+      }
     },
 
     /**
      * Hàm kiểm tra validate input.
+     * - Đánh dấu các input không hợp lệ.
      * @returns {String} errorMessage - Nội dung thông báo lỗi.
      * @author NVDung (18-04-2024)
      */
@@ -716,8 +959,9 @@ export default {
 
         // Thêm thông điệp lỗi để hiển thị thông báo
         errorMessage +=
-          this.$resource.resourcesRegister.step3.textWarningUsername["vi-VN"] +
-          `<br/>`;
+          this.$resource.resourcesRegister.step3.textWarningUsername[
+            this.languageStore.getLanguage
+          ] + `<br/>`;
       }
 
       // ========== KIỂM TRA VALIDATE INPUT PASSWORD ========== //
@@ -734,8 +978,9 @@ export default {
 
         // Thêm thông điệp lỗi để hiển thị thông báo
         errorMessage +=
-          this.$resource.resourcesRegister.step3.textWarningPassword["vi-VN"] +
-          `<br/>`;
+          this.$resource.resourcesRegister.step3.textWarningPassword[
+            this.languageStore.getLanguage
+          ] + `<br/>`;
       }
 
       // ========== KIỂM TRA VALIDATE INPUT CONFIRM PASSWORD ========== //
@@ -753,7 +998,7 @@ export default {
         // Thêm thông điệp lỗi để hiển thị thông báo
         errorMessage +=
           this.$resource.resourcesRegister.step3.textWarningConfirmPassword[
-            "vi-VN"
+            this.languageStore.getLanguage
           ] + `<br/>`;
       }
 
@@ -773,8 +1018,9 @@ export default {
 
         // Thêm thông điệp lỗi để hiển thị thông báo
         errorMessage +=
-          this.$resource.resourcesRegister.step3.textWarningEmail["vi-VN"] +
-          `<br/>`;
+          this.$resource.resourcesRegister.step3.textWarningEmail[
+            this.languageStore.getLanguage
+          ] + `<br/>`;
       }
 
       // Xóa '<br/>' ở cuối cùng
