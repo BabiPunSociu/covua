@@ -18,12 +18,12 @@ import resourcesTextField from "./basecomponent/resourcestextfield.js";
 import resourcesFooter from "./layoutcomponent/resourcefooter.js";
 
 // import resources của các view component.
-import resourcesLogin from "./view/resourcelogin.js";
-import resourcesRegister from "./view/resourceregister.js";
-import resourcesHome from "./view/resourcehome.js";
-import resourcesPlay from "./view/resourceplay.js";
-import resourcesPlayOnline from "./view/resourceplayonline.js";
-import resourcesGame from "./view/resourcegame.js";
+import resourcesLogin from "./view/resource_login.js";
+import resourcesRegister from "./view/resource_register.js";
+import resourcesHome from "./view/resource_home.js";
+import resourcesPlay from "./view/resource_play.js";
+import resourcesPlayOnline from "./view/resource_play_online.js";
+import resourcesGame from "./view/resource_game.js";
 
 /**
  * Đối tượng cung cấp resources cho ứng dụng.

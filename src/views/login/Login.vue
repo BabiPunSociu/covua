@@ -138,8 +138,8 @@
             this.$resource.resourcesLogin.textLoginGoogle[
               languageStore.getLanguage
             ]
-          }}</m-button
-        >
+          }}
+        </m-button>
 
         <!-- Login with Facebook -->
         <m-button
@@ -155,8 +155,8 @@
             this.$resource.resourcesLogin.textLoginFacebook[
               languageStore.getLanguage
             ]
-          }}</m-button
-        >
+          }}
+        </m-button>
       </div>
 
       <router-link

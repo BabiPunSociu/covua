@@ -34,7 +34,7 @@
       <a class="account-info" @click="btnAccountInfoClick">
         <!-- Hiện thị avatar -->
         <div class="user-ava mi mi-32 mi-user-avatar avatar icon-resize">
-          <img src="" alt="" />
+          <img v-if="avatar" :src="avatar" alt="Ảnh đại diện người dùng" />
         </div>
         <!-- Tên người dùng -->
         <div class="user-name" v-if="userStore.getName">
@@ -67,7 +67,7 @@ import NVDSwitchLightDark from "@/components/base/switchlightdark/NVDSwitchLight
 
 // APIs
 import { getUserByIdAsync } from "@/api/user";
-
+import { getImageByIdAsync } from "@/api/image";
 
 export default {
   name: "TheHeader",
@@ -97,6 +97,11 @@ export default {
          */
         value: "",
       },
+
+      /**
+       * Url avatar người dùng.
+       */
+      avatar: null,
     };
   },
 
@@ -143,16 +148,25 @@ export default {
           // Thực hiện gọi API để lấy thông tin User
           let response = await getUserByIdAsync(userId);
 
-          // Lưu thông tin User vào UserStore Pinia
-
-          // console.log("response: ", response);
+          console.log("response: ", response);
 
           // Cập nhật thông tin user vào user store
           let username =
             response.data.fullName.trim() ||
             `${response.data.firstName} ${response.data.lastName}`.trim();
 
+          // Lưu thông tin User vào UserStore Pinia
           this.userStore.setUserInfo({ userId: null, name: username });
+
+          // Lấy ảnh đại diện của người dùng
+          let avatarId = response.data.avatar;
+
+          // Thực hiện gọi API để lấy ảnh đại diện của người dùng
+          let responseImage = await getImageByIdAsync(avatarId);
+          console.log("responseImage: ", responseImage);
+
+          // Cập nhật ảnh đại diện vào avatar
+          this.avatar = responseImage.data.url;
 
           // Dừng vòng lặp nếu gọi API thành công.
           callAPIAgain = false;
