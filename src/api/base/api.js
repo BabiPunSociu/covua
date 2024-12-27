@@ -105,16 +105,20 @@ const createApiInstance = (config, { auth = true, silent = false }) => {
         case 401: {
           // Lấy thông tin DevMessage
           if (devMessage) {
-            // Chuyển JSON -> Object
-            devMessage = JSON.parse(devMessage);
-            let { message, accessToken, refreshToken } = devMessage;
-            // Refresh token
-            if (message == "REFRESH_TOKEN") {
-              // Cập nhật local storage
-              tokenLocalStorage.setToken({ accessToken, refreshToken });
-            }
+            try {
+              // Chuyển JSON -> Object
+              devMessage = JSON.parse(devMessage);
+              let { message, accessToken, refreshToken } = devMessage;
+              // Refresh token
+              if (message == "REFRESH_TOKEN") {
+                // Cập nhật local storage
+                tokenLocalStorage.setToken({ accessToken, refreshToken });
+              }
 
-            return Promise.reject({ message: "CallApiAgain" });
+              return Promise.reject({ message: "CallApiAgain" });
+            } catch (error) {
+              console.log(`Lỗi khi chuyển DevMessage sang Object`, error);
+            }
           }
 
           // Xóa token trong local storage
