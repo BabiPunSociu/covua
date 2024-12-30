@@ -48,12 +48,28 @@ const router = createRouter({
           component: () => import("../views/play/Play.vue"),
         },
 
-        // Render component 'Game'. => URL="/game/123456"
+        // Render component 'Game'. => URL="/game/live/123456"
         {
-          path: "/game/:gameCode",
+          path: "/game/live/:gameId",
           name: "GameRouter",
           // component: GameView
           component: () => import("../views/game/Game.vue"),
+        },
+
+        // Render component 'Game'. => URL="/game/watch/123456"
+        {
+          path: "/game/watch/:gameId",
+          name: "GameWatchRouter",
+          // component: GameView
+          component: () => import("../views/game/Game.vue"),
+        },
+
+        // Render component 'Profile'. => URL="/profile/User-123456"
+        {
+          path: "/profile/:userCode",
+          name: "ProfileRouter",
+          // component: ProfileView
+          component: () => import("../views/profile/Profile.vue"),
         },
       ],
     },

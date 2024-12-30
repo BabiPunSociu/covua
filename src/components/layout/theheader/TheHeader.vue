@@ -177,8 +177,13 @@ export default {
     btnAccountInfoClick() {
       // Kiểm tra người dùng đã đăng nhập chưa?
       if (this.userStore.getName) {
+        let userCode = this.userStore.getUserCode;
+
         // Chuyển hướng đến trang tài khoản người dùng
-        this.$router.push({ name: "ProfileRouter" });
+        this.$router.push({
+          name: "ProfileRouter",
+          params: { userCode: userCode },
+        });
       } else {
         // Chuyển hướng đến trang đăng nhập
         this.$router.push({ name: "LoginRouter" });
@@ -219,7 +224,10 @@ export default {
             `${response.data.firstName} ${response.data.lastName}`.trim();
 
           // Lưu thông tin User vào UserStore Pinia
-          this.userStore.setUserInfo({ userId: null, name: username });
+          this.userStore.setUserInfo({
+            userCode: response.data.userCode,
+            name: username,
+          });
 
           // Lấy ảnh đại diện của người dùng
           let avatarId = response.data.avatar;

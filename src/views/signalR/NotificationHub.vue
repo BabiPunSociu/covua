@@ -170,15 +170,19 @@ export default {
     },
 
     /**
-     * Thiết lập lắng nghe sự kiện FindMatch
-     * Sự kiện FindMatch được Server gửi cho Client khi Server tìm thấy đối thủ cho Client.
+     * Thiết lập lắng nghe sự kiện NotificationFindMatch
+     * Sự kiện NotificationFindMatch được Server gửi cho Client khi Server tìm thấy đối thủ cho Client.
      * @author NVDUNG (19-09-2024)
      */
     addEventListenerFindMatch() {
-      this.connection.on("FindMatch", (data) => {
-        console.log("FindMatch: ", data);
+      this.connection.on("NotificationFindMatch", (data) => {
+        console.log("NotificationFindMatch: ", data);
 
         // Thực hiện chuyển hướng đến trang Game.
+        this.$router.push({
+          name: "GameRouter",
+          params: { gameId: data },
+        });
       });
     },
 

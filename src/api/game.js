@@ -24,10 +24,24 @@ export const findGameAsync = async (notificationHubId, modeGameId) => {
  * @returns {Promise}
  * @author NVDung (19-12-2024)
  */
-export const getGameByIdASync = async (gameId) => {
+export const getGameByCodeAsync = async (gameId) => {
   try {
     return apiWithAuth.get("Game/" + gameId);
   } catch (error) {
-    console.error("getGameByIdASync() in game.js", error);
+    console.error("getGameByCodeAsync() in game.js", error);
+  }
+};
+
+/**
+ * Lấy thông tin TRẬN ĐẤU theo GameId.
+ * @param {string} gameId ID trận đấu.
+ * @returns {Promise}
+ * @author NVDung (19-12-2024)
+ */
+export const getGameByIdAsync = async (gameId) => {
+  try {
+    return apiWithAuth.get("Game/" + gameId);
+  } catch (error) {
+    console.error("getGameByIdAsync() in game.js", error);
   }
 };

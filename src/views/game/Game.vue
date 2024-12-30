@@ -787,7 +787,7 @@ import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
 import userIdLocalStorage from "@/js/localstorage/userIdLocalStorage";
 
 // APIs
-import { getGameByIdASync } from "@/api/game";
+import { getGameByIdAsync } from "@/api/game";
 import { getUserByIdAsync } from "@/api/user";
 import { getImageByIdAsync } from "@/api/image";
 
@@ -1051,7 +1051,7 @@ export default {
           let gameId = this.$route.params.gameCode;
 
           // Thực hiện gọi API để lấy thông tin Game
-          let response = await getGameByIdASync(gameId);
+          let response = await getGameByIdAsync(gameId);
 
           console.log("response: ", response);
 

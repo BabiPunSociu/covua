@@ -923,9 +923,7 @@ export default {
             this.showLoadingSearchOpponent = false;
           }
 
-          // Hiển thị tên và ảnh đối thủ
-
-          // Chuyển hướng đến trang game/live
+          // Nếu tìm thấy trận đấu, NotificationHub tự động chuyển hướng đến game/live.
 
           // Dừng vòng lặp nếu gọi API thành công.
           callAPIAgain = false;
