@@ -24,6 +24,7 @@ import resourcesHome from "./view/resource_home.js";
 import resourcesPlay from "./view/resource_play.js";
 import resourcesPlayOnline from "./view/resource_play_online.js";
 import resourcesGame from "./view/resource_game.js";
+import { resourcesForgotPassword } from "./view/resource_forgot_password.js";
 
 /**
  * Đối tượng cung cấp resources cho ứng dụng.
@@ -135,6 +136,11 @@ const NVDResource = {
    * Đối tượng cung cấp resources cho Game view-component.
    */
   resourcesGame,
+
+  /**
+   * Đối tượng cung cấp resources cho ForgotPassword view-component.
+   */
+  resourcesForgotPassword,
 };
 
 export default NVDResource;

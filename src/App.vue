@@ -50,17 +50,17 @@
 </template>
 
 <script>
-// import toast để có class gắn vào DataType.
+// Import các class constructor để tạo data type.
 import toast from "./js/classconstructor/toast.js";
-// import dialog để có class gắn vào DataType.
 import dialog from "./js/classconstructor/dialog.js";
 
+// Import các component
 import { VueIdentifyNetwork } from "vue-identify-network";
-
 import notificationHub from "@/views/signalR/NotificationHub.vue";
 
-import { useLanguageStore } from "@/stores/languagestore.js";
-import languageLocalStorage from "@/js/localstorage/languageLocalStorage.js";
+// Import local storage
+import { useLanguageStore } from "@/stores/languagestore";
+import languageLocalStorage from "@/js/localstorage/languageLocalStorage";
 
 export default {
   name: "App",
@@ -162,12 +162,13 @@ export default {
     });
   },
   mounted() {
-    /* ============= Thực hiện đặt ngôn ngữ ============= */
+    /* ============= START - Thực hiện đặt ngôn ngữ ============= */
     // Lấy ngôn ngữ từ localStorage.
     let { langCode, langName } = languageLocalStorage.getLangCode();
 
     // Set ngôn ngữ cho Store.
     this.languageStore.setLanguage(langCode);
+    /* ============= END - Thực hiện đặt ngôn ngữ ============= */
   },
   beforeUnmount() {
     // Hủy lắng nghe sự kiện showLoading

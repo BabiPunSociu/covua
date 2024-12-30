@@ -111,8 +111,8 @@
           @click="btnLoginOnClick"
           >{{
             this.$resource.resourcesLogin.textLogin[languageStore.getLanguage]
-          }}</m-button
-        >
+          }}
+        </m-button>
       </div>
 
       <div class="seperate-area flex">
@@ -166,8 +166,8 @@
         @keydown="tabFocusAround"
         >{{
           this.$resource.resourcesLogin.textRegister[languageStore.getLanguage]
-        }}</router-link
-      >
+        }}
+      </router-link>
     </div>
   </div>
 

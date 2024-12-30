@@ -1,5 +1,9 @@
 <template>
-  <label v-bind:title="tooltip" :class="{ 'text-white': isTextWhite }">
+  <label
+    v-bind:title="tooltip"
+    class="block-user-select"
+    :class="{ 'text-white': isTextWhite }"
+  >
     <slot></slot>
     <b v-show="lblRequired">&nbsp;*</b>
   </label>

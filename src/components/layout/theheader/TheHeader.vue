@@ -59,6 +59,7 @@ import { useUserStore } from "@/stores/userstore.js";
 import userIdLocalStorage from "@/js/localstorage/userIdLocalStorage";
 import lastURLLocalStorage from "@/js/localstorage/lastUrlLocalStorage";
 import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
+import { audioLocalStorage } from "@/js/localstorage/audioLocalStorage";
 
 // Components
 import NVDNotification from "@/components/base/notification/NVDNotification.vue";
@@ -68,6 +69,7 @@ import NVDSwitchLightDark from "@/components/base/switchlightdark/NVDSwitchLight
 // APIs
 import { getUserByIdAsync } from "@/api/user";
 import { getImageByIdAsync } from "@/api/image";
+import { getAudiosAsync } from "@/api/audio.js";
 
 export default {
   name: "TheHeader",
@@ -108,9 +110,70 @@ export default {
   mounted() {
     // Load thông tin người dùng
     this.loadInfoUser();
+
+    // Lấy danh sách audio từ API
+    this.loadAudioAsync();
   },
 
   methods: {
+    /* ========================== Audio ========================== */
+    /**
+     * Hàm lấy danh sách audio từ API
+     * @author NVDung (30-12-2024)
+     */
+    async loadAudioAsync() {
+      // Lấy giá trị Token trong local storage
+      let jwt = tokenLocalStorage.getToken();
+
+      if (!jwt?.accessToken) {
+        // Lưu URL hiện tại vào local storage
+        lastURLLocalStorage.setLastUrl({
+          name: this.$route.name,
+          params: this.$route.params,
+        });
+        // Điều hướng đến trang login.
+        this.$router.push({ name: "LoginRouter" });
+        return;
+      }
+
+      let callAPIAgain = false;
+      do {
+        try {
+          // Hiện loading
+          this.$emitter.emit("showLoading", true);
+
+          // Thực hiện gọi API để lấy thông tin Audio
+          let response = await getAudiosAsync();
+
+          console.log("response audio: ", response);
+
+          // Tạo Object Audio = { "description": "url" }
+          let objAudio = response.data.reduce((record, audio) => {
+            record[audio.description] = audio.url;
+            return record;
+          }, {});
+
+          // console.table("objAudio: ", objAudio);
+
+          // Lưu thông tin audio vào local storage
+          audioLocalStorage.setListAudio(objAudio);
+
+          // Dừng vòng lặp nếu gọi API thành công.
+          callAPIAgain = false;
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin người chơi 1");
+          console.error(error);
+
+          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+          callAPIAgain = error.message === "CallApiAgain";
+        } finally {
+          // Tắt loading
+          this.$emitter.emit("showLoading", false);
+        }
+      } while (callAPIAgain);
+    },
+    /* ======================== END Audio ======================== */
+
     btnAccountInfoClick() {
       // Kiểm tra người dùng đã đăng nhập chưa?
       if (this.userStore.getName) {
