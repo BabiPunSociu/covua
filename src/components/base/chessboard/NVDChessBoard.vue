@@ -133,9 +133,11 @@ export default {
     },
   },
 
-  created() {
-    // console.log("Chessboard created");
-    // console.log(`Prop: ${this.colorPlayer}`);
+  created() {},
+
+  mounted() {
+    console.log("Chessboard created");
+    console.log(`Prop: ${this.colorPlayer}`);
     // Thực hiện đảo ngược ma trận nếu người dùng chơi quân cờ ĐEN
     if (this.colorPlayer === this.$enum.colorPlayer.black) {
       this.theStartMatrix = this.reverseMatrix(this.theStartMatrix);

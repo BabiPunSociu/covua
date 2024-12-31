@@ -22,6 +22,21 @@
               ]
             }}
           </span>
+          <!-- Thông tin trạng thái đối thủ -->
+          <b
+            v-if="gameControl.playersState.isShowState == true"
+            class="player-state-opponent"
+          >
+            {{
+              gameControl.playersState.player2Ready == true
+                ? this.$resource.resourcesGame.statePlayerReady[
+                    languageStore.getLanguage
+                  ]
+                : this.$resource.resourcesGame.statePlayerNotReady[
+                    languageStore.getLanguage
+                  ]
+            }}
+          </b>
         </div>
         <div class="time flex">
           <div class="mi mi-24 mi-clock icon-resize"></div>
@@ -71,17 +86,36 @@
               ]
             }}
           </span>
+          <b
+            v-if="gameControl.playersState.isShowState == true"
+            class="player-state-player"
+          >
+            {{
+              gameControl.playersState.player1Ready == true
+                ? this.$resource.resourcesGame.statePlayerReady[
+                    languageStore.getLanguage
+                  ]
+                : this.$resource.resourcesGame.statePlayerNotReady[
+                    languageStore.getLanguage
+                  ]
+            }}
+          </b>
         </div>
 
-        <!-- Hiển thị khi chưa sẵn sàng -->
+        <!-- Hiển thị trạng thái sẵn sàng? -->
         <m-button
-          v-if="gameControl.playersState.player1Ready == false"
+          v-if="gameControl.playersState.isShowState == true"
+          :class="{ 'm-btn-secondary': gameControl.playersState.player1Ready }"
           @click="btnReadyOnClick"
         >
           {{
-            this.$resource.resourcesGame.statePlayerReady[
-              languageStore.getLanguage
-            ]
+            gameControl.playersState.player1Ready == true
+              ? this.$resource.resourcesGame.statePlayerNotReady[
+                  languageStore.getLanguage
+                ]
+              : this.$resource.resourcesGame.statePlayerReady[
+                  languageStore.getLanguage
+                ]
           }}
         </m-button>
 
@@ -984,10 +1018,28 @@ export default {
            */
           timePlayer2: null,
         },
+
+        /**
+         * Màu cờ của player 1.
+         */
+        colorPlayer: this.$enum.colorPlayer.white, // 0 - white || 1 - black
       },
     };
   },
 
+  watch: {
+    gameControl.gameInfomation.sender(value) {
+      // Lấy UserId từ Local Storage
+      let userId = userIdLocalStorage.getUserId();
+
+      let result =
+        this.gameControl.gameInfomation.sender == userId
+          ? this.$enum.colorPlayer.white
+          : this.$enum.colorPlayer.black;
+
+          this.gameControl.colorPlayer = result;
+    }
+  },
   computed: {
     /**
      * Người chơi cầm quân cờ màu?
@@ -1015,8 +1067,16 @@ export default {
      * @author NVDung (19-12-2024)
      */
     btnReadyOnClick() {
-      // Thực hiện phát sự kiện đến NotificationHub để gửi trạng thái sẵn sàng cho Server
-      this.$emitter.emit("sendReadyState");
+      // Cập nhật trạng thái Ready
+      this.gameControl.playersState.player1Ready =
+        !this.gameControl.playersState.player1Ready;
+
+      // Thực hiện phát sự kiện đến NotificationHub để gửi trạng thái sẵn sàng và color cho Server
+      this.$emitter.emit("sendReadyState", {
+        gameId: this.$route.params.gameId,
+        state: this.gameControl.playersState.player1Ready,
+        color: this.colorPlayer,
+      });
     },
 
     /* =================== END - STATE STATE PLAYER ==================== */
@@ -1047,8 +1107,8 @@ export default {
           // Hiện loading
           this.$emitter.emit("showLoading", true);
 
-          // Lấy GameId từ router code
-          let gameId = this.$route.params.gameCode;
+          // Lấy GameId từ router
+          let gameId = this.$route.params.gameId;
 
           // Thực hiện gọi API để lấy thông tin Game
           let response = await getGameByIdAsync(gameId);
@@ -1063,7 +1123,7 @@ export default {
             response.data.viewerCount;
 
           // Load dữ liệu về đối thủ.
-          this.getOpponentInfomation();
+          await this.getOpponentInfomation();
 
           // Dừng vòng lặp nếu gọi API thành công.
           callAPIAgain = false;
@@ -1405,9 +1465,20 @@ export default {
     /* =================== END SETUP SIDEBAR ==================== */
   },
 
+  created() {
+    this.$emitter.on("UpdatePlayerStatus", (data) => {
+      console.log(data);
+
+      // Cập nhật trạng thái người chơi
+    });
+  },
+
   beforeUnmount() {
     // Hủy sự kiện resize để điều chỉnh kích thước bàn cờ.
     window.removeEventListener("resize", this.adjustTableSize);
+
+    // Hủy lắng nghe sự kiện UpdatePlayerStatus
+    this.$emitter.off("UpdatePlayerStatus");
   },
 };
 </script>

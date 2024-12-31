@@ -41,6 +41,35 @@ export default {
     };
   },
 
+  created() {
+    /* ============= Event listener SendReadyToPlay ============= */
+    /**
+     * Tạo lắng nghe sự kiện ẩn hiện loading.
+     * @param {object} info {gameId, state, color} Thông tin tham số cho backend.
+     * @author NVDung (18-04-2024)
+     */
+    this.$emitter.on("sendReadyState", async (info) => {
+      // Thực hiện gửi yêu cầu đến backend.
+      try {
+        let { gameId, state, color } = info;
+
+        await this.connection.invoke(
+          // Invoke the "ClientReadyToPlay" method on the server
+          "ClientReadyToPlay",
+          gameId,
+          state,
+          color
+        );
+      } catch (error) {
+        console.error("Error sending ready to play:", error);
+      }
+    });
+  },
+
+  beforeUnmount() {
+    this.$emitter.off("sendReadyState");
+  },
+
   mounted() {
     // Thực hiện kết nối SignalR
     this.initConnectToServer();
@@ -103,24 +132,6 @@ export default {
       }
     },
 
-    /**
-     * Lấy Connection Id tương ứng với connection đến Server
-     * @returns {string} ConnectionId
-     * @author NVDUNG (19-09-2024)
-     */
-    // async getConnectionId() {
-    //   try {
-    //     let connectionId = await this.connection.invoke("getConnectionId");
-    //     console.log(`Connection Id: ${connectionId}`);
-    //     return connectionId;
-    //   } catch (error) {
-    //     console.error(`Error from getConnectionId: ${error}`);
-    //     // Thông báo toast
-    //     let message = errorMessage.ErrorText(this.languageStore.getLanguage);
-    //     this.toastWarningNoButtonUndo(message);
-    //   }
-    // },
-
     /* =========================== Phương thức kết nối SignalR hub notification =========================== */
     /**
      * Thiết lập các lắng nghe sự kiện từ NotificationHub
@@ -130,11 +141,14 @@ export default {
       try {
         // Các lắng nghe sự kiện ...
         this.addEventListenerOnConnected();
-        this.addEventListenerFindMatch();
+
         this.addEventListenerAddToGroup();
         this.addEventListenerRemoveFromGroup();
         this.addEventListenerReceiveMessageFromGroup();
         this.addEventListenerReceiveMessageFromAll();
+
+        this.addEventListenerFindMatch();
+        this.addEventListenerUpdatePlayerStatus();
       } catch (error) {
         console.error("Error from addEventListenerFromNotificationHub", error);
       }
@@ -235,6 +249,19 @@ export default {
         console.log("MessageFromGroup: ", data);
 
         // To do code ...
+      });
+    },
+
+    /**
+     * Thiết lập lắng nghe sự kiện UpdatePlayerStatus nhận từ Group GameId
+     * @author NVDung (30-12-2024)
+     */
+    addEventListenerUpdatePlayerStatus() {
+      this.connection.on("UpdatePlayerStatus", (data) => {
+        console.log(`UpdatePlayerStatus:`, data);
+
+        // Gửi dữ liệu sang Game.vue để cập nhật thông tin
+        this.$emitter.emit("UpdatePlayerStatus", data);
       });
     },
   },

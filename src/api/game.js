@@ -26,7 +26,7 @@ export const findGameAsync = async (notificationHubId, modeGameId) => {
  */
 export const getGameByCodeAsync = async (gameId) => {
   try {
-    return apiWithAuth.get("Game/" + gameId);
+    return apiWithAuth.get("/Game/" + gameId);
   } catch (error) {
     console.error("getGameByCodeAsync() in game.js", error);
   }
@@ -40,7 +40,7 @@ export const getGameByCodeAsync = async (gameId) => {
  */
 export const getGameByIdAsync = async (gameId) => {
   try {
-    return apiWithAuth.get("Game/" + gameId);
+    return apiWithAuth.get("/Game/" + gameId);
   } catch (error) {
     console.error("getGameByIdAsync() in game.js", error);
   }
