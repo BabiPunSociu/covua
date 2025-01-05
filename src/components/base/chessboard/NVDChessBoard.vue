@@ -133,6 +133,16 @@ export default {
     },
   },
 
+  watch: {
+    colorPlayer(value) {
+      console.log("Watch colorPlayer", value);
+      // Thực hiện đảo ngược ma trận nếu người dùng chơi quân cờ ĐEN
+      if (value === this.$enum.colorPlayer.black) {
+        this.theStartMatrix = this.reverseMatrix(this.theStartMatrix);
+      }
+    },
+  },
+
   created() {},
 
   mounted() {

@@ -45,7 +45,7 @@
       </span>
     </vue-identify-network>
 
-    <notification-hub></notification-hub>
+    <m-notification-hub></m-notification-hub>
   </div>
 </template>
 
@@ -56,7 +56,6 @@ import dialog from "./js/classconstructor/dialog.js";
 
 // Import các component
 import { VueIdentifyNetwork } from "vue-identify-network";
-import notificationHub from "@/views/signalR/NotificationHub.vue";
 
 // Import local storage
 import { useLanguageStore } from "@/stores/languagestore";
@@ -67,7 +66,6 @@ export default {
 
   components: {
     "vue-identify-network": VueIdentifyNetwork,
-    "notification-hub": notificationHub,
   },
 
   data() {

@@ -1,9 +1,18 @@
 <template></template>
 <script>
+// Pinia Store
 import { useLanguageStore } from "@/stores/languagestore.js";
+
+// File JS
 import errorMessage from "@/js/resources/errormessage/errormessage";
+
+// Local Storage
 import signalRHubLocalStorage from "@/js/localstorage/signalRHubLocalStorage.js";
+import userIdLocalStorage from "@/js/localstorage/userIdLocalStorage";
+
+// Libraries
 import { HubConnectionBuilder } from "@microsoft/signalr";
+
 export default {
   name: "NotificationHub",
   inject: ["toastWarningNoButtonUndo", "showDialogError"],
@@ -41,34 +50,9 @@ export default {
     };
   },
 
-  created() {
-    /* ============= Event listener SendReadyToPlay ============= */
-    /**
-     * Tạo lắng nghe sự kiện ẩn hiện loading.
-     * @param {object} info {gameId, state, color} Thông tin tham số cho backend.
-     * @author NVDung (18-04-2024)
-     */
-    this.$emitter.on("sendReadyState", async (info) => {
-      // Thực hiện gửi yêu cầu đến backend.
-      try {
-        let { gameId, state, color } = info;
+  created() {},
 
-        await this.connection.invoke(
-          // Invoke the "ClientReadyToPlay" method on the server
-          "ClientReadyToPlay",
-          gameId,
-          state,
-          color
-        );
-      } catch (error) {
-        console.error("Error sending ready to play:", error);
-      }
-    });
-  },
-
-  beforeUnmount() {
-    this.$emitter.off("sendReadyState");
-  },
+  beforeUnmount() {},
 
   mounted() {
     // Thực hiện kết nối SignalR
@@ -90,7 +74,17 @@ export default {
       // Nếu chưa thiết lập kết nối.
       if (!this.connected) {
         // Khởi tạo đối tượng kết nối
-        this.connection = new HubConnectionBuilder().withUrl(this.url).build();
+        this.connection = new HubConnectionBuilder()
+          .withUrl(this.url)
+          // Tự động kết nối lại sau 0ms, 2s, 10s, 30s
+          .withAutomaticReconnect([0, 2000, 10000, 30000])
+          .build();
+
+        // Cài đặt timeout (thời gian tối đa trước khi bị ngắt kết nối)
+        this.connection.serverTimeoutInMilliseconds = 2 * 60 * 1000; // 2 phút
+
+        // Cài đặt ping interval (thời gian gửi tín hiệu ping đến server)
+        this.connection.keepAliveIntervalInMilliseconds = 15 * 1000; // 15 giây
 
         // Hiện loading
         this.$emitter.emit("showLoading", true);
@@ -146,9 +140,7 @@ export default {
         this.addEventListenerRemoveFromGroup();
         this.addEventListenerReceiveMessageFromGroup();
         this.addEventListenerReceiveMessageFromAll();
-
-        this.addEventListenerFindMatch();
-        this.addEventListenerUpdatePlayerStatus();
+        this.addEventListenerServerSentMessageToClientSpecific();
       } catch (error) {
         console.error("Error from addEventListenerFromNotificationHub", error);
       }
@@ -170,6 +162,9 @@ export default {
               this.connectionId
             );
 
+            // Thực hiện restore Group GameHub
+            this.restoreGroup();
+
             this.connected = true;
           } else {
             throw new Error();
@@ -184,55 +179,59 @@ export default {
     },
 
     /**
-     * Thiết lập lắng nghe sự kiện NotificationFindMatch
-     * Sự kiện NotificationFindMatch được Server gửi cho Client khi Server tìm thấy đối thủ cho Client.
+     * Thực hiện kết nối lại Connection Hub theo UserId.
      * @author NVDUNG (19-09-2024)
      */
-    addEventListenerFindMatch() {
-      this.connection.on("NotificationFindMatch", (data) => {
-        console.log("NotificationFindMatch: ", data);
+    async restoreGroup() {
+      try {
+        // Lấy UserId từ local storage
+        let userId = userIdLocalStorage.getUserId();
 
-        // Thực hiện chuyển hướng đến trang Game.
-        this.$router.push({
-          name: "GameRouter",
-          params: { gameId: data },
-        });
-      });
+        // Thực hiện gọi đến Server
+        let result = await this.connection.invoke("RestoreGroupAsync", userId);
+
+        console.log(`Restore join group`, result);
+      } catch (error) {
+        console.error(`Error from Restore Group: ${error}`);
+        // Thông báo toast
+        let message = errorMessage.ErrorText(this.languageStore.getLanguage);
+        this.toastWarningNoButtonUndo(message);
+      }
     },
 
     /**
-     * Thiết lập lắng nghe sự kiện NotificationShowMessageAddToGroup
-     * Sự kiện NotificationShowMessageAddToGroup được Server gửi cho Client khi có Client mới tham gia vào Group.
+     * Thiết lập lắng nghe sự kiện NotificationHub_AddToGroup
+     * Sự kiện NotificationHub_AddToGroup được Server gửi cho Client khi có Client mới tham gia vào Group.
      * @author NVDUNG (19-09-2024)
      */
     addEventListenerAddToGroup() {
-      this.connection.on("NotificationShowMessageAddToGroup", (data) => {
-        console.log("AddToGroup: ", data);
+      this.connection.on("NotificationHub_AddToGroup", (data) => {
+        console.log("AddToGroupAsync: ", data);
 
         // To do code ...
       });
     },
 
     /**
-     * Thiết lập lắng nghe sự kiện NotificationShowMessageRemoveFromGroup
-     * Sự kiện NotificationShowMessageRemoveFromGroup là Server gửi cho Client khi Client đã thoát khỏi Group.
+     * Thiết lập lắng nghe sự kiện NotificationHub_RemoveFromGroup
+     * Sự kiện NotificationHub_RemoveFromGroup là Server gửi cho Client khi Client đã thoát khỏi Group.
      * @author NVDUNG (19-09-2024)
      */
     addEventListenerRemoveFromGroup() {
-      this.connection.on("NotificationShowMessageRemoveFromGroup", (data) => {
-        console.log("RemoveFromGroup: ", data);
+      this.connection.on("NotificationHub_RemoveFromGroup", (data) => {
+        console.log("RemoveFromGroupAsync: ", data);
 
         // To do code ...
       });
     },
 
     /**
-     * Thiết lập lắng nghe sự kiện NotificationReceiveMessageFromAll
-     * Sự kiện NotificationReceiveMessageFromAll là Server gửi cho tất cả Client.
+     * Thiết lập lắng nghe sự kiện NotificationHub_ReceiveMessageFromAll
+     * Sự kiện NotificationHub_ReceiveMessageFromAll là Server gửi cho tất cả Client.
      * @author NVDUNG (19-09-2024)
      */
     addEventListenerReceiveMessageFromAll() {
-      this.connection.on("NotificationReceiveMessageFromAll", (data) => {
+      this.connection.on("NotificationHub_ReceiveMessageFromAll", (data) => {
         console.log("MessageFromAll: ", data);
 
         // To do code ...
@@ -240,12 +239,12 @@ export default {
     },
 
     /**
-     * Thiết lập lắng nghe sự kiện NotificationReceiveMessageFromGroup
-     * Sự kiện NotificationReceiveMessageFromGroup là Server gửi cho Client trong Group.
+     * Thiết lập lắng nghe sự kiện NotificationHub_ReceiveMessageFromGroup
+     * Sự kiện NotificationHub_ReceiveMessageFromGroup là Server gửi cho Client trong Group.
      * @author NVDUNG (19-09-2024)
      */
     addEventListenerReceiveMessageFromGroup() {
-      this.connection.on("NotificationReceiveMessageFromGroup", (data) => {
+      this.connection.on("NotificationHub_ReceiveMessageFromGroup", (data) => {
         console.log("MessageFromGroup: ", data);
 
         // To do code ...
@@ -253,16 +252,19 @@ export default {
     },
 
     /**
-     * Thiết lập lắng nghe sự kiện UpdatePlayerStatus nhận từ Group GameId
-     * @author NVDung (30-12-2024)
+     * Thiết lập lắng nghe sự kiện NotificationHub_ReceiveMessageFromClientSpecific
+     * Sự kiện NotificationHub_ReceiveMessageFromClientSpecific là Server gửi cho Client cụ thể.
+     * @author NVDUNG (19-09-2024)
      */
-    addEventListenerUpdatePlayerStatus() {
-      this.connection.on("UpdatePlayerStatus", (data) => {
-        console.log(`UpdatePlayerStatus:`, data);
+    addEventListenerServerSentMessageToClientSpecific() {
+      this.connection.on(
+        "NotificationHub_ReceiveMessageFromClientSpecific",
+        (data) => {
+          console.log("Server send to Specific Client: ", data);
 
-        // Gửi dữ liệu sang Game.vue để cập nhật thông tin
-        this.$emitter.emit("UpdatePlayerStatus", data);
-      });
+          // To do code ...
+        }
+      );
     },
   },
 };

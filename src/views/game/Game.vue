@@ -56,7 +56,7 @@
         <!-- Chess Board -->
         <m-chess-board
           class="chess-board"
-          :colorPlayer="this.colorPlayer"
+          :colorPlayer="gameControl.colorPlayer"
           :isEndGame="false"
           @endGame="handleEndGameOnBoard"
           ref="chessBoard"
@@ -809,6 +809,8 @@
       </div>
     </div>
   </div>
+
+  <m-game-hub></m-game-hub>
 </template>
 
 <script>
@@ -1027,39 +1029,6 @@ export default {
     };
   },
 
-  watch: {
-    gameControl.gameInfomation.sender(value) {
-      // Lấy UserId từ Local Storage
-      let userId = userIdLocalStorage.getUserId();
-
-      let result =
-        this.gameControl.gameInfomation.sender == userId
-          ? this.$enum.colorPlayer.white
-          : this.$enum.colorPlayer.black;
-
-          this.gameControl.colorPlayer = result;
-    }
-  },
-  computed: {
-    /**
-     * Người chơi cầm quân cờ màu?
-     * @returns {int} 0 - white || 1 - black
-     */
-    colorPlayer() {
-      // Lấy UserId từ Local Storage
-      let userId = userIdLocalStorage.getUserId();
-
-      let result =
-        this.gameControl.gameInfomation.sender == userId
-          ? this.$enum.colorPlayer.white
-          : this.$enum.colorPlayer.black;
-
-      console.log(`ColorPlayer: ${result}`);
-
-      return result;
-    },
-  },
-
   methods: {
     /* =================== START - STATE PLAYER ==================== */
     /**
@@ -1074,8 +1043,8 @@ export default {
       // Thực hiện phát sự kiện đến NotificationHub để gửi trạng thái sẵn sàng và color cho Server
       this.$emitter.emit("sendReadyState", {
         gameId: this.$route.params.gameId,
+        color: this.gameControl.colorPlayer,
         state: this.gameControl.playersState.player1Ready,
-        color: this.colorPlayer,
       });
     },
 
@@ -1107,7 +1076,9 @@ export default {
           // Hiện loading
           this.$emitter.emit("showLoading", true);
 
-          // Lấy GameId từ router
+          /**
+           * Lấy GameId từ router
+           */
           let gameId = this.$route.params.gameId;
 
           // Thực hiện gọi API để lấy thông tin Game
@@ -1121,6 +1092,16 @@ export default {
           this.gameControl.gameInfomation.receiver = response.data.receiver;
           this.gameControl.gameInfomation.viewerCount =
             response.data.viewerCount;
+
+          /**
+           * Lấy UserId từ Local Storage
+           */
+          let userId = userIdLocalStorage.getUserId();
+
+          this.gameControl.colorPlayer =
+            this.gameControl.gameInfomation.sender == userId
+              ? this.$enum.colorPlayer.white
+              : this.$enum.colorPlayer.black;
 
           // Load dữ liệu về đối thủ.
           await this.getOpponentInfomation();
@@ -1470,6 +1451,15 @@ export default {
       console.log(data);
 
       // Cập nhật trạng thái người chơi
+      this.gameControl.playersState.player1Ready =
+        this.gameControl.colorPlayer == this.$enum.colorPlayer.white
+          ? data.playerWhiteReady
+          : data.playerBlackReady;
+
+      this.gameControl.playersState.player2Ready =
+        this.gameControl.colorPlayer == this.$enum.colorPlayer.white
+          ? data.playerBlackReady
+          : data.playerWhiteReady;
     });
   },
 

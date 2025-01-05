@@ -45,6 +45,8 @@ import NVDForm from "./components/base/form/NVDForm.vue";
 import NVDChessBoard from "./components/base/chessboard/NVDChessBoard.vue";
 import NVDDialogOtp from "./components/base/dialogotp/NVDDialogOtp.vue";
 
+import NotificationHub from "./components/base/signalR/NotificationHub.vue";
+import GameHub from "./components/base/signalR/GameHub.vue";
 /* ==================== CREATE APP (Instance) ==================== */
 const app = createApp(App);
 
@@ -61,6 +63,8 @@ app.component("m-loading", NVDLoading);
 app.component("m-toast", NVDToast);
 app.component("m-form", NVDForm);
 app.component("m-chess-board", NVDChessBoard);
+app.component("m-notification-hub", NotificationHub);
+app.component("m-game-hub", GameHub);
 
 /* ==================== CREATE GLOBAL VARIABLE ==================== */
 app.config.globalProperties.$enum = NVDEnum;

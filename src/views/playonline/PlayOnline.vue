@@ -758,6 +758,8 @@
       </div>
     </div>
   </div>
+
+  <m-game-hub></m-game-hub>
 </template>
 
 <script>
