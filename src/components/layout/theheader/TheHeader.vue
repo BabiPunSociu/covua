@@ -131,6 +131,7 @@ export default {
           name: this.$route.name,
           params: this.$route.params,
         });
+
         // Điều hướng đến trang login.
         this.$router.push({ name: "LoginRouter" });
         return;
@@ -164,8 +165,19 @@ export default {
           console.error("Lỗi khi lấy thông tin người chơi 1");
           console.error(error);
 
-          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
-          callAPIAgain = error.message === "CallApiAgain";
+          if (error.message === "GoToLogin") {
+            // Lưu URL hiện tại vào local storage
+            lastURLLocalStorage.setLastUrl({
+              name: this.$route.name,
+              params: this.$route.params,
+            });
+
+            // Điều hướng đến trang login.
+            this.$router.push({ name: "LoginRouter" });
+          } else {
+            // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+            callAPIAgain = error.message === "CallApiAgain";
+          }
         } finally {
           // Tắt loading
           this.$emitter.emit("showLoading", false);
@@ -185,6 +197,12 @@ export default {
           params: { userCode: userCode },
         });
       } else {
+        // Lưu URL hiện tại vào local storage
+        lastURLLocalStorage.setLastUrl({
+          name: this.$route.name,
+          params: this.$route.params,
+        });
+
         // Chuyển hướng đến trang đăng nhập
         this.$router.push({ name: "LoginRouter" });
       }
@@ -200,6 +218,7 @@ export default {
           name: this.$route.name,
           params: this.$route.params,
         });
+
         // Điều hướng đến trang login.
         this.$router.push({ name: "LoginRouter" });
         return;
@@ -223,12 +242,6 @@ export default {
             response.data.fullName.trim() ||
             `${response.data.firstName} ${response.data.lastName}`.trim();
 
-          // Lưu thông tin User vào UserStore Pinia
-          this.userStore.setUserInfo({
-            userCode: response.data.userCode,
-            name: username,
-          });
-
           // Lấy ảnh đại diện của người dùng
           let avatarId = response.data.avatar;
 
@@ -239,14 +252,32 @@ export default {
           // Cập nhật ảnh đại diện vào avatar
           this.avatar = responseImage.data.url;
 
+          // Lưu thông tin User vào UserStore Pinia
+          this.userStore.setUserInfo({
+            userCode: response.data.userCode,
+            name: username,
+            avatar: this.avatar,
+          });
+
           // Dừng vòng lặp nếu gọi API thành công.
           callAPIAgain = false;
         } catch (error) {
           console.error("Lỗi khi lấy thông tin người dùng");
           console.error(error);
 
-          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
-          callAPIAgain = error.message === "CallApiAgain";
+          if (error.message === "GoToLogin") {
+            // Lưu URL hiện tại vào local storage
+            lastURLLocalStorage.setLastUrl({
+              name: this.$route.name,
+              params: this.$route.params,
+            });
+
+            // Điều hướng đến trang login.
+            this.$router.push({ name: "LoginRouter" });
+          } else {
+            // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+            callAPIAgain = error.message === "CallApiAgain";
+          }
         } finally {
           // Tắt loading
           this.$emitter.emit("showLoading", false);

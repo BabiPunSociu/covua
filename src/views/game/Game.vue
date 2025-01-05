@@ -1112,8 +1112,19 @@ export default {
           console.error("Lỗi khi lấy thông tin trận đấu");
           console.error(error);
 
-          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
-          callAPIAgain = error.message === "CallApiAgain";
+          if (error.message === "GoToLogin") {
+            // Lưu URL hiện tại vào local storage
+            lastURLLocalStorage.setLastUrl({
+              name: this.$route.name,
+              params: this.$route.params,
+            });
+
+            // Điều hướng đến trang login.
+            this.$router.push({ name: "LoginRouter" });
+          } else {
+            // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+            callAPIAgain = error.message === "CallApiAgain";
+          }
         } finally {
           this.$emitter.emit("showLoading", false);
         }
@@ -1134,6 +1145,7 @@ export default {
           name: this.$route.name,
           params: this.$route.params,
         });
+
         // Điều hướng đến trang login.
         this.$router.push({ name: "LoginRouter" });
         return;
@@ -1174,8 +1186,19 @@ export default {
           console.error("Lỗi khi lấy thông tin người chơi 1");
           console.error(error);
 
-          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
-          callAPIAgain = error.message === "CallApiAgain";
+          if (error.message === "GoToLogin") {
+            // Lưu URL hiện tại vào local storage
+            lastURLLocalStorage.setLastUrl({
+              name: this.$route.name,
+              params: this.$route.params,
+            });
+
+            // Điều hướng đến trang login.
+            this.$router.push({ name: "LoginRouter" });
+          } else {
+            // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+            callAPIAgain = error.message === "CallApiAgain";
+          }
         } finally {
           // Tắt loading
           this.$emitter.emit("showLoading", false);
@@ -1245,8 +1268,19 @@ export default {
           console.error("Lỗi khi lấy thông tin đối thủ");
           console.error(error);
 
-          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
-          callAPIAgain = error.message === "CallApiAgain";
+          if (error.message === "GoToLogin") {
+            // Lưu URL hiện tại vào local storage
+            lastURLLocalStorage.setLastUrl({
+              name: this.$route.name,
+              params: this.$route.params,
+            });
+
+            // Điều hướng đến trang login.
+            this.$router.push({ name: "LoginRouter" });
+          } else {
+            // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+            callAPIAgain = error.message === "CallApiAgain";
+          }
         } finally {
           // Tắt loading
           this.$emitter.emit("showLoading", false);

@@ -9,6 +9,7 @@ export const useUserStore = defineStore("user", {
     user: {
       userCode: null,
       name: null,
+      avatar: null,
     },
   }),
 
@@ -30,16 +31,26 @@ export const useUserStore = defineStore("user", {
     getName() {
       return this.user.name;
     },
+
+    /**
+     * Hàm get giá trị Avatar trong store.
+     * @returns {string} Giá trị URL ảnh đại diện trong store.
+     * @author NVDUNG (01-05-2024)
+     */
+    getAvatar() {
+      return this.user.avatar;
+    },
   },
   actions: {
     /**
      * Hàm thực hiện thiết lập thông tin người dùng.
-     * @param {{userCode: string, name: string}} info Thông tin người dùng.
+     * @param {{userCode: string, name: string, avatar: string}} info Thông tin người dùng.
      * @author NVDUNG (01-05-2024)
      */
     setUserInfo(info) {
       this.user.userCode = info.userCode;
       this.user.name = info.name;
+      this.user.avatar = info.avatar;
     },
   },
 });

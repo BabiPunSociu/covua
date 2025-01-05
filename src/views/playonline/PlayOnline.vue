@@ -55,7 +55,10 @@
             loading="lazy"
             width="20"
             height="20"
-            :src="this.$resource.resourcesImage.logo.avatarWhite"
+            :src="
+              userStore.getAvatar ||
+              this.$resource.resourcesImage.logo.avatarWhite
+            "
             alt="Ảnh đại diện bản thân"
           />
           <span>
@@ -925,7 +928,7 @@ export default {
             this.showLoadingSearchOpponent = false;
           }
 
-          // Nếu tìm thấy trận đấu, NotificationHub tự động chuyển hướng đến game/live.
+          // Nếu tìm thấy trận đấu, GameHub tự động chuyển hướng đến game/live.
 
           // Dừng vòng lặp nếu gọi API thành công.
           callAPIAgain = false;
@@ -933,8 +936,19 @@ export default {
           console.error("Lỗi khi tìm trận đấu");
           console.error(error);
 
-          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
-          callAPIAgain = error.message === "CallApiAgain";
+          if (error.message === "GoToLogin") {
+            // Lưu URL hiện tại vào local storage
+            lastURLLocalStorage.setLastUrl({
+              name: this.$route.name,
+              params: this.$route.params,
+            });
+
+            // Điều hướng đến trang login.
+            this.$router.push({ name: "LoginRouter" });
+          } else {
+            // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+            callAPIAgain = error.message === "CallApiAgain";
+          }
         }
       } while (callAPIAgain);
     },
@@ -1130,8 +1144,19 @@ export default {
           console.error("Lỗi khi lấy thông tin người dùng");
           console.error(error);
 
-          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
-          callAPIAgain = error.message === "CallApiAgain";
+          if (error.message === "GoToLogin") {
+            // Lưu URL hiện tại vào local storage
+            lastURLLocalStorage.setLastUrl({
+              name: this.$route.name,
+              params: this.$route.params,
+            });
+
+            // Điều hướng đến trang login.
+            this.$router.push({ name: "LoginRouter" });
+          } else {
+            // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+            callAPIAgain = error.message === "CallApiAgain";
+          }
         } finally {
           // Tắt loading
           this.$emitter.emit("showLoading", false);

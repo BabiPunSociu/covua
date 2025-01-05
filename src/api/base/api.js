@@ -106,6 +106,10 @@ const createApiInstance = (config, { auth = true, silent = false }) => {
           // Lấy thông tin DevMessage
           if (devMessage) {
             try {
+              if (devMessage == "InValidToken") {
+                return Promise.reject({ message: "GoToLogin" });
+              }
+
               // Chuyển JSON -> Object
               devMessage = JSON.parse(devMessage);
               let { message, accessToken, refreshToken } = devMessage;
@@ -113,9 +117,9 @@ const createApiInstance = (config, { auth = true, silent = false }) => {
               if (message == "REFRESH_TOKEN") {
                 // Cập nhật local storage
                 tokenLocalStorage.setToken({ accessToken, refreshToken });
-              }
 
-              return Promise.reject({ message: "CallApiAgain" });
+                return Promise.reject({ message: "CallApiAgain" });
+              }
             } catch (error) {
               console.log(`Lỗi khi chuyển DevMessage sang Object`, error);
             }

@@ -69,7 +69,7 @@
           >{{ indexCol }}</span
         >
 
-        <span class="maker-cell">{{ indexRow + " " + indexCol }}</span>
+        <!-- <span class="maker-cell">{{ indexRow + " " + indexCol }}</span> -->
       </td>
     </tr>
   </table>

@@ -121,7 +121,8 @@ const router = createRouter({
       path: "/signalRConnection",
       name: "SignalRConnectionRouter",
       // component: SignalRConnection
-      component: () => import("../views/signalR/SignalRConnection.vue"),
+      component: () =>
+        import("../components/base/signalR/SignalRConnection.vue"),
     },
 
     /**
