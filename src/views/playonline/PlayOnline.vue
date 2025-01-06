@@ -886,7 +886,7 @@ export default {
     async btnPlayClick() {
       // Lấy ConnectionId NotificationHub
       let connectionIdNotificationHub =
-        signalRHubLocalStorage.notificationHub.getNotificationHub();
+        signalRHubLocalStorage.gameHub.getGameHub();
 
       // Xác định ModeGameId đã chọn
       let modeGameId =

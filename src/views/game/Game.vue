@@ -40,7 +40,22 @@
         </div>
         <div class="time flex">
           <div class="mi mi-24 mi-clock icon-resize"></div>
-          <span class="time-text block-user-select">
+          <span
+            class="time-text block-user-select"
+            v-if="gameControl.timeControl.timePlayer2"
+            >{{
+              Math.floor(gameControl.timeControl.timePlayer2 / 60)
+                .toString()
+                .padStart(2, "0")
+            }}
+            :
+            {{
+              Math.floor(gameControl.timeControl.timePlayer2 % 60)
+                .toString()
+                .padStart(2, "0")
+            }}
+          </span>
+          <span v-else class="time-text block-user-select">
             {{ this.sectionNewGame.modeGameSelected.textTime }}
           </span>
         </div>
@@ -48,10 +63,13 @@
 
       <!-- Chess Board -->
       <div class="board-layout-chessboard flex flex-center">
-        <!-- Ngăn chặn hành động khi game chưa bắt đầu -->
+        <!-- Ngăn chặn hành động khi game "chưa bắt đầu" hoặc "đã bắt đầu nhưng không đúng lượt" -->
         <div
           class="overlay"
-          v-if="gameControl.matchInfomation.isMatchStartedState != true"
+          v-if="
+            !gameControl.matchInfomation.isMatchStartedState ||
+            (gameControl.matchInfomation.isMatchStartedState && !allowedToPlay)
+          "
         ></div>
         <!-- Chess Board -->
         <m-chess-board
@@ -121,7 +139,22 @@
 
         <div class="time flex">
           <div class="mi mi-24 mi-clock icon-resize"></div>
-          <span class="time-text block-user-select">
+          <span
+            class="time-text block-user-select"
+            v-if="gameControl.timeControl.timePlayer1"
+            >{{
+              Math.floor(gameControl.timeControl.timePlayer1 / 60)
+                .toString()
+                .padStart(2, "0")
+            }}
+            :
+            {{
+              Math.floor(gameControl.timeControl.timePlayer1 % 60)
+                .toString()
+                .padStart(2, "0")
+            }}
+          </span>
+          <span v-else class="time-text block-user-select">
             {{ this.sectionNewGame.modeGameSelected.textTime }}
           </span>
         </div>
@@ -810,7 +843,8 @@
     </div>
   </div>
 
-  <m-game-hub></m-game-hub>
+  <m-game-hub @updatePlayerStatus="updatePlayerStatus" @startGame="startGame">
+  </m-game-hub>
 </template>
 
 <script>
@@ -1025,6 +1059,11 @@ export default {
          * Màu cờ của player 1.
          */
         colorPlayer: this.$enum.colorPlayer.white, // 0 - white || 1 - black
+
+        /**
+         * Cho phép player 1 chơi
+         */
+        allowedToPlay: false,
       },
     };
   },
@@ -1048,7 +1087,59 @@ export default {
       });
     },
 
+    /**
+     * Cập nhật trạng thái người chơi.
+     * @param {object} data Dữ liệu gửi về từ Server
+     */
+    updatePlayerStatus(data) {
+      console.log("updatePlayerStatus", data);
+
+      // Cập nhật trạng thái người chơi
+      this.gameControl.playersState.player1Ready =
+        this.gameControl.colorPlayer == this.$enum.colorPlayer.white
+          ? data.playerWhiteReady
+          : data.playerBlackReady;
+
+      this.gameControl.playersState.player2Ready =
+        this.gameControl.colorPlayer == this.$enum.colorPlayer.white
+          ? data.playerBlackReady
+          : data.playerWhiteReady;
+    },
+
     /* =================== END - STATE STATE PLAYER ==================== */
+
+    /* =================== START - GAME PLAY ==================== */
+    /**
+     * Thực hiện bắt đầu trận đấu
+     * @param match Thông tin trận đấu
+     */
+    startGame(match) {
+      console.log("Start match", match);
+
+      // Cập nhật thông tin trạng thái người chơi
+      this.gameControl.playersState.player1Ready = true;
+      this.gameControl.playersState.player2Ready = true;
+      this.gameControl.playersState.isShowState = false; // Tắt hiển thị trạng thái.
+
+      // Cập nhật thông tin Match
+      this.gameControl.matchInfomation.matchId = match.matchId;
+      this.gameControl.matchInfomation.numberOfMatch = match.numberOfMatch;
+      this.gameControl.matchInfomation.isMatchStartedState = true;
+
+      // Set timeControl
+      this.gameControl.timeControl.timePlayer1 = 10 * 60; // 10 minutes
+      this.gameControl.timeControl.timePlayer2 = 10 * 60;
+
+      // Nếu Player cầm quân trắng và number of match là số lẻ (1) => Đúng lượt chơi
+      if (this.gameControl.colorPlayer == this.$enum.colorPlayer.white) {
+        this.gameControl.allowedToPlay = match.numberOfMatch % 2 == 1;
+      }
+
+      if (this.gameControl.allowedToPlay) {
+        // Trừ time
+      }
+    },
+    /* =================== END - GAME PLAY ==================== */
 
     /* =================== START GAME CHESSBOARD ==================== */
     /**
@@ -1480,29 +1571,11 @@ export default {
     /* =================== END SETUP SIDEBAR ==================== */
   },
 
-  created() {
-    this.$emitter.on("UpdatePlayerStatus", (data) => {
-      console.log(data);
-
-      // Cập nhật trạng thái người chơi
-      this.gameControl.playersState.player1Ready =
-        this.gameControl.colorPlayer == this.$enum.colorPlayer.white
-          ? data.playerWhiteReady
-          : data.playerBlackReady;
-
-      this.gameControl.playersState.player2Ready =
-        this.gameControl.colorPlayer == this.$enum.colorPlayer.white
-          ? data.playerBlackReady
-          : data.playerWhiteReady;
-    });
-  },
+  created() {},
 
   beforeUnmount() {
     // Hủy sự kiện resize để điều chỉnh kích thước bàn cờ.
     window.removeEventListener("resize", this.adjustTableSize);
-
-    // Hủy lắng nghe sự kiện UpdatePlayerStatus
-    this.$emitter.off("UpdatePlayerStatus");
   },
 };
 </script>

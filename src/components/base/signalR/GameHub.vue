@@ -16,6 +16,7 @@ import { HubConnectionBuilder } from "@microsoft/signalr";
 export default {
   name: "GameHub",
   inject: ["toastWarningNoButtonUndo", "showDialogError"],
+  emits: ["updatePlayerStatus", "startGame"],
   data() {
     return {
       /**
@@ -84,7 +85,7 @@ export default {
     this.initConnectToServer();
 
     // Thiết lập các lắng nghe sự kiện gửi về từ Server.
-    this.addEventListenerFromNotificationHub();
+    this.addEventListenerFromGameHub();
   },
 
   methods: {
@@ -151,12 +152,12 @@ export default {
       }
     },
 
-    /* =========================== Phương thức kết nối SignalR hub notification =========================== */
+    /* =========================== Phương thức kết nối SignalR hub Game =========================== */
     /**
-     * Thiết lập các lắng nghe sự kiện từ NotificationHub
+     * Thiết lập các lắng nghe sự kiện từ GameHub
      * @author NVDUNG (19-09-2024)
      */
-    async addEventListenerFromNotificationHub() {
+    async addEventListenerFromGameHub() {
       try {
         // Các lắng nghe sự kiện ...
         this.addEventListenerOnConnected();
@@ -169,8 +170,9 @@ export default {
 
         this.addEventListenerFindMatch();
         this.addEventListenerUpdatePlayerStatus();
+        this.addEventListenerStartGame();
       } catch (error) {
-        console.error("Error from addEventListenerFromNotificationHub", error);
+        console.error("Error from addEventListenerFromGameHub", error);
       }
     },
 
@@ -308,15 +310,15 @@ export default {
     },
 
     /**
-     * Thiết lập lắng nghe sự kiện UpdatePlayerStatus nhận từ Group GameId
+     * Thiết lập lắng nghe sự kiện GameHub_UpdatePlayerStatus nhận từ Group GameId
      * @author NVDung (30-12-2024)
      */
     addEventListenerUpdatePlayerStatus() {
-      this.connection.on("UpdatePlayerStatus", (data) => {
-        console.log(`UpdatePlayerStatus:`, data);
+      this.connection.on("GameHub_UpdatePlayerStatus", (data) => {
+        console.log(`GameHub_UpdatePlayerStatus:`, data);
 
         // Gửi dữ liệu sang Game.vue để cập nhật thông tin
-        this.$emitter.emit("UpdatePlayerStatus", data);
+        this.$emit("updatePlayerStatus", data);
       });
     },
 
@@ -324,12 +326,12 @@ export default {
      * Thiết lập lắng nghe sự kiện GameHub_StartGame nhận từ Group GameId
      * @author NVDung (30-12-2024)
      */
-    addEventListenerUpdatePlayerStatus() {
+    addEventListenerStartGame() {
       this.connection.on("GameHub_StartGame", (data) => {
         console.log(`GameHub_StartGame:`, data);
 
         // Gửi dữ liệu sang Game.vue để cập nhật thông tin
-        this.$emitter.emit("GameHub_StartGame", data);
+        this.$emit("startGame", data);
       });
     },
   },
