@@ -53,7 +53,7 @@ export const getGameByIdAsync = async (gameId) => {
  */
 export const getPlayerStateByGameIdAsync = async (gameId) => {
   try {
-    return apiWithAuth.get("/Game/PlayerState", null, {
+    return apiWithAuth.get("/Game/PlayerState", {
       params: {
         gameId: gameId,
       },

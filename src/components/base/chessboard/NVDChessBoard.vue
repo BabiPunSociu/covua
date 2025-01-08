@@ -149,6 +149,14 @@ export default {
         this.theStartMatrix = this.reverseMatrix(this.theStartMatrix);
       }
     },
+
+    matrix(value) {
+      if (this.colorPlayer == this.$enum.colorPlayer.black) {
+        this.theStartMatrix = this.reverseMatrix(value);
+      } else {
+        this.theStartMatrix = value;
+      }
+    },
   },
 
   created() {},
@@ -158,7 +166,7 @@ export default {
     console.log(`Prop: ${this.colorPlayer}`);
 
     // Cập nhật giá trị khởi tạo matrix
-    if (this.matrix.length) {
+    if (this.matrix?.length) {
       console.table(this.matrix);
 
       this.theStartMatrix = this.matrix;

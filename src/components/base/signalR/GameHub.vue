@@ -54,7 +54,7 @@ export default {
   created() {
     /* ============= Event listener SendReadyToPlay ============= */
     /**
-     * Tạo lắng nghe sự kiện ẩn hiện loading.
+     * Tạo lắng nghe sự kiện gửi trạng thái sẵn sàng cho server
      * @param {object} info {gameId, color, state } Thông tin tham số cho backend.
      * @author NVDung (18-04-2024)
      */
@@ -94,18 +94,34 @@ export default {
       }
     });
 
+    /**
+     * Đồng bộ thời gian
+     */
     this.$emitter.on("sendUpdateTime", async (data) => {
       try {
-        let { gameId, timePlayerWhite, TimePlayerBlack } = data;
+        let { gameId, timePlayerWhite, timePlayerBlack } = data;
 
         await this.connection.invoke(
           "TimeControlAsync",
           gameId,
           timePlayerWhite,
-          TimePlayerBlack
+          timePlayerBlack
         );
       } catch (error) {
         console.error("Error sending timer to server:", error);
+      }
+    });
+
+    /**
+     * Gửi dữ liệu hết giờ => kết thúc trận đấu lên Server
+     */
+    this.$emitter.on("sendPlayerTimeOut", async (data) => {
+      try {
+        let { gameId, matchId, userId } = data;
+
+        await this.connection.invoke("PlayerTimeOut", gameId, matchId, userId);
+      } catch (error) {
+        console.error("Error sending player timeout to server:", error);
       }
     });
   },
@@ -113,7 +129,8 @@ export default {
   beforeUnmount() {
     this.$emitter.off("sendReadyState");
     this.$emitter.off("sendUpdateBoardState");
-    this.$emitter.off("sendReadyState");
+    this.$emitter.off("sendUpdateTime");
+    this.$emitter.off("sendPlayerTimeOut");
   },
 
   mounted() {
