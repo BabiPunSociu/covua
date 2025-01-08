@@ -45,3 +45,20 @@ export const getGameByIdAsync = async (gameId) => {
     console.error("getGameByIdAsync() in game.js", error);
   }
 };
+
+/**
+ * Lấy thông tin trạng thái người chơi theo gameId.
+ * @param {string} gameId GameId
+ * @returns {Promise} Thông tin người chơi || null khi trận đấu kết thúc.
+ */
+export const getPlayerStateByGameIdAsync = async (gameId) => {
+  try {
+    return apiWithAuth.get("/Game/PlayerState", null, {
+      params: {
+        gameId: gameId,
+      },
+    });
+  } catch (error) {
+    console.error("getPlayerStateByGameIdAsync() in game.js", error);
+  }
+};

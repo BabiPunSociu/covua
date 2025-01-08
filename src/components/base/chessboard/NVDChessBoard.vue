@@ -79,7 +79,7 @@
 export default {
   name: "NVDChessBoard",
 
-  emits: ["endGame"],
+  emits: ["endGame", "sendUpdateBoardState"],
 
   data() {
     return {
@@ -121,6 +121,14 @@ export default {
     },
 
     /**
+     * Giá trị ma trận bàn cờ.
+     */
+    matrix: {
+      type: Array(Array(Number)),
+      default: [],
+    },
+
+    /**
      * Game đã kết thúc chưa?
      * true: Kết thúc.
      * false: Chưa kết thúc.
@@ -148,6 +156,14 @@ export default {
   mounted() {
     console.log("Chessboard created");
     console.log(`Prop: ${this.colorPlayer}`);
+
+    // Cập nhật giá trị khởi tạo matrix
+    if (this.matrix.length) {
+      console.table(this.matrix);
+
+      this.theStartMatrix = this.matrix;
+    }
+
     // Thực hiện đảo ngược ma trận nếu người dùng chơi quân cờ ĐEN
     if (this.colorPlayer === this.$enum.colorPlayer.black) {
       this.theStartMatrix = this.reverseMatrix(this.theStartMatrix);
@@ -341,6 +357,7 @@ export default {
       // console.log("handleDrop");
 
       event.preventDefault();
+
       try {
         // Kiểm tra ván đấu đã kết thúc chưa?
         if (this.isEndGame) {
@@ -367,8 +384,20 @@ export default {
           if (isLegalMove) {
             /* ===== Kiểm tra kết thúc ván cờ ===== */
             let resultMatch = this.gameOverCheck();
-            // Nếu giá trị resultMatch khác "đang diễn ra"
-            if (resultMatch != this.$enum.resultMatch.happenning) {
+
+            // Trận đấu "Đang diễn ra"
+            if (resultMatch == this.$enum.resultMatch.happenning) {
+              // Phát sự kiện cập nhật bàn cờ cho component cha.
+              if (this.colorPlayer == this.$enum.colorPlayer.white) {
+                this.$emit("sendUpdateBoardState", this.theStartMatrix);
+              } else {
+                // Xoay 180deg
+                let result = this.reverseMatrix(this.theStartMatrix);
+
+                // Gửi trạng thái đến component cha
+                this.$emit("sendUpdateBoardState", this.result);
+              }
+            } else {
               // Phát sự kiện kết thúc cho component cha.
               this.$emit("endGame", resultMatch);
             }

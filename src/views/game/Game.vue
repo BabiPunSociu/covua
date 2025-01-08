@@ -68,7 +68,8 @@
           class="overlay"
           v-if="
             !gameControl.matchInfomation.isMatchStartedState ||
-            (gameControl.matchInfomation.isMatchStartedState && !allowedToPlay)
+            (gameControl.matchInfomation.isMatchStartedState &&
+              !gameControl.allowedToPlay)
           "
         ></div>
         <!-- Chess Board -->
@@ -77,6 +78,7 @@
           :colorPlayer="gameControl.colorPlayer"
           :isEndGame="false"
           @endGame="handleEndGameOnBoard"
+          @sendUpdateBoardState="sendUpdateBoardState"
           ref="chessBoard"
         >
         </m-chess-board>
@@ -120,24 +122,26 @@
           </b>
         </div>
 
-        <!-- Hiển thị trạng thái sẵn sàng? -->
-        <m-button
-          v-if="gameControl.playersState.isShowState == true"
-          :class="{ 'm-btn-secondary': gameControl.playersState.player1Ready }"
-          @click="btnReadyOnClick"
-        >
-          {{
-            gameControl.playersState.player1Ready == true
-              ? this.$resource.resourcesGame.statePlayerNotReady[
-                  languageStore.getLanguage
-                ]
-              : this.$resource.resourcesGame.statePlayerReady[
-                  languageStore.getLanguage
-                ]
-          }}
-        </m-button>
-
         <div class="time flex">
+          <!-- Hiển thị trạng thái sẵn sàng? -->
+          <m-button
+            v-if="gameControl.playersState.isShowState == true"
+            :class="{
+              'm-btn-secondary': gameControl.playersState.player1Ready,
+            }"
+            @click="btnReadyOnClick"
+          >
+            {{
+              gameControl.playersState.player1Ready == true
+                ? this.$resource.resourcesGame.statePlayerNotReady[
+                    languageStore.getLanguage
+                  ]
+                : this.$resource.resourcesGame.statePlayerReady[
+                    languageStore.getLanguage
+                  ]
+            }}
+          </m-button>
+
           <div class="mi mi-24 mi-clock icon-resize"></div>
           <span
             class="time-text block-user-select"
@@ -857,7 +861,7 @@ import tokenLocalStorage from "@/js/localstorage/tokenLocalStorage";
 import userIdLocalStorage from "@/js/localstorage/userIdLocalStorage";
 
 // APIs
-import { getGameByIdAsync } from "@/api/game";
+import { getGameByIdAsync, getPlayerStateByGameIdAsync } from "@/api/game";
 import { getUserByIdAsync } from "@/api/user";
 import { getImageByIdAsync } from "@/api/image";
 
@@ -1010,6 +1014,11 @@ export default {
           isMatchStartedState: false,
         },
 
+        boardStateInfomation: {
+          matrix: null,
+          turnNumber: 0,
+        },
+
         /**
          * Thông tin người chơi 1
          */
@@ -1066,6 +1075,44 @@ export default {
         allowedToPlay: false,
       },
     };
+  },
+
+  watch: {
+    /**
+     * Gửi dữ liệu đến GameHub để thực hiện đồng bộ thời gian
+     * @param value Giá trị thời gian còn lại của người chơi 1.
+     */
+    "gameControl.timeControl.timePlayer1": function (value) {
+      let time;
+
+      if (this.gameControl.colorPlayer == this.$enum.colorPlayer.white) {
+        time = {
+          gameId: this.$route.params.gameId,
+          timePlayerWhite: value,
+          TimePlayerBlack: this.gameControl.timeControl.timePlayer2,
+        };
+      } else {
+        time = {
+          gameId: this.$route.params.gameId,
+          timePlayerWhite: this.gameControl.timeControl.timePlayer1,
+          TimePlayerBlack: value,
+        };
+      }
+
+      // Gửi dữ liệu đến GameHub
+      this.$emitter("sendUpdateTime", time);
+    },
+
+    "gameControl.allowedToPlay": function (value) {
+      let timer;
+      if (value) {
+        timer = setInterval(this.reduceTime, 1000);
+      } else {
+        clearInterval(timer);
+
+        // Gửi thông tin "hết giờ" đến GameHub
+      }
+    },
   },
 
   methods: {
@@ -1126,6 +1173,10 @@ export default {
       this.gameControl.matchInfomation.numberOfMatch = match.numberOfMatch;
       this.gameControl.matchInfomation.isMatchStartedState = true;
 
+      // Set BoardState
+      this.gameControl.boardStateInfomation.matrix;
+      this.gameControl.boardStateInfomation.turnNumber = 0; // Tăng khi gửi lên server
+
       // Set timeControl
       this.gameControl.timeControl.timePlayer1 = 10 * 60; // 10 minutes
       this.gameControl.timeControl.timePlayer2 = 10 * 60;
@@ -1139,9 +1190,16 @@ export default {
         // Trừ time
       }
     },
+
+    /**
+     * Giảm thời gian của người chơi hiện tại.
+     */
+    reduceTime() {
+      this.gameControl.timeControl.timePlayer1--;
+    },
     /* =================== END - GAME PLAY ==================== */
 
-    /* =================== START GAME CHESSBOARD ==================== */
+    /* =================== START Load data ==================== */
     /**
      * Lấy thông tin về game đấu.
      * @author NVDung (19-12-2024)
@@ -1193,6 +1251,9 @@ export default {
             this.gameControl.gameInfomation.sender == userId
               ? this.$enum.colorPlayer.white
               : this.$enum.colorPlayer.black;
+
+          // Load dữ liệu trạng thái người chơi
+          await this.getPlayerState();
 
           // Load dữ liệu về đối thủ.
           await this.getOpponentInfomation();
@@ -1378,9 +1439,105 @@ export default {
         }
       } while (callAPIAgain);
     },
-    /* =================== END GAME CHESSBOARD ==================== */
+
+    /**
+     * Lấy thông tin trạng thái người chơi.
+     */
+    async getPlayerState() {
+      // Lấy giá trị Token trong local storage
+      let jwt = tokenLocalStorage.getToken();
+
+      if (!jwt?.accessToken) {
+        // Lưu URL hiện tại vào local storage
+        lastURLLocalStorage.setLastUrl({
+          name: this.$route.name,
+          params: this.$route.params,
+        });
+        // Điều hướng đến trang login.
+        this.$router.push({ name: "LoginRouter" });
+        return;
+      }
+
+      let callAPIAgain = false;
+      do {
+        try {
+          // Hiện loading
+          this.$emitter.emit("showLoading", true);
+
+          /**
+           * Lấy GameId từ router
+           */
+          let gameId = this.$route.params.gameId;
+
+          // Thực hiện gọi API để lấy thông tin Game
+          let response = await getPlayerStateByGameIdAsync(gameId);
+
+          console.log("response: ", response);
+
+          // Cập nhật thông tin vào data.
+          this.gameControl.playersState.player1Ready =
+            this.gameControl.colorPlayer == this.$enum.colorPlayer.white
+              ? response.playerWhiteReady
+              : response.playerBlackReady;
+
+          this.gameControl.playersState.player2Ready =
+            this.gameControl.colorPlayer == this.$enum.colorPlayer.white
+              ? response.playerBlackReady
+              : response.playerWhiteReady;
+
+          // Dừng vòng lặp nếu gọi API thành công.
+          callAPIAgain = false;
+        } catch (error) {
+          console.error("Lỗi khi lấy thông tin trận đấu");
+          console.error(error);
+
+          switch (error.message) {
+            case "GoToLogin":
+              // Lưu URL hiện tại vào local storage
+              lastURLLocalStorage.setLastUrl({
+                name: this.$route.name,
+                params: this.$route.params,
+              });
+
+              // Điều hướng đến trang login.
+              this.$router.push({ name: "LoginRouter" });
+              break;
+
+            case "NotFoundGame":
+              // Chuyển hướng đến trang PlayOnline
+              this.$router.push({ name: "PlayOnlineRouter" });
+              break;
+
+            default:
+              break;
+          }
+
+          // Điều khiển vòng lặp, thực hiện gọi lại API khi refresh token.
+          callAPIAgain = error.message === "CallApiAgain";
+        } finally {
+          this.$emitter.emit("showLoading", false);
+        }
+      } while (callAPIAgain);
+    },
+    /* =================== END Load data ==================== */
 
     /* =================== START GAME CHESSBOARD ==================== */
+    /**
+     * Cập nhật thông tin trạng thái bàn cờ.
+     * @param {Number[][]} matrix Ma trận trạng thái bàn cờ
+     */
+    sendUpdateBoardState(matrix) {
+      // Chuyển matrix thành string
+      let matrixJson = JSON.stringify(matrix);
+
+      // Gửi đến GameHub
+      this.$emitter.emit("sendUpdateBoardState", {
+        matrix: matrixJson,
+        turnNumber: this.gameControl.boardStateInfomation.turnNumber++,
+        gameId: this.$route.params.gameId,
+        matchId: this.gameControl.matchInfomation.matchId,
+      });
+    },
     /**
      * Hàm xử lý sự kiện kết thúc game trên bàn cờ.
      * @author NVDUNG (05-05-2024)

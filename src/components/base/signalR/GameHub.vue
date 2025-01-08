@@ -74,9 +74,45 @@ export default {
         console.error("Error sending ready to play:", error);
       }
     });
+
+    /**
+     * Gửi dữ liệu bàn cờ lên server
+     */
+    this.$emitter.on("sendUpdateBoardState", async (data) => {
+      try {
+        let { matrix, turnNumber, gameId, matchId } = data;
+
+        await this.connection.invoke(
+          "PlayGameAsync",
+          gameId,
+          matchId,
+          matrix,
+          turnNumber
+        );
+      } catch (error) {
+        console.error("Error sending boardstate to server:", error);
+      }
+    });
+
+    this.$emitter.on("sendUpdateTime", async (data) => {
+      try {
+        let { gameId, timePlayerWhite, TimePlayerBlack } = data;
+
+        await this.connection.invoke(
+          "TimeControlAsync",
+          gameId,
+          timePlayerWhite,
+          TimePlayerBlack
+        );
+      } catch (error) {
+        console.error("Error sending timer to server:", error);
+      }
+    });
   },
 
   beforeUnmount() {
+    this.$emitter.off("sendReadyState");
+    this.$emitter.off("sendUpdateBoardState");
     this.$emitter.off("sendReadyState");
   },
 

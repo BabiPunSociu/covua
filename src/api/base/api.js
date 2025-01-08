@@ -99,6 +99,10 @@ const createApiInstance = (config, { auth = true, silent = false }) => {
           if (!userMessage) {
             userMessage = errorMessage.DataNotValid(langCode);
           }
+
+          if (devMessage == "NotFoundGame") {
+            return Promise.reject({ message: "NotFoundGame" });
+          }
           break;
         }
 
