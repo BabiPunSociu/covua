@@ -180,7 +180,12 @@
     </div>
   </div>
 
-  <m-game-hub @updatePlayerStatus="updatePlayerStatus" @startGame="startGame">
+  <m-game-hub
+    @updatePlayerStatus="updatePlayerStatus"
+    @startGame="startGame"
+    @updateBoardState="updateBoardState"
+    @updateTime="updateTime"
+  >
   </m-game-hub>
 </template>
 
@@ -351,6 +356,11 @@ export default {
          */
         allowedToPlay: false,
       },
+
+      /**
+       * Timer
+       */
+      timer: null,
     };
   },
 
@@ -360,41 +370,50 @@ export default {
      * @param value Giá trị thời gian còn lại của người chơi 1.
      */
     "gameControl.timeControl.timePlayer1": function (value) {
-      let time;
+      // Nếu trận đấu đã bắt đầu
+      if (this.gameControl.matchInfomation.isMatchStartedState) {
+        let time;
 
-      if (this.gameControl.colorPlayer == this.$enum.colorPlayer.white) {
-        time = {
-          gameId: this.$route.params.gameId,
-          timePlayerWhite: value,
-          timePlayerBlack: this.gameControl.timeControl.timePlayer2,
-        };
-      } else {
-        time = {
-          gameId: this.$route.params.gameId,
-          timePlayerWhite: this.gameControl.timeControl.timePlayer1,
-          timePlayerBlack: value,
-        };
+        if (this.gameControl.colorPlayer == this.$enum.colorPlayer.white) {
+          time = {
+            gameId: this.$route.params.gameId,
+            timePlayerWhite: value,
+            timePlayerBlack: this.gameControl.timeControl.timePlayer2,
+          };
+        } else {
+          time = {
+            gameId: this.$route.params.gameId,
+            timePlayerWhite: this.gameControl.timeControl.timePlayer1,
+            timePlayerBlack: value,
+          };
+        }
+
+        // Gửi dữ liệu đến GameHub
+        this.$emitter.emit("sendUpdateTime", time);
       }
-
-      // Gửi dữ liệu đến GameHub
-      this.$emitter.emit("sendUpdateTime", time);
     },
 
     "gameControl.allowedToPlay": function (value) {
-      let timer;
-      if (value) {
-        timer = setInterval(this.reduceTime, 1000);
-      } else {
-        clearInterval(timer);
+      // Nếu trận đấu đã bắt đầu
+      if (this.gameControl.matchInfomation.isMatchStartedState) {
+        console.log("=== Allowed to play this game:", value);
 
-        let data = {
-          gameId: this.$route.params.gameId,
-          matchId: this.gameControl.matchInfomation.matchId,
-          userId: userIdLocalStorage.getUserId(),
-        };
+        if (value) {
+          this.timer = setInterval(this.reduceTime, 1000);
+        } else {
+          this.timer = setTimeout(() => {}, 500);
+          clearInterval(this.timer);
+          this.timer = null;
 
-        // Gửi thông tin "hết giờ" đến GameHub
-        this.$emitter.emit("sendPlayerTimeOut", data);
+          let data = {
+            gameId: this.$route.params.gameId,
+            matchId: this.gameControl.matchInfomation.matchId,
+            userId: userIdLocalStorage.getUserId(),
+          };
+
+          // Gửi thông tin "hết giờ" đến GameHub
+          this.$emitter.emit("sendPlayerTimeOut", data);
+        }
       }
     },
   },
@@ -489,7 +508,6 @@ export default {
       this.gameControl.boardStateInfomation.matrix;
       this.gameControl.boardStateInfomation.turnNumber = 0; // Tăng khi gửi lên server
 
-      // Set timeControl
       this.gameControl.timeControl.timePlayer1 = 10 * 60; // 10 minutes
       this.gameControl.timeControl.timePlayer2 = 10 * 60;
 
@@ -497,10 +515,52 @@ export default {
       if (this.gameControl.colorPlayer == this.$enum.colorPlayer.white) {
         this.gameControl.allowedToPlay = match.numberOfMatch % 2 == 1;
       }
+    },
 
-      if (this.gameControl.allowedToPlay) {
-        // Trừ time
-      }
+    /**
+     * Thông tin trạng thái bàn cờ mới
+     * @param boardState
+     */
+    updateBoardState(boardState) {
+      console.log("updateBoardState", boardState);
+
+      // Chuyển Json sang Number[][]
+      let matrix = JSON.parse(boardState.boardStateValue);
+
+      this.gameControl.boardStateInfomation.matrix = matrix;
+      this.gameControl.boardStateInfomation.turnNumber = boardState.turnNumber;
+
+      console.log("turn number:", boardState.turnNumber);
+
+      // Cập nhật allowedToPlay
+      // if (this.gameControl.colorPlayer == this.$enum.colorPlayer.white) {
+      //   this.gameControl.allowedToPlay =
+      //     (match.numberOfMatch + boardState.turnNumber) % 2 != 1;
+      // } else {
+      //   this.gameControl.allowedToPlay =
+      //     (match.numberOfMatch + boardState.turnNumber) % 2 == 1;
+      // }
+
+      this.gameControl.allowedToPlay = !this.gameControl.allowedToPlay;
+
+      // Clear interval
+      clearInterval(this.timer);
+      this.timer = null;
+    },
+
+    updateTime(timeData) {
+      console.log("updateTime", timeData);
+
+      // Cập nhật giá trị thời gian
+      this.gameControl.timeControl.timePlayer1 =
+        this.gameControl.colorPlayer == this.$enum.colorPlayer.white
+          ? timeData.timePlayerWhite
+          : timeData.timePlayerBlack;
+
+      this.gameControl.timeControl.timePlayer2 =
+        this.gameControl.colorPlayer == this.$enum.colorPlayer.white
+          ? timeData.timePlayerBlack
+          : timeData.timePlayerWhite;
     },
 
     /**
@@ -545,7 +605,7 @@ export default {
           // Thực hiện gọi API để lấy thông tin Game
           let response = await getGameByIdAsync(gameId);
 
-          console.log("response: ", response);
+          console.log("response game: ", response);
 
           // Cập nhật thông tin vào data.
           this.gameControl.gameInfomation.score = response.data.score;
@@ -711,16 +771,18 @@ export default {
 
           console.log("response player state: ", response);
 
+          let { data } = response;
+
           // Cập nhật thông tin vào data.
           this.gameControl.playersState.player1Ready =
             this.gameControl.colorPlayer == this.$enum.colorPlayer.white
-              ? response.playerWhiteReady
-              : response.playerBlackReady;
+              ? data.playerWhiteReady
+              : data.playerBlackReady;
 
           this.gameControl.playersState.player2Ready =
             this.gameControl.colorPlayer == this.$enum.colorPlayer.white
-              ? response.playerBlackReady
-              : response.playerWhiteReady;
+              ? data.playerBlackReady
+              : data.playerWhiteReady;
 
           if (
             this.gameControl.playersState.player1Ready &&
@@ -774,10 +836,12 @@ export default {
       // Chuyển matrix thành string
       let matrixJson = JSON.stringify(matrix);
 
+      let turnNumber = this.gameControl.boardStateInfomation.turnNumber + 1;
+
       // Gửi đến GameHub
       this.$emitter.emit("sendUpdateBoardState", {
         matrix: matrixJson,
-        turnNumber: this.gameControl.boardStateInfomation.turnNumber++,
+        turnNumber: turnNumber,
         gameId: this.$route.params.gameId,
         matchId: this.gameControl.matchInfomation.matchId,
       });

@@ -16,7 +16,7 @@ import { HubConnectionBuilder } from "@microsoft/signalr";
 export default {
   name: "GameHub",
   inject: ["toastWarningNoButtonUndo", "showDialogError"],
-  emits: ["updatePlayerStatus", "startGame"],
+  emits: ["updatePlayerStatus", "startGame", "updateBoardState", "updateTime"],
   data() {
     return {
       /**
@@ -224,6 +224,8 @@ export default {
         this.addEventListenerFindMatch();
         this.addEventListenerUpdatePlayerStatus();
         this.addEventListenerStartGame();
+        this.addEventListenerUpdateBoardState();
+        this.addEventListenerUpdateTime();
       } catch (error) {
         console.error("Error from addEventListenerFromGameHub", error);
       }
@@ -385,6 +387,24 @@ export default {
 
         // Gửi dữ liệu sang Game.vue để cập nhật thông tin
         this.$emit("startGame", data);
+      });
+    },
+
+    addEventListenerUpdateBoardState() {
+      this.connection.on("GameHub_UpDateBoardState", (data) => {
+        console.log(`GameHub_UpDateBoardState`, data);
+
+        // Gửi dữ liệu sang Game.vue để cập nhật thông tin
+        this.$emit("updateBoardState", data);
+      });
+    },
+
+    addEventListenerUpdateTime() {
+      this.connection.on("GameHub_UpDateTimer", (data) => {
+        console.log(`GameHub_UpDateTimer`, data);
+
+        // Gửi dữ liệu sang Game.vue để cập nhật thông tin
+        this.$emit("updateTime", data);
       });
     },
   },
